@@ -15,6 +15,12 @@ catagoryModeRules.append(['lib'   ,'overwrite'])
 catagoryModeRules.append(['bin'   ,'overwrite'])
 catagoryModeRules.append(['config','overwrite'])
 
+# file path rules 
+filePathRules = [] # [catagory, path under $HOME, dir or file]
+filePathRules.append(['lib'   ,'lib'    ,'dir' ])
+filePathRules.append(['bin'	  ,'bin'    ,'dir' ])
+filePathRules.append(['bashrc','.bashrc','file'])
+
 
 modules = []
 userInput = ''
@@ -25,7 +31,9 @@ for root, directories, filenames in os.walk("./"): # generate file listing
 	for directory in directories:
 		pass # we dont care about directories
 	for filename in filenames:
-		files.append(os.path.join(root,filename))
+		if '.git' not in filename: # prevent a whole pile of warnings of deploy was installed from git
+			if '.git' not in root:
+				files.append(os.path.join(root,filename))
 print("done")
 
 print("indexing modules...")
@@ -91,45 +99,72 @@ def installModule(moduleName):
 def commit():
 	# performs module installation
 	
+	home = os.getenv('HOME')
+
 	# make backups of existing files
-	homeDirectory = os.getenv("HOME")
-	print("saving copies of existing files...")
-	if os.path.isfile(os.path.join(homeDirectory, '.bashrc')):
-		print("found existing .bashrc")
-		shutil.copy(os.path.join(homeDirectory, '.bashrc'), os.path.join(homeDirectory, '.bashrc.bak')) 
-	if os.path.isdir(os.path.join(homeDirectory, 'bin')):
-		print("found existing bin")
-		shutil.copy(os.path.join(homeDirectory, 'bin'), os.path.join(homeDirectory, '.bin.bak')) 
-	if os.path.isdir(os.path.join(homeDirectory, 'lib')):
-		print("found existing bin")
-		shutil.copy(os.path.join(homeDirectory, 'lib'), os.path.join(homeDirectory, '.lib.bak')) 
-	else:
-		os.mkdir(os.path.join(homeDirectory, 'lib'))
-	
+	print("backing up existing files...")
+	for rule in filePathRules:
+		if rule[2] == 'file':
+			if os.path.isfile(os.path.join(home,rule[1])):
+				print("found existing file",rule[1])
+				try:
+					shutil.copy(os.path.join(home,rule[1]), os.path.join(home,'.'+rule[1]+'.bak'))
+				except FileExistsError:
+					os.remove(os.path.join(home,'.'+rule[1]+'.bak'))
+					shutil.copy(os.path.join(home,rule[1]), os.path.join(home,'.'+rule[1]+'.bak'))
+		else:
+			if os.path.isdir(os.path.join(home,rule[1])):
+				print("found existing dir",rule[1])
+				try:
+					shutil.copytree(os.path.join(home,rule[1]), os.path.join(home,'.'+rule[1]+'.bak'))
+				except FileExistsError:
+					shutil.rmtree(os.path.join(home,'.'+rule[1]+'.bak'))
+					shutil.copytree(os.path.join(home,rule[1]), os.path.join(home,'.'+rule[1]+'.bak'))
+			else:
+				os.mkdir(os.path.join(home,rule[1]))
+	print("done")
 	for module in modules:
 		if module['install'] == 'yes':
-			sourceFile = open(module['path'], 'r')
-			if module['catagory'] == 'bashrc':
+			print(module['name'], "marked for installation")
+			rule = 'nil'
+			for r in filePathRules:
+				if r[0] == module['catagory']:
+					rule = r
+			if rule[2] == 'file':
 				if module['mode'] == 'append':
-					destFile = open(os.path.join(homeDirectory, '.bashrc'), 'a')
+					targetFile = open(os.path.join(home,rule[1]), 'a')
+					sourceFile = open(module['path'])
+					targetFile.write("# generated during dotfile deployment\n")
+					for line in sourceFile:
+						targetFile.write(line)
+					targetFile.write('\n')
+					targetFile.close() 
+					sourceFile.close()
 				else:
-					destFile = open(os.path.join(homeDirectory, '.bashrc'), 'w')
-				destFile.write("#Automatically added by deploy.py")
-				for line in sourceFile:
-					destFile.write(line)
-				destFile.close()
-			elif module['catagory'] == 'lib':
+					try:
+						os.remove(os.path.join(home,rule[1]))
+					except FileNotFoundError:
+						pass 
+					shutil.copy(module['path'], os.path.join(home, rule[1]))
+			elif rule[2] == 'dir':
 				if module['mode'] == 'append':
-					destFile = open(os.path.join(homeDirectory, 'lib', module['name']), 'a')
+					targetFile = os.path.join(home,rule[1],module['name'])
+					sourceFile = open(module['path'])
+					targetFile.write("# generated during dotfile deployment\n") 
+					for line in sourceFile:
+						targetFile.write(line)
+					target.write('\n')
+					targetFile.close()
+					sourceFile.close()
 				else:
-					destFile = open(os.path.join(homeDirectory, 'lib', module['name']), 'w')
-				destFile.write("#Automatically added by deploy.py")
-				for line in sourceFile:
-					destFile.write(line)
-				destFile.close()
-			else:
-				print("ERROR: no rule defined for catagory:", module['catagory'])
-	
+					try:
+						os.remove(os.path.join(home,rule[1],module['name']))
+					except FileNotFoundError:
+						pass
+					shutil.copy(module['path'],os.path.join(home,rule[1]))
+	print("commit finished")
+
+# main interface loop	
 while(userInput != 'exit'):
 	userInput = input("> ")
 	if userInput == 'help':
