@@ -8,3 +8,9 @@ alias yagi="yaourt -S --noconfirm"
 alias yagu="yauort -Sy"
 alias ysuu="yaourt -Syu"
 alias yacs="yaourt -Ss"
+
+package-manager-install()
+{
+	# used by other scripts which need to install things
+	sudo pacman -S $1 
+}

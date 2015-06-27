@@ -11,16 +11,17 @@ import shutil
 # configuration section
 catagoryModeRules = [] # these are the defaults for each catagory
 catagoryModeRules.append(['bashrc','append'   ])
+catagoryModeRules.append(['tmux'  ,'overwrite'])
 catagoryModeRules.append(['lib'   ,'overwrite'])
 catagoryModeRules.append(['bin'   ,'overwrite'])
 catagoryModeRules.append(['config','overwrite'])
 
 # file path rules 
 filePathRules = [] # [catagory, path under $HOME, dir or file]
-filePathRules.append(['lib'   ,'lib'    ,'dir' ])
-filePathRules.append(['bin'	  ,'bin'    ,'dir' ])
-filePathRules.append(['bashrc','.bashrc','file'])
-
+filePathRules.append(['lib'   ,'lib'       ,'dir' ])
+filePathRules.append(['bin'	  ,'bin'       ,'dir' ])
+filePathRules.append(['bashrc','.bashrc'   ,'file'])
+filePathRules.append(['tmux'  ,'.tmux.conf','file'])
 
 modules = []
 userInput = ''

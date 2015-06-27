@@ -4,3 +4,9 @@ alias suu="sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgr
 alias agui="sudo apt-get update && sudo apt-get install"
 alias agr="sudo apt-get remove" 
 alias acs="sudo apt-cache search"
+
+package-manager-install()
+{
+	# used by other scripts which need to install things
+	sudo apt-get install $1 
+}
