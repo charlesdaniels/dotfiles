@@ -1,0 +1,2 @@
+# My dotfiles 
+These are the official dotfiles of Charles Daniels. Nothing to fancy, and no crazy installation scripts or anything like that. These are intended for use on my own systems as templates for system-specific dotfiles I usually create during or after installation. No guarantees any of these will work for you.  
