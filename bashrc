@@ -1,3 +1,7 @@
+PATH=$PATH:~/bin
+EDITOR=vim
+VISUAL=vim
+
 # package managment
 alias agi="sudo pacman -S"
 alias agu="sudo pacman -Sy"
