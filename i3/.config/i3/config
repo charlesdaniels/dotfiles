@@ -168,10 +168,6 @@ bindsym Control+Right exec "playerctl next"
 bindsym Control+Left exec "playerctl previous" 
 
 
-#gaps
-#gaps inner 8
-#gaps outer 0
-
 # colors 
 # from here https://faq.i3wm.org/question/2071/how-can-i-change-look-of-windows/
 # color defines for zenburn styled i3
@@ -201,12 +197,12 @@ bar {
 	colors {
         	background          $bg
         	statusline          $fg
-	        separator           $hi
-			  #focused_workspace   $gn        $bg        $ac
-			  active_workspace	$gn	$bg	$ac
+                separator           $hi
+	        focused_workspace   $gn        $bg        $ac
+		active_workspace    $gn	       $bg	  $ac
 	        #active_workspace    $gn        $ac        $tx
-			  focused_workspace	$gn	$ac	$tx
-			  inactive_workspace  $bg        $bg        $ia
-			  urgent_workspace    $rd        $bg        $ac
+		focused_workspace   $gn	       $ac	  $tx
+		inactive_workspace  $bg        $bg        $ia
+		urgent_workspace    $rd        $bg        $ac
 	    }
 }
