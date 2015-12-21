@@ -1,0 +1,52 @@
+general 
+{
+	colors = true
+	interval = 5
+}
+
+order += "disk /"
+order += "disk /home" 
+order += "disk /var"
+order += "ethernet enp0s25"
+order += "load"
+order += "volume master"
+order += "tztime local" 
+
+ethernet enp0s25
+{
+	format_up = "E: %ip (%speed)"
+	format_down = "E: DOWN"
+}
+
+volume master {
+        format = "♪: %volume"
+        format_muted = "♪: muted (%volume)"
+        device = "default"
+        mixer = "Master"
+        mixer_idx = 0
+}
+
+tztime local
+{
+	format = "%Y-%m-%d %H:%M:%S"
+}
+
+load 
+{
+	format = "%1min;%5min;%15min"
+}
+
+disk "/"
+{
+	format = "rootfs: %free free of %total"
+}
+
+disk "/home"
+{
+	format = "home: %free free of %total" 
+}
+
+disk "/var"
+{
+	format = "var: %free free of %total" 
+}
