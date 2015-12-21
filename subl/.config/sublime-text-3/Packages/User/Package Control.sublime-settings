@@ -3,8 +3,26 @@
 	"in_process_packages":
 	[
 	],
+	"install_prereleases":
+	[
+		"AutoPEP8"
+	],
 	"installed_packages":
 	[
-		"LaTeXTools"
+		"All Autocomplete",
+		"AutoPEP8",
+		"COBOL Syntax",
+		"DashDoc",
+		"DoxyDoxygen",
+		"Git",
+		"Intellitip",
+		"Javatar",
+		"Jedi - Python autocompletion",
+		"LaTeXTools",
+		"Markdown Extended",
+		"Markdown Preview",
+		"Package Control",
+		"Python Auto-Complete",
+		"SublimeREPL"
 	]
 }
