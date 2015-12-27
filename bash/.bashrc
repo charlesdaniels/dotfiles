@@ -25,6 +25,12 @@ alias yagi="yaourt -S --noconfirm"
 alias yagu="yauort -Sy"
 alias ysuu="yaourt -Syu"
 alias yacs="yaourt -Ss"
+# aptitude aliases
+#alias agi="sudo apt-get install"
+#alias agu="sudo apt-get update"
+#alias suu="sudo apt-get update && sudo apt-get upgrade && sudo apt-get autoremove"
+#alias agr="sudo apt-get remove"
+#alias acs="apt-cache search"
 
 PATH=$PATH:~/bin
 EDITOR=vim
