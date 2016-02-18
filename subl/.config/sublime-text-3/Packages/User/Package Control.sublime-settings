@@ -2,7 +2,8 @@
 	"bootstrapped": true,
 	"in_process_packages":
 	[
-		"DashDoc"
+		"DashDoc",
+		"Python Auto-Complete"
 	],
 	"install_prereleases":
 	[
@@ -23,7 +24,7 @@
 		"Markdown Extended",
 		"Markdown Preview",
 		"Package Control",
-		"Python Auto-Complete",
+		"Python Completions",
 		"SublimeREPL"
 	]
 }

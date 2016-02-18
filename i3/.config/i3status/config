@@ -5,17 +5,17 @@ general
 }
 
 order += "disk /"
-order += "disk /home" 
-order += "disk /var"
-order += "ethernet enp0s25"
 order += "load"
 order += "volume master"
+order += "battery 0"
 order += "tztime local" 
 
-ethernet enp0s25
-{
-	format_up = "E: %ip (%speed)"
-	format_down = "E: DOWN"
+battery 0 {
+	format = "%status %percentage  %remaining"
+	format_down = "NO BATTERY"
+	status_chr = "⚇ CHR"
+	status_bat = "⚡ BAT"
+	status_full = "☻ FULL"
 }
 
 volume master {
@@ -41,12 +41,3 @@ disk "/"
 	format = "rootfs: %free free of %total"
 }
 
-disk "/home"
-{
-	format = "home: %free free of %total" 
-}
-
-disk "/var"
-{
-	format = "var: %free free of %total" 
-}

@@ -3,7 +3,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod1
+set $mod Mod4
 
 font pango:Droid Sans 10
 
@@ -141,13 +141,15 @@ for_window [title="win0"] kill
 focus_follows_mouse no 
 
 # autostart
+exec "xrandr --dpi 192 && xdotool key Super+Shift+r"
 exec pasystray # pavucontrol in systray
-#exec nm-applet # network manager applet in systray
-#exec twmnd # twmn daemon 
+exec nm-applet # network manager applet in systray
+exec twmnd # twmn daemon 
 exec "compton --vsync opengl" # compositing
 exec_always "feh --bg-fill ~/.wallpapers/current" # set wallpaper 
 exec dropbox
 exec bashbullet
+exec "pulseaudio --start"
 
 # alt tab
 bindsym $mod+Tab exec "rofi -show window"
@@ -163,9 +165,16 @@ bindsym Shift+Print exec "teiler --cast"
 for_window [class="^.*"] border pixel 2
 
 # media keys 
-bindsym Control+End exec "playerctl play-pause"
-bindsym Control+Right exec "playerctl next"
-bindsym Control+Left exec "playerctl previous" 
+bindsym XF86AudioPlay exec "playerctl play-pause"
+bindsym XF86AudioNext exec "playerctl next"
+bindsym XF86AudioPrev exec "playerctl previous" 
+bindsym XF86AudioLowerVolume exec "pamixer -d 3"
+bindsym XF86AudioRaiseVolume exec "pamixer -i 3"
+bindsym XF86AudioMute exec "pamixer -t" 
+bindsym XF86KbdBrightnessDown exec "kbdlight down 10"
+bindsym XF86KbdBrightnessUp exec "kbdlight up 10"
+bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
 
 
 # colors 

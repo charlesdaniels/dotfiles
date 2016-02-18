@@ -9,6 +9,7 @@
 #PS1='[\u@\h \W]\$ '
 
 export PS1="[\u@\h][\A][\w]\n\\$ \[$(tput sgr0)\]"
+export TERM=xterm
 
 PATH=$PATH:~/bin
 EDITOR=vim
@@ -87,3 +88,9 @@ sysinfo ()
 	cat /tmp/sysinfo | sprunge 
 	rm /tmp/sysinfo	
 }
+
+PATH="/home/cad/perl5/bin${PATH+:}${PATH}"; export PATH;
+PERL5LIB="/home/cad/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/cad/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/cad/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/cad/perl5"; export PERL_MM_OPT;
