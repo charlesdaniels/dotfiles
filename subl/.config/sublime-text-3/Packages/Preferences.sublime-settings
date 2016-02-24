@@ -2,7 +2,8 @@
 	"color_scheme": "Packages/Color Scheme - Default/Solarized (Light).tmTheme",
 	"dictionary": "Packages/Language - English/en_US.dic",
 	"draw_white_space": "all",
-	"font_size": 13,
+	"font_size": 11,
+	"font_face": "Source Code Pro Semibold",
 	"ignored_packages":
 	[
 		"Vintage"
@@ -16,5 +17,6 @@
 	"tab_size": 4,
 	"translateTabsToSpaces": true,
 	"translate_tabs_to_spaces": true,
-	"use_tab_stops": true
+	"use_tab_stops": true,
+	"overlay_scroll_bars": "enabled"
 }

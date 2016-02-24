@@ -5,10 +5,32 @@ general
 }
 
 order += "disk /"
+order += "run_watch DHCP"
+order += "wireless wlp3s0"
+order += "path_exists VPN"
 order += "load"
+order += "cpu_temperature 0"
 order += "volume master"
 order += "battery 0"
 order += "tztime local" 
+
+cpu_temperature 0 {
+	format = "CPU Temp: %degrees °C"
+	max_threshold = 55
+}
+
+path_exists VPN {
+	path = "/proc/sys/net/ipv4/conf/tun0"
+}
+
+wireless wlp3s0 {
+	format_up = "W: (%essid @ %bitrate) %ip)"
+	format_down = "W: DOWN"
+}
+
+run_watch DHCP {
+	pidfile = "/var/run/dhclient*.pid"
+}
 
 battery 0 {
 	format = "%status %percentage  %remaining"

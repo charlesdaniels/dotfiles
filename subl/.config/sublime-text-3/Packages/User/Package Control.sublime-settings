@@ -2,8 +2,7 @@
 	"bootstrapped": true,
 	"in_process_packages":
 	[
-		"DashDoc",
-		"Python Auto-Complete"
+		"DashDoc"
 	],
 	"install_prereleases":
 	[
