@@ -87,6 +87,7 @@ bindsym $mod+m workspace ✉
 bindsym $mod+t workspace ♫
 bindsym $mod+minus workspace Δ
 bindsym $mod+equal workspace ∈
+bindsym $mod+i workspace ⇵
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1; workspace 1
@@ -100,9 +101,10 @@ bindsym $mod+Shift+8 move container to workspace 8; workspace 8
 bindsym $mod+Shift+9 move container to workspace 9; workspace 9
 bindsym $mod+Shift+0 move container to workspace 10; workspace 10
 bindsym $mod+Shift+m move container to workspace ✉; workspace ✉
-bindsym $mod+shift+t move container to workspace ♫; workspace ♫
-bindsym $mod+shift+minus move container to workspace Δ; workspace Δ
-bindsym $mod+shift+equal move container to workspace ∈; workspace ∈
+bindsym $mod+Shift+t move container to workspace ♫; workspace ♫
+bindsym $mod+Shift+minus move container to workspace Δ; workspace Δ
+bindsym $mod+Shift+equal move container to workspace ∈; workspace ∈
+bindsym $mod+Shift+i move container to workspace ⇵; workspace ⇵
 
 # reload the configuration file
 bindsym $mod+Shift+c reload

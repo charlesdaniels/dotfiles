@@ -16,7 +16,7 @@ order += "tztime local"
 
 cpu_temperature 0 {
 	format = "CPU Temp: %degrees °C"
-	max_threshold = 55
+	max_threshold = 60
 }
 
 path_exists VPN {
