@@ -1,2 +1,6 @@
-# My dotfiles 
-These are the official dotfiles of Charles Daniels. Nothing to fancy, and no crazy installation scripts or anything like that. These are intended for use on my own systems as templates for system-specific dotfiles I usually create during or after installation. No guarantees any of these will work for you.  
+My personal dotfiles repository. Meant to be installed using GNU stow. Maybe these will benifit others, maybe not. Use anything here at your own risk. 
+
+For more information on how this works can be found
+[here](http://brandon.invergo.net/news/2012-05-26-using-gnu-stow-to-manage-your-dotfiles.html)
+
+

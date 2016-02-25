@@ -1,0 +1,20 @@
+{
+	"color_scheme": "Packages/Color Scheme - Default/Solarized (Light).tmTheme",
+	"dictionary": "Packages/Language - English/en_US.dic",
+	"draw_white_space": "all",
+	"font_size": 13,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"rulers":
+	[
+		80,
+		120
+	],
+	"spell_check": true,
+	"tab_size": 4,
+	"translateTabsToSpaces": true,
+	"translate_tabs_to_spaces": true,
+	"use_tab_stops": true
+}
