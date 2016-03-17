@@ -19,6 +19,7 @@ stow subl
 stow termite
 stow tmux
 stow vim
+stow fish
 
 # install packages
-installpackage vim tmux htop nano nmap ioping xbindkeys xdotool 
+installpackage vim tmux htop nano nmap ioping xbindkeys xdotool fish 

@@ -5,10 +5,17 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-#alias ls='ls --color=auto'
-#PS1='[\u@\h \W]\$ '
+__prompt()
+{
+if [[ $? != 0 ]] ; then
+	echo '[ERROR]'
+else
+	echo '[OK]'
+fi
 
-export PS1="[\u@\h][\A][\w]\n\\$ \[$(tput sgr0)\]"
+}
+export PS1='$(__prompt)'"[\u@\h][\A][\w]\n\\$ \[$(tput sgr0)\]"
+
 export TERM=xterm
 
 PATH=$PATH:~/bin
