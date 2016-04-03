@@ -1,30 +1,22 @@
-#!/usr/bin/fish
+#!/bin/bash
 
 # get the name of the most prioritized package manager installed on the system
 
-command --search pacaur >/dev/null; and begin
-    echo "pacaur"
-    exit 0
-end;
-command --search pacman >/dev/null; and begin
-    echo "pacman"
-    exit 0
-end;
-command --search apt-get >/dev/null; and begin
-    echo "apt-get"
-    exit 0
-end;
-command --search aptitude >/dev/null; and begin
-    echo "aptitude"
-    exit 0
-end;
-command --search yum >/dev/null; and begin
-    echo "yum"
-    exit 0
-end;
-command --search brew >/dev/null; and begin
-    echo "brew"
-    exit 0
-end;
-echo "no known package manager found"
-exit 100
+do_check()
+{
+    command -v $1 > /dev/null
+    if [ $? -eq 0 ] ; then
+        echo "$1"
+        exit 0 
+    fi 
+}
+
+do_check pacaur
+do_check pacman
+do_check apt-get
+do_check aptitude
+do_check yum
+do_check brew
+
+>&2 echo "ERROR: could not find package manager"
+exit 1
