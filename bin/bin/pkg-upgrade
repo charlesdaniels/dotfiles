@@ -1,16 +1,31 @@
-#!/usr/bin/fish
+#!/bin/bash
 
-switch (pkg-get-manager)
-case pacaur 
-    pacaur -Syu
-case pacman 
-    sudo pacman -Syu
-case apt-get
-    sudo apt-get upgrade
-case aptitude 
-    sudo aptitude upgrade
-case yum 
-    sudo yum upgrade
-case brew
-    echo "unsupported operation"
-end
+pkg-update
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -Syu 
+        ;;
+
+    pacman)
+        sudo pacman -Syu
+        ;;
+    
+    apt-get)
+        sudo apt-get upgrade
+        ;;
+
+    aptitude)
+        sudo aptitude upgrade
+        ;;
+
+    yum)
+        sudo yum upgrade
+        ;;
+
+    brew)
+        brew upgrade
+        ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

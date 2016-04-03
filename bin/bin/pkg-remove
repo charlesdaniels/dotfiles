@@ -1,17 +1,30 @@
-#!/usr/bin/fish
+#!/bin/bash
 
-switch (pkg-get-manager)
-case pacaur 
-    pacaur -R $argv
-case pacman 
-    sudo pacman -R $argv
-case apt-get
-    sudo apt-get remove $argv
-case aptitude 
-    sudo aptitude remove $argv
-case yum 
-    sudo yum remove $argv
-case brew
-    brew remove $argv
-end
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -R "$@"
+        ;;
 
+    pacman)
+        sudo pacman -R "$@" 
+        ;;
+    
+    apt-get)
+        sudo apt-get remove "$@" 
+        ;;
+
+    aptitude)
+        sudo aptitude remove "$@"
+        ;;
+
+    yum)
+        sudo yum remove "$@" 
+        ;;
+
+    brew)
+        brew remove "$@"
+        ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

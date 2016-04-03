@@ -1,17 +1,32 @@
-#!/usr/bin/fish
+#!/bin/bash
 
 pkg-upgrade
-switch (pkg-get-manager)
-case pacaur 
-    echo "unsupported operation"
-case pacman 
-    echo "unsupported operation"
-case apt-get
-    sudo apt-get autoremove
-case aptitude 
-    echo "not yet implemented"
-case yum 
-    echo "not yet implemented"
-case brew
-    echo "unsupported operation"
-end
+
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -Rs $(pacman -Qtdq) 
+        ;;
+
+    pacman)
+        sudo pacman -Rs $(pacman -Qtdq)
+        ;;
+    
+    apt-get)
+        sudo apt-get autoremove
+        ;;
+
+    aptitude)
+        echo "not yet implemented"
+        ;;
+
+    yum)
+        echo "not yet implemented"
+        ;;
+
+    brew)
+        echo "unsupported operation"
+        ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

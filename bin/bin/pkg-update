@@ -1,17 +1,30 @@
-#!/usr/bin/fish
+#!/bin/bash
 
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -Syy
+        ;;
 
-switch (pkg-get-manager)
-case pacaur 
-    pacaur -Syy
-case pacman 
-    sudo pacman -Syy
-case apt-get
-    sudo apt-get update
-case aptitude 
-    sudo aptitude update
-case yum 
-    sudo yum update
-case brew
-    brew update
-end
+    pacman)
+        sudo pacman -Syy
+        ;;
+    
+    apt-get)
+        sudo apt-get update 
+        ;;
+
+    aptitude)
+        sudo aptitude update
+        ;;
+
+    yum)
+        sudo yum update 
+        ;;
+
+    brew)
+        brew update
+        ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 
