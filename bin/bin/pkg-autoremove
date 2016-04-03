@@ -4,7 +4,7 @@ pkg-upgrade
 
 case "$(pkg-get-manager)" in 
     pacaur)
-        pacaur -Rs $(pacman -Qtdq) 
+        pacaur -Rs $(pacaur -Qtdq) 
         ;;
 
     pacman)
