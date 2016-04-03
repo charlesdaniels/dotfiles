@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 . $CAD_ETC_PATH/BACKUP.cfg
 if [ ! -d "${CAD_BACKUP_PATH}" ]; then
