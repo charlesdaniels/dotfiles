@@ -1,4 +1,4 @@
-function pkg-install
+function pkg-remove
     switch (get-pkg-manager)
     case pacaur 
         pacaur -R $argv

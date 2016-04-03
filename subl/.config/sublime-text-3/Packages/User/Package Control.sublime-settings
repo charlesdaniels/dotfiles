@@ -23,8 +23,10 @@
 		"LaTeXTools",
 		"Markdown Extended",
 		"Markdown Preview",
+		"orgmode",
 		"Package Control",
 		"Python Completions",
+		"Restructured Text (RST) Snippets",
 		"SublimeREPL"
 	]
 }

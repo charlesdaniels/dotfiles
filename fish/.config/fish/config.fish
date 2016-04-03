@@ -20,3 +20,16 @@ end
 
 # squelch greeting
 set fish_greeting ""
+
+# aliases
+alias sprunge="curl -F 'sprunge=<-' http://sprunge.us"
+alias opendirget='wget -e robots=off -r --level=0 -nc -np --reject html,htm,css'
+alias ls="ls --color=never"
+
+# setup PATH
+set PATH $HOME/bin $PATH
+
+# fix intel gpu driver stuff
+set hiz false
+set INTEL_HIZ 0
+set INTEL_SEPARATE_STENCIL 0

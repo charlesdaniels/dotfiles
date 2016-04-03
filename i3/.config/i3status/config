@@ -33,7 +33,7 @@ run_watch DHCP {
 }
 
 battery 0 {
-	format = "%status %percentage  %remaining"
+	format = "%status %percentage  %remaining (%consumption)"
 	format_down = "NO BATTERY"
 	status_chr = "⚇ CHR"
 	status_bat = "⚡ BAT"

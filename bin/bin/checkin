@@ -1,0 +1,24 @@
+#!/bin/bash
+echo "------ check-in $(date) -------"
+echo "System Uptime: $(uptime)"
+echo ". . . . Logged In Users . . . ."
+who -a
+echo ". . . . Interfaces  . . . . . ." 
+ip addr
+echo ". . . . Geolocation . . . . . ."
+curl "https://maps.googleapis.com/maps/api/browserlocation/json?browser=firefox&key=AIzaSyDBgL8fm9bD8RLShATOLI1xKmFcZ4ieMkM&sensor=true" --data-urlencode "`nmcli -f SSID,BSSID,SIGNAL dev wifi list |perl -ne "if(s/^(.+?)\s+(..:..:..:..:..:..)\s+(.+?)\s*$/&wifi=mac:\2|ssid:\1|ss:\3/g){print;}"`"
+echo ". . . . Nearby Wi-Fi networks ."
+iwlist scan | grep ESSID | tr -s [:space:]
+echo ". . . . ARP Table . . . . . . ."
+cat /proc/net/arp
+echo ". . . . USB Devices . . . . . ."
+lsusb
+echo ". . . . PCI Devices . . . . . ."
+lspci
+echo ". . . . Running Services  . . ."
+echo "$(systemctl list-units )"
+echo ". . . . cronjobs  . . . . . . ."
+crontab -l
+echo ". . . . traceroute  . . . . . ."
+traceroute 8.8.8.8
+traceroute cdaniels.net

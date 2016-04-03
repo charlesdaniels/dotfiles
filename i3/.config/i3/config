@@ -160,10 +160,8 @@ exec_always "feh --bg-fill ~/.wallpapers/current" # set wallpaper
 exec dropbox
 exec bashbullet
 exec "pulseaudio --start"
-#exec --no-startup-id i3-msg 'workspace ✉; exec thunderbird; exec sleep 1; workspace ♫; exec spotify-hidpi; exec sleep 1; workspace 1'
-#exec --no-startup-id i3-msg 'workspace ♫; exec spotify-hidpi; exec sleep 1'
-#exec --no-startup-id i3-msg 'exec sleep 2; workspace 1'
 exec ~/bin/workspace_setup.sh
+exec "numlockx on"
 
 # alt tab
 bindsym $mod+Tab exec "rofi -show window -dpi 160"
