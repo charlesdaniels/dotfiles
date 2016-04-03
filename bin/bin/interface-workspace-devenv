@@ -1,0 +1,26 @@
+#!/bin/bash
+# setup development environment with i3
+
+. $CAD_ETC_PATH
+
+CAD_GUI_EDITOR      
+CAD_TERMINAL        
+CAD_FILE_MANAGER    
+CAD_EDITOR_WORKSPACE
+CAD_FILER_WORKSPACE 
+CAD_EDITOR_LAYOUT   
+
+
+echo "editor is: $CAD_GUI_EDITOR"
+echo "terminal is: $CAD_TERMINAL"
+echo "file manager is: $CAD_FILE_MANAGER"
+
+i3-msg "workspace $CAD_EDITOR_WORKSPACE"
+i3-msg "append_layout $CAD_EDITOR_LAYOUT"
+i3-msg "exec $CAD_GUI_EDITOR"
+i3-msg "exec $CAD_TERMINAL"
+
+
+i3-msg "workspace $CAD_FILER_WORKSPACE"
+i3-msg "exec $CAD_FILE_MANAGER"
+i3-msg "workspace $CAD_EDITOR_WORKSPACE"

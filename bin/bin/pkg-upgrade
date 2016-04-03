@@ -1,0 +1,16 @@
+#!/usr/bin/fish
+
+switch (pkg-get-manager)
+case pacaur 
+    pacaur -Syu
+case pacman 
+    sudo pacman -Syu
+case apt-get
+    sudo apt-get upgrade
+case aptitude 
+    sudo aptitude upgrade
+case yum 
+    sudo yum upgrade
+case brew
+    echo "unsupported operation"
+end

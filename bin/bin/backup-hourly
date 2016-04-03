@@ -1,0 +1,15 @@
+#!/bin/sh
+
+. $CAD_ETC_PATH/BACKUP.cfg
+if [ ! -d "${CAD_BACKUP_PATH}" ]; then
+  echo "Backup folder does not exist, not continuing with backup"
+  exit
+fi
+echo "Backup folder exists... proceeding with backup"
+
+# Backup all of /home and /var/www except a few
+# excluded directories
+borg create -v --stats                          \
+    $CAD_BACKUP_PATH::`hostname`-`date +%Y-%m-%d:%H` \
+    /home                                       \
+

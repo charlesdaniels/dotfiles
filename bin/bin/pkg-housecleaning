@@ -1,0 +1,6 @@
+#!/usr/bin/fish
+
+pkg-update
+pkg-upgrade
+pkg-dist-upgrade
+pkg-autoremove
