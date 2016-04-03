@@ -1,18 +1,32 @@
-#!/usr/bin/fish
+#!/bin/bash
 
 # install a package using the preferred package manager
 
-switch (pkg-get-manager)
-case pacaur 
-    pacaur -S $argv
-case pacman 
-    sudo pacman -S $argv
-case apt-get
-    sudo apt-get install $argv
-case aptitude 
-    sudo aptitude install $argv
-case yum 
-    sudo yum install $argv
-case brew
-    brew install $argv
-end
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -S "$@"
+        ;;
+
+    pacman)
+        sudo pacman -S "$@" 
+        ;;
+    
+    apt-get)
+        sudo apt-get install "$@" 
+        ;;
+
+    aptitude)
+        sudo aptitude install "$@"
+        ;;
+
+    yum)
+        sudo yum install "$@" 
+        ;;
+
+    brew)
+        brew install "$@"
+        ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 
