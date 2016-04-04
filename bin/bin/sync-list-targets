@@ -7,12 +7,14 @@ if [ ! -d $CAD_ETC_PATH/sync/targets ] ; then
     exit 1
 fi 
 
-echo "source dir          | dest dir           | command       | options"
-echo "--------------------|--------------------|---------------|---------------"
+ printf " %-15s | %-18s | %-18s | %-13s | %-13s \n" "name" "source" "dest" \
+ "command" "options"
+ printf "+----------------+--------------------+--------------------+---------------+---------------\n"
 
 for f in $CAD_ETC_PATH/sync/targets/*.cfg ; do
     . $f
-    printf " %-18s | %-18s | %-13s | %-23s" "$CAD_SYNC_TARGET_SOURCE_DIR" \
+    printf " %-15s | %-18s | %-18s | %-13s | %-13s \n" $(basename $f) \
+        "$CAD_SYNC_TARGET_SOURCE_DIR" \
         "$CAD_SYNC_TARGET_DEST_DIR" \
         "$CAD_SYNC_TARGET_COMMAND" \
         "$CAD_SYNC_TARGET_OPTS"
