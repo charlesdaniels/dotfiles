@@ -2,5 +2,5 @@
 nmcli radio wifi off
 sudo mount /borg
 sudo mount /tank
-/home/cad/bin/autobackup.sh
-/home/cad/bin/checkin > /home/cad/Dropbox/Ixion_report
+backup-hourly
+status-checkin > /home/cad/Dropbox/Ixion_report
