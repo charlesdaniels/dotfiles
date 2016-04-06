@@ -1,0 +1,22 @@
+#!/bin/bash
+
+CURRENT_DATE=$(date +"%Y%m%d")
+NEXT_WEEK=$(date --date "$(date --date $CURRENT_DATE +%F) +7 days" +%F)
+NEXT_WEEK=$(date -d $NEXT_WEEK +"%Y%m%d")
+. $HOME/.todo/config
+
+todo archive > /dev/null
+
+cat $TODO_FILE | grep ^[^x] | grep "due:[0-9]\{4\}\-[0-9]\{2\}\-[0-9]\{2\}" | \
+while read line; do
+    #echo "PROCESSING LINE: $line" 
+    DUE_DATE=$(echo $line | grep -o "due:[0-9]\{4\}\-[0-9]\{2\}\-[0-9]\{2\}")
+    DUE_DATE=$(echo $DUE_DATE |  grep -o "[0-9]\{4\}\-[0-9]\{2\}\-[0-9]\{2\}")
+    #echo "DUE DATE: $DUE_DATE"
+    DUE_DATE=$(date -d $DUE_DATE +"%Y%m%d")
+    if [ $DUE_DATE -ge $CURRENT_DATE ] ; then
+        if [ $DUE_DATE -le $NEXT_WEEK ] ; then
+            echo "      $line"
+        fi 
+    fi 
+done

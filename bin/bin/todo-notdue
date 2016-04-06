@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# print all tasks which do not have due dates 
+
+CURRENT_DATE=$(date +"%Y%m%d")
+. $HOME/.todo/config
+
+todo archive > /dev/null
+
+cat $TODO_FILE | grep ^[^x] | grep -v "due:[0-9]\{4\}\-[0-9]\{2\}\-[0-9]\{2\}" | \
+while read line; do
+    echo "      $line"
+done
