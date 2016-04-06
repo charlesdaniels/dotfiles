@@ -151,17 +151,7 @@ for_window [title="win0"] kill
 focus_follows_mouse no 
 
 # autostart
-exec "xrandr --dpi 160 && xdotool key Super+Shift+r"
-exec pasystray # pavucontrol in systray
-exec nm-applet # network manager applet in systray
-exec twmnd # twmn daemon 
-exec "compton --vsync opengl" # compositing
-exec_always "feh --bg-fill ~/.wallpapers/current" # set wallpaper 
-exec dropbox
-exec bashbullet
-exec "pulseaudio --start"
-exec ~/bin/workspace_setup.sh
-exec "numlockx on"
+exec "~/bin/sys-onlogin"
 
 # alt tab
 bindsym $mod+Tab exec "rofi -show window -dpi 160"

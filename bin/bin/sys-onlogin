@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# programs to run on login. Should be called by DE on login
+
+# uncomment to make i3 do high res properly
+xrandr --dpi 160 && xdotool key Super+Shift+r
+
+# system tray stuff
+nohup pasystray &
+nohup nm-applet &
+nohup dropbox &
+
+# pulsaudio
+nohup pulseaudio --start &
+
+# compositing
+nohup compton --vsync opengl &
+
+# set wallpaper
+feh --bg-fill ~/.wallpapers/current 
+
+# force numlock to be on
+numlockx on 
+
+# twmnd 
+nohup twmnd &
+
+# hook workspace setup
+interface-workspace-setup
