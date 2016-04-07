@@ -1,15 +1,7 @@
 #!/bin/bash
 # setup development environment with i3
 
-. $CAD_ETC_PATH
-
-CAD_GUI_EDITOR      
-CAD_TERMINAL        
-CAD_FILE_MANAGER    
-CAD_EDITOR_WORKSPACE
-CAD_FILER_WORKSPACE 
-CAD_EDITOR_LAYOUT   
-
+. $CAD_ETC_PATH/interface/INTERFACE.cfg
 
 echo "editor is: $CAD_GUI_EDITOR"
 echo "terminal is: $CAD_TERMINAL"

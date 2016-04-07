@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ls $CAD_ETC_PATH/sync/groups

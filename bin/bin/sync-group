@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ ! -f $CAD_ETC_PATH/sync/groups/$1 ] ; then
+    echo "ERROR: group $1 does not exist in $CAD_ETC_PATH/sync/groups/"
+    exit 1
+fi
+
+cat $CAD_ETC_PATH/sync/groups/$1 | while read target ; do 
+    echo "processing target $target..."
+    sync-target $target 
+done
