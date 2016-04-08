@@ -11,5 +11,8 @@ todo-today
 echo "Tasks due in the next week: "
 todo-week
 
-echo "Tasks without due dates: " 
-todo-notdue
+echo "School-related Tasks without due dates: " 
+todo-notdue-context School
+
+echo "Non-School-related Tasks without due dates: " 
+todo-notdue-notcontext School
