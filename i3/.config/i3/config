@@ -180,24 +180,16 @@ bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightnes
 
 
 # colors 
-# from here https://faq.i3wm.org/question/2071/how-can-i-change-look-of-windows/
-# color defines for zenburn styled i3
-set $bg     #2c2c2e
-set $fg     #9f9f9f
-set $hi     #efef8f
-set $ac     #a0afa0i
-set $tx     #040404
-set $ia     #8f8f8f
-set $be     #8faf9f
-set $yw     #ccdc90
-set $gn     #88b090
-set $rd     #e89393
+set $bg     #151515
+set $fg     #D8D8D8
+set $hi     #F2F2F2
+set $rd 		#B40404
 
-# set some nice colors      border     background  text
-client.focused              $ac        $ac         $tx
-client.unfocused            $bg        $bg         $ia
-client.focused_inactive     $bg        $bg         $ac
-client.urgent               $rd        $rd         $tx
+# set some nice colors      border     background  text	indicator	child_border
+client.focused              $hi        $fg         $bg		$rd			$fg
+client.unfocused            $bg        $bg         $hi		$rd			$bg
+client.focused_inactive     $fg        $fg         $bg		$rd			$bg
+client.urgent               $rd        $rd         $hi		$rd			$rd
 
 
 # Start i3bar to display a workspace bar (plus the system information i3status
@@ -208,12 +200,10 @@ bar {
 	colors {
         	background          $bg
         	statusline          $fg
-                separator           $hi
-	        focused_workspace   $gn        $bg        $ac
-		active_workspace    $gn	       $bg	  $ac
-	        #active_workspace    $gn        $ac        $tx
-		focused_workspace   $gn	       $ac	  $tx
-		inactive_workspace  $bg        $bg        $ia
-		urgent_workspace    $rd        $bg        $ac
+         separator           $hi
+	      focused_workspace   $hi        $bg        $fg
+			active_workspace    $hi	       $bg	  		$fg
+			inactive_workspace  $bg        $bg        $fg
+			urgent_workspace    $rd        $bg        $fg
 	    }
 }

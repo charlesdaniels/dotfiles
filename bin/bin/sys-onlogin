@@ -6,15 +6,15 @@
 xrandr --dpi 160 && xdotool key Super+Shift+r
 
 # system tray stuff
-nohup pasystray &
-nohup nm-applet &
-nohup dropbox &
+i3-msg 'exec pasystray'
+i3-msg 'exec "nm-applet"'
+i3-msg 'exec "dropbox"'
 
 # pulsaudio
-nohup pulseaudio --start &
+i3-msg 'exec "pulseaudio --start"'
 
 # compositing
-nohup compton --vsync opengl &
+i3-msg 'exec "compton --vsync opengl"'
 
 # set wallpaper
 feh --bg-fill ~/.wallpapers/current 
@@ -23,7 +23,7 @@ feh --bg-fill ~/.wallpapers/current
 numlockx on 
 
 # twmnd 
-nohup twmnd &
+i3-msg 'exec "twmnd"'
 
 # hook workspace setup
 interface-workspace-setup
