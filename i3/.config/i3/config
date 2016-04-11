@@ -5,7 +5,8 @@
 
 set $mod Mod4
 
-font pango:Source Code Sans 9
+#font pango:Source Code Sans 9
+font pango:uushi 11
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -147,6 +148,9 @@ for_window [class="net-sourceforge-jnlp-runtime-Boot"] floating enable
 for_window [class="sun-awt-X11-XFramePeer"] floating enable 
 for_window [title="win0"] kill 
 
+# hide window borders on edges
+hide_edge_borders both
+
 # mouse focus
 focus_follows_mouse no 
 
@@ -178,12 +182,12 @@ bindsym XF86KbdBrightnessUp exec "kbdlight up 10"
 bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
 
-
+# color pallete: http://paletton.com/#uid=23i0u0kt+lZlOstrKqzzSiaJidt
 # colors 
-set $bg     #151515
-set $fg     #D8D8D8
-set $hi     #F2F2F2
-set $rd 		#B40404
+set $bg     #4B6060
+set $fg     #D3CCC6
+set $hi     #F9E6D5
+set $rd 		#AF550B
 
 # set some nice colors      border     background  text	indicator	child_border
 client.focused              $hi        $fg         $bg		$rd			$fg

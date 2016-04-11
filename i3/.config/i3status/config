@@ -1,12 +1,16 @@
+
 general 
 {
+	color_bad = "#FF7400"
+	color_good = "#77D5D5"
+	color_degraded = "#FFAA63"
 	colors = true
 	interval = 5
 }
 
 order += "disk /"
-order += "run_watch DHCP"
 order += "wireless wlp3s0"
+order += "ethernet enp0s20u1u2"
 order += "path_exists VPN"
 order += "load"
 order += "cpu_temperature 0"
@@ -24,8 +28,12 @@ path_exists VPN {
 }
 
 wireless wlp3s0 {
-	format_up = "W: (%essid @ %bitrate) %ip)"
+	format_up = "W: %essid (%bitrate %ip)"
 	format_down = "W: DOWN"
+}
+ethernet enp0s20u1u2 {
+	format_up = "E: %ip"
+	format_down = "E: DOWN"
 }
 
 run_watch DHCP {
