@@ -1,15 +1,3 @@
 #!/bin/bash
 
-. $CAD_ETC_PATH/interface/INTERFACE.cfg
-
-i3-msg "workspace $CAD_MAIL_WORKSPACE"
-i3-msg 'exec surf https://fastmail.com'
-sleep 3
-i3-msg "workspace $CAD_MUSIC_WORKSPACE"
-i3-msg 'exec spotify-hidpi' 
-sleep 3
-i3-msg "workspace $CAD_BROWSER_WORKSPACE"
-i3-msg 'exec firefox'
-sleep 3
-i3-msg 'workspace 1'
-
+echo "depreciated"

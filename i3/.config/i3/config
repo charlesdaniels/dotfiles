@@ -5,8 +5,8 @@
 
 set $mod Mod4
 
-#font pango:Source Code Sans 9
-font pango:uushi 11
+font pango:Source Code Pro Semibold 10
+#font pango:gohufont 11
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -154,9 +154,6 @@ hide_edge_borders both
 # mouse focus
 focus_follows_mouse no 
 
-# autostart
-exec "~/bin/sys-onlogin"
-
 # alt tab
 bindsym $mod+Tab exec "rofi -show window -dpi 160"
 
@@ -169,6 +166,20 @@ exec "xautolock -time 15 -locker \"i3lock -t -i ~/.wallpapers/lock\" &"
 
 # borders
 for_window [class="^.*"] border pixel 2
+
+# Auto Start
+
+exec pasystray
+exec "nm-applet"
+exec "dropbox"
+exec "xrandr --dpi 160 && xdotool key Super+Shift+r"
+# pulsaudio
+exec "pulseaudio --start"
+# compositing
+exec "compton --vsync opengl"
+exec /home/cad/bin/interface-update-wallpaper
+exec twmnd
+exec /home/cad/bin/interface-workspace-setup
 
 # media keys 
 bindsym XF86AudioPlay exec "playerctl play-pause"

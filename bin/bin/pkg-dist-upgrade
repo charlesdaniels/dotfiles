@@ -5,10 +5,12 @@ pkg-upgrade
 case "$(pkg-get-manager)" in 
     pacaur)
         sudo mkinitcpio -p linux
+		  sudo pacman-key --refresh-keys
         ;;
 
     pacman)
         sudo mkinitcpio -p linux
+		  sudo pacman-key --refresh-keys
         ;;
     
     apt-get)

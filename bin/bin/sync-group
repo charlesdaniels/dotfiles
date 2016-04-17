@@ -5,7 +5,9 @@ if [ ! -f $CAD_ETC_PATH/sync/groups/$1 ] ; then
     exit 1
 fi
 
-cat $CAD_ETC_PATH/sync/groups/$1 | while read target ; do 
-    echo "processing target $target..."
-    sync-target $target 
+cat $CAD_ETC_PATH/sync/groups/$1 | while read TARGET ; do 
+    . $CAD_ETC_PATH/sync/targets/$TARGET.cfg
+
+    $CAD_SYNC_TARGET_COMMAND "$CAD_SYNC_TARGET_SOURCE_DIR" \
+        "$CAD_SYNC_TARGET_DEST_DIR" $CAD_SYNC_TARGET_OPTS
 done
