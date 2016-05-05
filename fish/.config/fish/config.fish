@@ -39,3 +39,6 @@ set -x VISUAL vim
 set hiz false
 set INTEL_HIZ 0
 set INTEL_SEPARATE_STENCIL 0
+
+# base 16 colors
+eval sh $HOME/bin/base16
