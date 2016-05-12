@@ -1,0 +1,2 @@
+#!/bin/bash
+youtube-dl -i -x --audio-format vorbis --audio-quality 0 "$1" 
