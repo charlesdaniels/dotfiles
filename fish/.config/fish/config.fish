@@ -49,3 +49,5 @@ case xterm-termite
 case '*'
 	# do nothing
 end
+
+functions --erase ls # prevents ls from breaking on BSD
