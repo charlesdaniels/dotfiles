@@ -24,6 +24,9 @@ case "$(pkg-get-manager)" in
     brew)
         brew remove "$@"
         ;;
+	 pkg)
+	 	  sudo pkg delete "$@"
+		  ;;
     *) 
         echo "ERROR: no known package manager available"
         exit 1

@@ -24,6 +24,9 @@ case "$(pkg-get-manager)" in
     brew)
         brew search "$@"
         ;;
+    pkg)
+	     pkg search "$@"
+		  ;;
     *) 
         echo "ERROR: no known package manager available"
         exit 1

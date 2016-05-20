@@ -1,6 +1,5 @@
 #!/bin/bash
 
-pkg-upgrade
 
 case "$(pkg-get-manager)" in 
     pacaur)
@@ -26,6 +25,9 @@ case "$(pkg-get-manager)" in
     brew)
         echo "unsupported operation"
         ;;
+	 pkg)
+	 	  sudo pkg autoremove
+		  ;;
     *) 
         echo "ERROR: no known package manager available"
         exit 1

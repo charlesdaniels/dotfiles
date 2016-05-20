@@ -30,6 +30,9 @@ case "$(pkg-get-manager)" in
     brew)
         echo "unsupported operation"
         ;;
+	 pkg)
+	 	  sudo pkg upgrade
+		  ;;
     *) 
         echo "ERROR: no known package manager available"
         exit 1

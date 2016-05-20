@@ -17,6 +17,7 @@ do_check apt-get
 do_check aptitude
 do_check yum
 do_check brew
+do_check pkg
 
 >&2 echo "ERROR: could not find package manager"
 exit 1

@@ -25,6 +25,9 @@ case "$(pkg-get-manager)" in
     brew)
         brew upgrade
         ;;
+	 pkg)
+	 	  sudo pkg upgrade
+		  ;;
     *) 
         echo "ERROR: no known package manager available"
         exit 1
