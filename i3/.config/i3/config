@@ -3,7 +3,7 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
-set $mod Mod4
+set $mod Mod1
 
 font pango:Source Code Pro Semibold 10
 #font pango:gohufont 11
@@ -19,7 +19,7 @@ bindsym $mod+Return exec "termite"
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec "rofi -opacity 80 -width 80 -lines 30 -show run -dpi 160" 
+bindsym $mod+d exec "rofi -opacity 80 -width 80 -lines 30 -show run" 
 # rofi is a dmenu alternative, you can install it from the AUR 
 #bindsym $mod+d exec dmenu_run
 
@@ -155,7 +155,7 @@ hide_edge_borders both
 focus_follows_mouse no 
 
 # alt tab
-bindsym $mod+Tab exec "rofi -show window -dpi 160"
+bindsym $mod+Tab exec "rofi -show window"
 
 # print screen 
 bindsym Print exec teiler
@@ -168,32 +168,34 @@ exec "xautolock -time 15 -locker \"i3lock -t -i ~/.wallpapers/lock\" &"
 for_window [class="^.*"] border pixel 2
 
 # Auto Start
-
+exec "feh --bg-fill ~/.wallpapers/current"
 exec pasystray
 exec "nm-applet"
 exec "dropbox"
-exec "xrandr --dpi 160 && xdotool key Super+Shift+r"
+#exec "xrandr --dpi 160 && xdotool key Super+Shift+r"
 # pulsaudio
 exec "pulseaudio --start"
 # compositing
 exec "compton --vsync opengl"
-exec /home/cad/bin/interface-update-wallpaper
 exec twmnd
-exec /home/cad/bin/interface-workspace-setup
 exec "numlockx on"
 exec "copyq"
 
 # media keys 
-bindsym XF86AudioPlay exec "playerctl play-pause"
-bindsym XF86AudioNext exec "playerctl next"
-bindsym XF86AudioPrev exec "playerctl previous" 
-bindsym XF86AudioLowerVolume exec "pamixer -d 3"
-bindsym XF86AudioRaiseVolume exec "pamixer -i 3"
-bindsym XF86AudioMute exec "pamixer -t" 
+bindsym XF86AudioPlay 		   exec "playerctl play-pause"
+bindsym XF86AudioNext 		   exec "playerctl next"
+bindsym XF86AudioPrev 		   exec "playerctl previous" 
+bindsym XF86AudioLowerVolume  exec "pamixer -d 3"
+bindsym XF86AudioRaiseVolume  exec "pamixer -i 3"
+bindsym XF86AudioMute 		   exec "pamixer -t" 
 bindsym XF86KbdBrightnessDown exec "kbdlight down 10"
-bindsym XF86KbdBrightnessUp exec "kbdlight up 10"
-bindsym XF86MonBrightnessUp exec xbacklight -inc 5 # increase screen brightness
+bindsym XF86KbdBrightnessUp   exec "kbdlight up 10"
+bindsym XF86MonBrightnessUp   exec xbacklight -inc 5 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
+
+bindsym Control+Right exec "playerctl next"
+bindsym Control+Left  exec "playerctl previous"
+bindsym Control+End 	 exec "playerctl play-pause"
 
 # color pallete: http://paletton.com/#uid=23i0u0kt+lZlOstrKqzzSiaJidt
 # colors 

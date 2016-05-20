@@ -42,3 +42,10 @@ set INTEL_SEPARATE_STENCIL 0
 
 # base 16 colors
 eval sh $HOME/bin/base16
+
+switch (echo $TERM)
+case xterm-termite
+	set TERM 'xterm'
+case '*'
+	# do nothing
+end
