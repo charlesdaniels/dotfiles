@@ -33,6 +33,7 @@ set -x CAD_BIN_PATH $HOME/bin
 set -x PATH $PATH $CAD_BIN_PATH
 set -x EDITOR vim
 set -x VISUAL vim
+set -x HOMEBREW_GITHUB_API_TOKEN (cat $CAD_ETC_PATH/HOMEBREW.cfg) 
 
 
 # fix intel gpu driver stuff
@@ -40,8 +41,6 @@ set hiz false
 set INTEL_HIZ 0
 set INTEL_SEPARATE_STENCIL 0
 
-# base 16 colors
-eval sh $HOME/bin/base16
 
 switch (echo $TERM)
 case xterm-termite
