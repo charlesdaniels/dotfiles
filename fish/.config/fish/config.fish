@@ -30,7 +30,7 @@ alias ls="ls --color=never"
 set -x PATH $HOME/bin $PATH
 set -x CAD_ETC_PATH $HOME/etc
 set -x CAD_BIN_PATH $HOME/bin
-set -x PATH $PATH:$CAD_BIN_PATH
+set -x PATH $PATH $CAD_BIN_PATH
 set -x EDITOR vim
 set -x VISUAL vim
 
