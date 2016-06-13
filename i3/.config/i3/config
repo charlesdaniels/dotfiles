@@ -5,7 +5,7 @@
 
 set $mod Mod1
 
-font pango:Source Code Pro Semibold 10
+font pango:profont 11
 #font pango:gohufont 11
 
 # Use Mouse+$mod to drag floating windows to their wanted position

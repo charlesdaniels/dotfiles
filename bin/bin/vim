@@ -1,0 +1,7 @@
+#!/bin/sh
+command -v vim
+if [ $? -ne 0 ] ; then
+	vim $@
+else 
+	nvim $@
+fi
