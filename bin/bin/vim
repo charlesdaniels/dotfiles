@@ -1,7 +1,8 @@
 #!/bin/sh
+VIMCMD=/usr/bin/vim
 command -v vim
-if [ $? -ne 0 ] ; then
-	vim $@
+if [ $? -eq 0 ] ; then
+	$VIMCMD $@
 else 
 	nvim $@
 fi
