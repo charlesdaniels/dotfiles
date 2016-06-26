@@ -6,7 +6,6 @@
 set $mod Mod1
 
 font pango:profont 11
-#font pango:gohufont 11
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -176,7 +175,7 @@ exec "dropbox"
 # pulsaudio
 exec "pulseaudio --start"
 # compositing
-exec "compton --vsync opengl"
+#exec "compton"
 exec twmnd
 exec "numlockx on"
 exec "copyq"

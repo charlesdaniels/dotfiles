@@ -1,4 +1,0 @@
-#!/bin/bash
-nmcli radio wifi on
-sudo umount /tank
-sudo umount /borg

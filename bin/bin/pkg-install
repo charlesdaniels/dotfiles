@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # install a package using the preferred package manager
 
@@ -25,6 +25,10 @@ case "$(pkg-get-manager)" in
 
     brew)
         brew install "$@"
+        if [ $? -ne 0] ; then
+            echo "requested packages appears to be in cask..."
+            brew cask install "$@"
+        fi 
         ;;
     pkg)
 	 	  sudo pkg install "$@"

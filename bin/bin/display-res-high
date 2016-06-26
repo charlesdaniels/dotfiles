@@ -1,5 +1,0 @@
-#!/bin/bash
-# set to high resolution
-
-. $CAD_ETC_PATH/SCREEN.CFG
-xrandr --output $CAD_XRANDR_DISPLAY --mode $CAD_RESOLUTION_HIGH

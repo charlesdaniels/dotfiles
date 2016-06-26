@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 pkg-update
 case "$(pkg-get-manager)" in 

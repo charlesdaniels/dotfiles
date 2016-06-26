@@ -1,9 +1,0 @@
-#!/bin/bash
-
-. $CAD_ETC_PATH/BACKUP.cfg
-if [ ! -d "${CAD_BACKUP_PATH}" ]; then
-  echo "Backup folder does is not mounted"
-  exit
-fi
-
-borg list --info $CAD_BACKUP_PATH
