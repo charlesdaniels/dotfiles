@@ -1,6 +1,6 @@
 #!/bin/sh
 VIMCMD=/usr/bin/vim
-command -v vim
+command -v $VIMCMD
 if [ $? -eq 0 ] ; then
 	$VIMCMD $@
 else 
