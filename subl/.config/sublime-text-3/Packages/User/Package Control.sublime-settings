@@ -12,18 +12,21 @@
 	[
 		"All Autocomplete",
 		"AutoPEP8",
+		"Base16 Color Schemes",
 		"COBOL Syntax",
+		"Color Scheme - Chromodynamics",
 		"DashDoc",
 		"DoxyDoxygen",
+		"fish-shell",
 		"Git",
 		"Intellitip",
-		"Javatar",
-		"Jedi - Python autocompletion",
 		"LaTeXTools",
 		"Markdown Extended",
 		"Markdown Preview",
 		"Package Control",
-		"Python Auto-Complete",
-		"SublimeREPL"
+		"Python Completions",
+		"Restructured Text (RST) Snippets",
+		"SublimeREPL",
+		"Todo.txt Syntax"
 	]
 }

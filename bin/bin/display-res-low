@@ -1,0 +1,5 @@
+#!/bin/bash
+# set to low resolution (useful for games that don't support resolution setting)
+
+. $CAD_ETC_PATH/SCREEN.CFG
+xrandr --output $CAD_XRANDR_DISPLAY --mode $CAD_RESOLUTION_LOW

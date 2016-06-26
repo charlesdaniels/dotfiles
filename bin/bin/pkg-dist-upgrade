@@ -1,0 +1,39 @@
+#!/bin/bash
+
+pkg-upgrade
+
+case "$(pkg-get-manager)" in 
+    pacaur)
+        sudo mkinitcpio -p linux
+		  sudo mkinitcpio -p linux-ck
+		  sudo pacman-key --refresh-keys
+        ;;
+
+    pacman)
+        sudo mkinitcpio -p linux
+		  sudo mkinitcpio -p linux-ck
+		  sudo pacman-key --refresh-keys
+        ;;
+    
+    apt-get)
+        sudo apt-get dist-upgrade
+        ;;
+
+    aptitude)
+        echo "not yet implemented"
+        ;;
+
+    yum)
+        echo "not yet implemented"
+        ;;
+
+    brew)
+        echo "unsupported operation"
+        ;;
+	 pkg)
+	 	  sudo pkg upgrade
+		  ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

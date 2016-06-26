@@ -1,0 +1,34 @@
+#!/bin/bash
+
+
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -Rs $(pacaur -Qtdq) 
+        ;;
+
+    pacman)
+        sudo pacman -Rs $(pacman -Qtdq)
+        ;;
+    
+    apt-get)
+        sudo apt-get autoremove
+        ;;
+
+    aptitude)
+        echo "not yet implemented"
+        ;;
+
+    yum)
+        echo "not yet implemented"
+        ;;
+
+    brew)
+        echo "unsupported operation"
+        ;;
+	 pkg)
+	 	  sudo pkg autoremove
+		  ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

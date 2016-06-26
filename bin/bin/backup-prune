@@ -1,0 +1,15 @@
+#!/bin/bash
+
+. $CAD_ETC_PATH/BACKUP.cfg
+
+# Use the `prune` subcommand to maintain 7 daily, 4 weekly and 6 monthly
+# archives of THIS machine. --prefix `hostname`- is very important to
+# limit prune's operation to this machine's archives and not apply to
+# other machine's archives also.
+
+borg prune -v $CAD_BACKUP_PATH --prefix `hostname`- \
+    --keep-hourly=$CAD_HOURLY_BACKUPS \
+    --keep-daily=$CAD_DAILY_BACKUPS   \
+    --keep-weekly=$CAD_WEEKLY_BACKUPS \
+    --keep-monthly=$CAD_MONTHLY_BACKUPS &> \
+    $CAD_BACKUP_LOG_PATH/prune~$(date +"%Y-%m-%d:%H").log

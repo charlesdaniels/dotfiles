@@ -1,0 +1,33 @@
+#!/bin/bash
+
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -Syy
+        ;;
+
+    pacman)
+        sudo pacman -Syy
+        ;;
+    
+    apt-get)
+        sudo apt-get update 
+        ;;
+
+    aptitude)
+        sudo aptitude update
+        ;;
+
+    yum)
+        sudo yum update 
+        ;;
+
+    brew)
+        brew update
+        ;;
+	 pkg)
+	     sudo pkg update
+		  ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

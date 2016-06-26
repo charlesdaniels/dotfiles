@@ -1,0 +1,33 @@
+#!/bin/bash
+
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -Ss "$@"
+        ;;
+
+    pacman)
+        pacman -Ss "$@" 
+        ;;
+    
+    apt-get)
+        apt-cache search "$@" 
+        ;;
+
+    aptitude)
+        aptitude search "$@"
+        ;;
+
+    yum)
+        yum search "$@" 
+        ;;
+
+    brew)
+        brew search "$@"
+        ;;
+    pkg)
+	     pkg search "$@"
+		  ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

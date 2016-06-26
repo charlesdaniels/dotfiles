@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# install a package using the preferred package manager
+
+case "$(pkg-get-manager)" in 
+    pacaur)
+        pacaur -S "$@"
+        ;;
+
+    pacman)
+        sudo pacman -S "$@" 
+        ;;
+    
+    apt-get)
+        sudo apt-get install "$@" 
+        ;;
+
+    aptitude)
+        sudo aptitude install "$@"
+        ;;
+
+    yum)
+        sudo yum install "$@" 
+        ;;
+
+    brew)
+        brew install "$@"
+        ;;
+    pkg)
+	 	  sudo pkg install "$@"
+		  ;;
+    *) 
+        echo "ERROR: no known package manager available"
+        exit 1
+esac 

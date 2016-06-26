@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# get the name of the most prioritized package manager installed on the system
+
+do_check()
+{
+    command -v $1 > /dev/null
+    if [ $? -eq 0 ] ; then
+        echo "$1"
+        exit 0 
+    fi 
+}
+
+do_check pacaur
+do_check pacman
+do_check apt-get
+do_check aptitude
+do_check yum
+do_check brew
+do_check pkg
+
+>&2 echo "ERROR: could not find package manager"
+exit 1

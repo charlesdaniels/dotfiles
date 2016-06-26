@@ -1,21 +1,50 @@
+
 general 
 {
+	color_bad = "#AB4642"
+	color_good = "#7CAFC2"
+	color_degraded = "#F7CA88"
 	colors = true
 	interval = 5
 }
 
 order += "disk /"
-order += "disk /home" 
-order += "disk /var"
-order += "ethernet enp0s25"
+order += "wireless wlp3s0"
+order += "ethernet enp0s20u1u2"
+order += "path_exists VPN"
 order += "load"
 order += "volume master"
+order += "battery 0"
 order += "tztime local" 
 
-ethernet enp0s25
-{
-	format_up = "E: %ip (%speed)"
+cpu_temperature 0 {
+	format = "CPU Temp: %degrees °C"
+	max_threshold = 60
+}
+
+path_exists VPN {
+	path = "/proc/sys/net/ipv4/conf/tun0"
+}
+
+wireless wlp3s0 {
+	format_up = "W: %essid (%bitrate %ip)"
+	format_down = "W: DOWN"
+}
+ethernet enp0s20u1u2 {
+	format_up = "E: %ip"
 	format_down = "E: DOWN"
+}
+
+run_watch DHCP {
+	pidfile = "/var/run/dhclient*.pid"
+}
+
+battery 0 {
+	format = "%status %percentage  %remaining (%consumption)"
+	format_down = "NO BATTERY"
+	status_chr = "⚇ CHR"
+	status_bat = "⚡ BAT"
+	status_full = "☻ FULL"
 }
 
 volume master {
@@ -38,15 +67,6 @@ load
 
 disk "/"
 {
-	format = "rootfs: %free free of %total"
+	format = "/ %free free"
 }
 
-disk "/home"
-{
-	format = "home: %free free of %total" 
-}
-
-disk "/var"
-{
-	format = "var: %free free of %total" 
-}

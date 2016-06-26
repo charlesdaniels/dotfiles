@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# generate an agenda for the next week, using todo.txt
+
+echo "Tasks which are past due: "
+todo-late
+
+echo "Tasks which are due today: "
+todo-today
+
+echo "Tasks due in the next week: "
+todo-week
+
+echo "School-related Tasks without due dates: " 
+todo-notdue-context School
+
+echo "Non-School-related Tasks without due dates: " 
+todo-notdue-notcontext School
