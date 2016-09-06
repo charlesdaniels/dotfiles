@@ -6,8 +6,6 @@
 """""""""""""""""""""""""""""""""""""""""""""
 
 
-" load pathogen plugins
-execute pathogen#infect()
 " use utf-8
 if has ("multi_byte")
 	" we can only enable utf-8 if we have multi byte support compiled in
@@ -27,43 +25,26 @@ filetype plugin indent on  " guess indent based on file type
 set cursorline  " highlight the active line
 set number  " use line numbering
 set laststatus=2
-colorscheme solarized
 set colorcolumn=80,160,240,320,400,480,660,740,800
-
+set nocompatible  "fix odd behaviour on some older systems 
 
 " show non-printing characters
 set list
 if has("multi_byte")
 	" if we have multi byte support, enable pretty characters
 	set listchars=tab:▸\ 
-	set listchars+=trail:·
-	set listchars+=space:·
+	set listchars+=trail:¬
 	set listchars+=precedes:«
 	set listchars+=extends:»
 	set listchars+=eol:↲
+	if v:version >= 704
+		" if we are using a supported vim version, show whitespace
+		set listchars+=space:␣
+	endif
 else
 	set listchars=tab:>-
-	set listchars+=trail:.
+	set listchars+=trail:_
 endif
-
-" airline configuration
-let g:airline#extensions#tabline#enabled = 1  " enable tabline
-let g:airline_theme = 'understated'  " set theme
-
-" NERDtree config
-
-" Open NERDTree in the directory of the current file (or /home if no file is
-" open)
-" see: http://superuser.com/a/868124
-nmap <silent> <Tab> :call NERDTreeToggleInCurDir()<cr>
-function! NERDTreeToggleInCurDir()
-	" If NERDTree is open in the current buffer
-	if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
-		exe ":NERDTreeClose"
-	else
-		exe ":NERDTreeFind"
-	endif
-endfunction
 
 " buffer cycling
 nnoremap <C-l> :bnext!<CR>
