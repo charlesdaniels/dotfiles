@@ -1,18 +1,20 @@
-#!/bin/bash
+#!/bin/sh
 
 pkg-upgrade
 
+arch_upgrade () 
+{
+    sudo mkinitcpio -p linux
+    sudo pacman-key --refresh-keys
+}
+
 case "$(pkg-get-manager)" in 
     pacaur)
-        sudo mkinitcpio -p linux
-		  sudo mkinitcpio -p linux-ck
-		  sudo pacman-key --refresh-keys
+        arch_upgrade
         ;;
 
     pacman)
-        sudo mkinitcpio -p linux
-		  sudo mkinitcpio -p linux-ck
-		  sudo pacman-key --refresh-keys
+        arch_upgrade
         ;;
     
     apt-get)

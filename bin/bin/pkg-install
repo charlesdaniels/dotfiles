@@ -25,10 +25,17 @@ case "$(pkg-get-manager)" in
 
     brew)
         brew install "$@"
+<<<<<<< HEAD
         if [ $? -ne 0 ] ; then
             echo "it looks like the requested item may be in cask..."
             brew cask install "$@"
         fi
+=======
+        if [ $? -ne 0] ; then
+            echo "requested packages appears to be in cask..."
+            brew cask install "$@"
+        fi 
+>>>>>>> origin/cleanup
         ;;
     pkg)
 	 	  sudo pkg install "$@"

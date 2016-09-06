@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # get the name of the most prioritized package manager installed on the system
 

@@ -7,8 +7,7 @@ allow_bold = true
 dynamic_title = true
 urgent_on_bell = true
 clickable_url = true
-#font = gohufont 11
-font = source code pro semibold 11
+font = profont 11
 scrollback_lines = 10000
 search_wrap = true
 #icon_name = terminal
@@ -18,7 +17,7 @@ search_wrap = true
 cursor_blink = system
 
 # "block", "underline" or "ibeam"
-cursor_shape = block
+cursor_shape = ibeam
 
 # $BROWSER is used by default if set, with xdg-open as a fallback
 browser = xdg-open

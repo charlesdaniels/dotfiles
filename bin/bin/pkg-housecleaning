@@ -1,4 +1,4 @@
-#!/usr/bin/fish
+#!/bin/fish
 
 pkg-update
 pkg-upgrade

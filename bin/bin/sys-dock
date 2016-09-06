@@ -1,6 +1,0 @@
-#!/bin/bash
-nmcli radio wifi off
-sudo mount /borg
-sudo mount /tank
-backup-hourly
-status-checkin > /home/cad/Dropbox/Ixion_report

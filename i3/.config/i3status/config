@@ -1,20 +1,21 @@
 
 general 
 {
-	color_bad = "#AB4642"
-	color_good = "#7CAFC2"
-	color_degraded = "#F7CA88"
+	#color_bad = "#AB4642"
+	#color_good = "#7CAFC2"
+	#color_degraded = "#F7CA88"
 	colors = true
 	interval = 5
 }
 
 order += "disk /"
-order += "wireless wlp3s0"
-order += "ethernet enp0s20u1u2"
-order += "path_exists VPN"
+order += "disk /Archive"
+order += "disk /home"
+order += "ethernet enp0s25"
+#order += "path_exists VPN"
 order += "load"
 order += "volume master"
-order += "battery 0"
+#order += "battery 0"
 order += "tztime local" 
 
 cpu_temperature 0 {
@@ -30,7 +31,7 @@ wireless wlp3s0 {
 	format_up = "W: %essid (%bitrate %ip)"
 	format_down = "W: DOWN"
 }
-ethernet enp0s20u1u2 {
+ethernet enp0s25 {
 	format_up = "E: %ip"
 	format_down = "E: DOWN"
 }
@@ -48,8 +49,8 @@ battery 0 {
 }
 
 volume master {
-        format = "♪: %volume"
-        format_muted = "♪: muted (%volume)"
+        format = "VOL: %volume"
+        format_muted = "VOL: muted (%volume)"
         device = "default"
         mixer = "Master"
         mixer_idx = 0
@@ -70,3 +71,12 @@ disk "/"
 	format = "/ %free free"
 }
 
+disk "/Archive"
+{
+	format = "NAS %free free"
+}
+
+disk "/home"
+{
+	format ="home %free free"
+}

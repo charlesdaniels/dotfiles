@@ -1,0 +1,8 @@
+#!/bin/sh
+VIMCMD=/usr/bin/vim
+command -v $VIMCMD
+if [ $? -eq 0 ] ; then
+	$VIMCMD $@
+else 
+	nvim $@
+fi
