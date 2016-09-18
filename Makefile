@@ -1,11 +1,14 @@
+STOW_TARGET=~
+STOW_PATH=stow
+STOW_CMD=$(STOW_PATH) --target $(STOW_TARGET)
+
 install:
-	cd universal && stow bash
-	cd universal && stow bin
-	cd universal && stow fish
-	cd universal && stow tmux
-	cd universal && stow vim
-	ifeq ($(UNAME_S),Darwin):
-		cd OSX && stow subl
-	else
-		cd other-unix && stow i3
-	endif
+	cd universal && $(STOW_CMD) bash
+	cd universal && $(STOW_CMD) bin
+	cd universal && $(STOW_CMD) fish
+	cd universal && $(STOW_CMD) tmux
+	cd universal && $(STOW_CMD) vim
+install-osx: install
+	cd OSX && $(STOW_CMD) subl
+install-unix: install
+	cd other-unix && $(STOW_CMD) i3
