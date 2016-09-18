@@ -33,7 +33,6 @@ set -x CAD_BIN_PATH $HOME/bin
 set -x PATH $PATH $CAD_BIN_PATH
 set -x EDITOR vim
 set -x VISUAL vim
-set -x HOMEBREW_GITHUB_API_TOKEN (cat $CAD_ETC_PATH/HOMEBREW.cfg) 
 
 
 # fix intel gpu driver stuff
