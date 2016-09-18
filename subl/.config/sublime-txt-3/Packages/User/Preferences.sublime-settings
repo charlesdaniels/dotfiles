@@ -1,9 +1,0 @@
-{
-	"color_scheme": "Packages/Base16 Color Schemes/base16-embers.light.tmTheme",
-	"font_size": 10,
-	"ignored_packages":
-	[
-		"DashDoc",
-		"Vintage"
-	]
-}

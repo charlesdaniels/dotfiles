@@ -1,0 +1,25 @@
+{
+	"color_scheme": "Packages/Colorsublime - Themes/Flatland_Black.tmTheme",
+	"draw_white_space": "all",
+	"font_face": "Monaco",
+	"font_options":
+	[
+		"no_antialias"
+	],
+	"font_size": 11,
+	"highlight_line": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"rulers":
+	[
+		0,
+		80,
+		120
+	],
+	"scroll_past_end": true,
+	"spell_check": true,
+	"tab_size": 2,
+	"translate_tabs_to_spaces": true
+}
