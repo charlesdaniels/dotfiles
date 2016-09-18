@@ -1,0 +1,4 @@
+#!/bin/bash
+if [[ "$OSTYPE" == "darwin"* ]] ; then
+	sudo killall -HUP mDNSResponder
+fi

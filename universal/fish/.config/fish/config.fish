@@ -22,8 +22,6 @@ end
 set fish_greeting ""
 
 # aliases
-alias sprunge="curl -F 'sprunge=<-' http://sprunge.us"
-alias opendirget='wget -e robots=off -r --level=0 -nc -np --reject html,htm,css'
 alias ls="ls --color=never"
 
 # setup environment variables
