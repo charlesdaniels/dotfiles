@@ -55,3 +55,4 @@ functions --erase ls # prevents ls from breaking on BSD
 set -x LC_ALL en_US.UTF-8
 set -x LANG en_US.UTF-8
 set -x LANGUAGE en_US.UTF-8
+set -g fish_user_paths "/usr/local/sbin" $fish_user_paths

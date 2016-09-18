@@ -1,8 +1,6 @@
 """"""""" Master Keybind List """""""""""""""
 " Alt + l - next buffer
 " Alt + k - previous buffer
-" Tab - toggle NERDtree
-" Ctrl + n - toggle numbering mode
 """""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -27,6 +25,8 @@ set number  " use line numbering
 set laststatus=2
 set colorcolumn=80,160,240,320,400,480,660,740,800
 set nocompatible  "fix odd behaviour on some older systems 
+set ruler  " display column and line number in statusline
+set mouse=a  " enable mouse support
 
 " show non-printing characters
 set list
@@ -49,3 +49,8 @@ endif
 " buffer cycling
 nnoremap <C-l> :bnext!<CR>
 nnoremap <C-k> :bprevious!<CR>
+
+
+set backspace=indent,eol,start " fix dumbass default backspace behaviour 
+
+set nowrap " disable line wrapping
