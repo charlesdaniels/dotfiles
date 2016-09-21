@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# shortcut to invoke sublime text from the OSX shell
+
+SUBL_PATH=/Applications/Sublime\ Text.app/Contents/MacOS/Sublime\ Text
+nohup "$SUBL_PATH" $@ < /dev/null >/dev/null 2>&1 &
