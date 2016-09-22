@@ -63,8 +63,11 @@ case "$(pkg-get-manager)" in
   brew)
     brew update
     ;;
-   pkg)
+  pkg)
     sudo pkg update
+    ;;
+  port)
+    sudo port selfupdate
     ;;
   *) 
     echo "ERROR: no known package manager available"

@@ -67,8 +67,11 @@ case "$(pkg-get-manager)" in
   brew)
     brew remove "$@"
     ;;
-   pkg)
+  pkg)
     sudo pkg delete "$@"
+    ;;
+  port)
+    sudo port uninstall "$@"
     ;;
   *) 
     echo "ERROR: no known package manager available"

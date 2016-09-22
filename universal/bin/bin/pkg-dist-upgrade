@@ -74,6 +74,9 @@ case "$(pkg-get-manager)" in
   pkg)
     sudo pkg upgrade
     ;;
+  port)
+    echo "not yet implemented"
+    ;;
   *) 
     echo "ERROR: no known package manager available"
     exit 1

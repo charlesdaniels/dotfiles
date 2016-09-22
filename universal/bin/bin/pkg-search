@@ -70,6 +70,10 @@ case "$(pkg-get-manager)" in
   pkg)
     pkg search "$@"
     ;;
+
+  port)
+    port search "$@"
+    ;;
   *) 
     echo "ERROR: no known package manager available"
     exit 1

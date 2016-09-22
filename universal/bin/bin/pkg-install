@@ -77,6 +77,9 @@ case "$(pkg-get-manager)" in
   pkg)
     sudo pkg install "$@"
     ;;
+  port)
+    sudo port install "$@"
+    ;;
   *) 
     echo "ERROR: no known package manager available"
     exit 1
