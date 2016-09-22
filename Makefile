@@ -10,5 +10,6 @@ install:
 	cd universal && $(STOW_CMD) vim
 install-osx: install
 	cd OSX && $(STOW_CMD) subl
+	cd OSX && $(STOW_CMD) iterm2
 install-unix: install
 	cd other-unix && $(STOW_CMD) i3
