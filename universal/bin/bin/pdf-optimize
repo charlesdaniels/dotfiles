@@ -3,7 +3,12 @@
 #
 #  OVERVIEW
 #  ========
-#  This script attempts to intelligently optimize a PDF file using ghostscript.
+#  This script attempts to intelligently optimize a PDF file using
+#  ghostscript. This script will work best on image-heavy PDFs, as it should
+#  not modify any vector content in a PDF. It will not modify the PDF in-line.
+#  This script is written with quality preservation in mind - it should not
+#  down sample below 300dpi ever. For a 600dpi scan, this script was tested to
+#  offer a size reduction of 90%.
 #
 #  USAGE
 #  =====
