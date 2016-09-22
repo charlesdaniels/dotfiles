@@ -5,8 +5,8 @@ STOW_CMD=$(STOW_PATH) --target $(STOW_TARGET)
 clear-iterm-config:
 	# this is a link to a file, which we don't know how to unstow
 	-rm ~/com.googlecode.iterm2.plist.bak
-	cp ~/Library/Preferences/com.googlecode.iterm2.plist ~/com.googlecode.iterm2.plist.bak
-	rm ~/Library/Preferences/com.googlecode.iterm2.plist
+	-cp ~/Library/Preferences/com.googlecode.iterm2.plist ~/com.googlecode.iterm2.plist.bak
+	-rm ~/Library/Preferences/com.googlecode.iterm2.plist
 
 install:
 	cd universal && $(STOW_CMD) bash
