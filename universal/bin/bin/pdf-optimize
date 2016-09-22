@@ -31,11 +31,13 @@ TIMESTAMP="$(date +"%Y-%m-%d_%H-%M-%S")"
 # postscript configuration
 # see here: http://milan.kupcevic.net/ghostscript-ps-pdf/
 GS_LOG_PATH="/tmp/pdf-optimize-$TIMESTAMP.log"
-PDFSETTINGS='/prepress'
 GS_OPTS=" -sDEVICE=pdfwrite \
 -dDetectDuplicateImages=true \
--dPDFSETTINGS=$PDFSETTINGS \
 -dCompatibilityLevel=1.4 \
+-dColorConversionStrategy=/LeaveColorUnchanged \
+-dDownsampleMonoImages=false \
+-dDownsampleGrayImages=false \
+-dDownsampleColorImages=false \
 -o"
 
 ########10########20########30#### LISCENSE ####50########60########70########80
@@ -115,8 +117,13 @@ TEMPIF=/tmp/pdf-optimize_input_$TIMESTAMP.pdf
 TEMPOF=/tmp/pdf-optimize_output_$TIMESTAMP.pdf
 cp "$INPUT_FILE" "$TEMPIF"
 
+
+START=$(date +%s)
 $GS_PATH $GS_OPTS "$TEMPOF" "$TEMPIF" > $GS_LOG_PATH 2>&1
 echo "done"
+END=$(date +%s)
+DIFF=$(( $END - $START ))
+echo "INFO: optimized PDF in $DIFF seconds"
 
 cp "$TEMPOF" "$OUTPUT_FILE"
 echo "INFO: GhostScript log written to: $GS_LOG_PATH"
@@ -129,3 +136,7 @@ IFSIZE=$(du -h "$INPUT_FILE" | cut -f 1)
 OFSIZE=$(du -h "$OUTPUT_FILE" | cut -f 1)
 echo "Input file size: $IFSIZE"
 echo "Output file size: $OFSIZE"
+
+
+
+
