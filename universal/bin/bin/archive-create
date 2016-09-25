@@ -44,10 +44,13 @@
 ########10########20########30########40########50########60########70########80
 
 
-ARCHIVE_DIR="$1"
+ARCHIVE_DIR=$(basename "$1")
 TIMESTAMP="$(iso8601date)"
 TEMP_DIR=/tmp/archive-$TIMESTAMP
 
+echo "INFO: archive timestamp is: $TIMESTAMP"
+echo "INFO: workspace is: $TEMP_DIR"
+echo "INFO: building archive from directory: $ARCHIVE_DIR"
 if [ ! -d "$ARCHIVE_DIR" ] ; then
   echo "ERROR: $ARCHIVE_DIR does not exist or is not a directory"
   exit 1
@@ -58,17 +61,22 @@ if [ -e "$ARCHIVE_DIR.tar.xz" ] ; then
   exit 1
 fi
 
+FILE_COUNT=$(find "$ARCHIVE_DIR" -type f | wc -l)
+echo "INFO: building archive from $FILE_COUNT files"
+
 printf "STATUS: creating workspace... "
 mkdir -p $TEMP_DIR
 echo "done"
 
 printf "STATUS: generating md5 sums... "
-find $ARCHIVE_DIR -type f | parallel md5 {} 2> /dev/null > $TEMP_DIR/md5sums.txt
+find "$ARCHIVE_DIR" -type f | parallel md5 {} 2> /dev/null > $TEMP_DIR/md5sums.txt
 echo "done"
+echo "INFO: computed $(wc -l < $TEMP_DIR/md5sums.txt) checksums"
 
 printf "STATUS: generating SHA sums... "
-find $ARCHIVE_DIR -type f | parallel shasum {} 2> /dev/null > $TEMP_DIR/shasums.txt
+find "$ARCHIVE_DIR" -type f | parallel shasum {} 2> /dev/null > $TEMP_DIR/shasums.txt
 echo "done"
+echo "INFO: computed $(wc -l < $TEMP_DIR/shasums.txt) checksums"
 
 printf "STATUS: gathering system information... "
 sysenv > $TEMP_DIR/sysenv.txt
@@ -92,14 +100,17 @@ mkdir "$ARCHIVE_DIR/archive_info"
 cp $TEMP_DIR/*txt "$ARCHIVE_DIR/archive_info"
 echo "done"
 
-printf "STATUS: compressing archive... "
+printf "STATUS: compressing archive ... "
 tar cvfJ "$ARCHIVE_DIR.tar.xz" "$ARCHIVE_DIR" > "$ARCHIVE_DIR.manifest" 2>&1
 echo "done"
 
 printf "STATUS: removing workspace... "
-rm -rf $TEMP_DIR
+rm -rf "$TEMP_DIR"
 echo "done"
 
 printf "STATUS: removing archive info from original... "
 rm -rf "$ARCHIVE_DIR/archive_info"
 echo "done"
+
+printf "INFO: completed archive generation."
+echo ""

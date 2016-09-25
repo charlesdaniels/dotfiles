@@ -3,8 +3,8 @@
 #
 #  OVERVIEW
 #  ========
-#  Generate system information and display to stdout. 
-#
+#  This is a wrapper for lpr, which causes it to use a smaller font and 
+#  
 ########10########20########30#### LISCENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
@@ -37,11 +37,12 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-echo "Current Date: $(date)"
-echo ""
-
-echo "Kernel: $(uname -a)"
-echo ""
-
-echo "-------------------------- Network Configuration ------------------------"
-ifconfig -a 
+MARGINS_SIZE="25"
+MARGINS="$MARGINS_SIZE:$MARGINS_SIZE:$MARGINS_SIZE:$MARGINS_SIZE"
+ENSCRIPT="--no-header \
+--margins=$MARGINS \
+--font=Courier9 \
+--word-wrap \
+--media=Letter"
+export ENSCRIPT
+enscript -p - | lpr

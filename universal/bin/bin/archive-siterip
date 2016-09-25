@@ -3,7 +3,14 @@
 #
 #  OVERVIEW
 #  ========
-#  This script is an alias for ``ls -lahF``. Mnemonic is "list all files"
+#  This script will rip an entire website recursively, then produce an archive
+#  of the site using archive-create.
+#  
+#  The archive will be created in ./
+#  
+#  USAGE
+#  =====
+#   $1 . . . . URL of the site to download
 #
 ########10########20########30#### LISCENSE ####50########60########70########80
 # Copyright (c) 2016, Charles Daniels
@@ -35,4 +42,53 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 # POSSIBILITY OF SUCH DAMAGE.
 ########10########20########30########40########50########60########70########80
-ls -lahF "$@"
+
+
+
+
+TIMESTAMP="$(iso8601date)"
+TEMP_DIR=/tmp/siterip-$TIMESTAMP
+TARGET_URL="$1"
+OUTPUT_DIR=$(echo "$TARGET_URL" | sed 's~http[s]*://~~g')
+
+USER_AGENT='Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0'
+HEADER='Accept: text/html'
+ROBOTS="off"
+WGET_OPTS="mpck"
+WGET_CMD="wget \
+-$WGET_OPTS \
+--user-agent=$USER_AGENT \
+--header=$HEADER \
+-e robots=$ROBOTS \
+--recursive \
+--page-requisites \
+-- convert-links \
+-- no-clobber \
+$TARGET_URL"
+
+echo "INFO: archive timestamp is: $TIMESTAMP"
+echo "INFO: workspace is: $TEMP_DIR"
+echo "INFO: performing sitreip on $TARGET_URL"
+echo "INFO: output directory is: $OUTPUT_DIR"
+echo "INFO: wget command is: $WGET_CMD"
+
+printf "STATUS: creating workspace... "
+mkdir -p $TEMP_DIR
+echo "done"
+
+
+printf "STATUS: downloading site with wget... "
+$WGET_CMD > $TEMP_DIR/wget.log 2>&1
+if [ 0 -ne $? ] ; then
+  echo "WARNING: wget exited with a nonzero return code, displaying log..."
+  cat $TEMP_DIR/wget.log
+fi
+echo "done"
+
+printf "STATUS: removing workspace... "
+rm -rf "$TEMP_DIR"
+echo "done"
+
+echo "INFO: finished downloading site; invoking archive-create."
+
+archive-create "$OUTPUT_DIR"

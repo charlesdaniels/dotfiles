@@ -3,8 +3,9 @@
 #
 #  OVERVIEW
 #  ========
-#  Generate system information and display to stdout. 
-#
+#  This script will locate all .h and .hpp files under ./ recursively, then
+#  print them to stdout in a pleasant format for printing.
+#  
 ########10########20########30#### LISCENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
@@ -37,11 +38,32 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-echo "Current Date: $(date)"
-echo ""
+printf_n () {
+  str=$1
+  num=$2
+  printf "%0.s$str" $(seq 1 $num)
+}
 
-echo "Kernel: $(uname -a)"
-echo ""
+format_header () {
+  # $1 . . . the path to the file to format 
+  TARGET_FILE="$1"
+  TARET_BASENAME=$(basename "$TARGET_FILE")
+  FNAME_LENGTH="$(echo -n $TARET_BASENAME | wc -m)"
+  SEP_LEN=$(expr \( 84 - $FNAME_LENGTH \) / 2 - 1)
+  SEP_CHAR='~'
+  printf "\f\n"
+  printf "      "
+  printf_n $SEP_CHAR $SEP_LEN
+  printf " %s " "$(echo $TARET_BASENAME)"
+  printf_n $SEP_CHAR $SEP_LEN
+  echo ""
+  echo ""
+  cat -n "$TARGET_FILE"
+  
+}
 
-echo "-------------------------- Network Configuration ------------------------"
-ifconfig -a 
+for target in $(find ./ -type f -name "*.h") ; do
+  format_header "$target"
+  #format_header $target
+done
+#find ./ -type f -name "*.h"
