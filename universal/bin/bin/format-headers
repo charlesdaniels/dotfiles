@@ -66,4 +66,7 @@ for target in $(find ./ -type f -name "*.h") ; do
   format_header "$target"
   #format_header $target
 done
-#find ./ -type f -name "*.h"
+for target in $(find ./ -type f -name "*.hpp") ; do
+  format_header "$target"
+  #format_header $target
+done
