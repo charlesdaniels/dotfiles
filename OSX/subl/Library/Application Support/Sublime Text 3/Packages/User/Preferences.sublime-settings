@@ -1,11 +1,7 @@
 {
 	"color_scheme": "Packages/Colorsublime - Themes/dimmed-monokai.tmTheme",
 	"draw_white_space": "all",
-	"font_face": "Andale Mono",
-	"font_options":
-	[
-		"no_antialias"
-	],
+	"font_face": "Monaco",
 	"font_size": 14,
 	"highlight_line": true,
 	"ignored_packages":
