@@ -39,6 +39,6 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 # POSSIBILITY OF SUCH DAMAGE.
-###
+########10########20########30########40########50########60########70########80
 
 find . -type f -name "$1" -exec sh -c 'for i;do sed 's/[[:space:]]*$//' "$i">/tmp/.$$ && cat /tmp/.$$ > "$i";done' arg0 {} +
