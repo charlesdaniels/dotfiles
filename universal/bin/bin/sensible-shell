@@ -65,4 +65,6 @@ invoke_shell tcsh
 invoke_shell csh
 invoke_shell ksh
 invoke_shell sh
+echo "ERROR: failed to locate a sensible shell"
+exit 1
 
