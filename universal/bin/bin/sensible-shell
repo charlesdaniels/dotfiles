@@ -53,8 +53,6 @@ invoke_shell()
     echo "found sensible shell $1, executing it now"
     $1
     exit 0
-  else
-    exit 1
   fi
 }
 
