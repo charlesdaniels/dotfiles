@@ -39,7 +39,11 @@ if has("multi_byte")
 	set listchars+=eol:↲
 	if v:version >= 704
 		" if we are using a supported vim version, show whitespace
-		set listchars+=space:␣
+		try
+			set listchars+=space:␣
+		catch 
+			" do nothing
+		endtry
 	endif
 else
 	set listchars=tab:>-

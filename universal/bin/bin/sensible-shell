@@ -4,8 +4,16 @@
 #
 #  OVERVIEW
 #  ========
-#  This script will invoke a sensible shell. It will first attempt to launch
-#  fish. Then it will attempt to launch bash. Finally, it will launch sh.
+#  This script will invoke a sensible shell. It will attempt to invoke a shell
+#  in the following order...
+#  
+#  * fish
+#  * bash
+#  * zsh
+#  * tcsh
+#  * csh
+#  * ksh
+#  * sh
 #  
 ########10########20########30#### LISCENSE ####50########60########70########80
 # Copyright (c) 2016, Charles Daniels
@@ -51,6 +59,9 @@ invoke_shell()
 
 invoke_shell fish
 invoke_shell bash
+invoke_shell zsh
+invoke_shell tcsh
+invoke_shell csh
+invoke_shell ksh
 invoke_shell sh
-
 
