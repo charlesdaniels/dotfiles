@@ -43,6 +43,9 @@ invoke_shell()
   command -v $1 > /dev/null
   if [ $? -eq 0 ] ; then
     $1
+    exit 0
+  else
+    exit 1
   fi
 }
 
