@@ -52,4 +52,4 @@ if [ $? -ne 0 ] ; then
   exit 1
 fi
 
-$(sensible-python3) $SORTPHOTOS_SCRIPT
+$(sensible-python3) $SORTPHOTOS_SCRIPT $@
