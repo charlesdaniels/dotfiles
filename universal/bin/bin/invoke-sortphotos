@@ -38,18 +38,11 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-SORTPHOTOS_SCRIPT=SortPhotos/src/sortphotos.py 
+SORTPHOTOS_SCRIPT=~/bin/SortPhotos/src/sortphotos.py 
 
 if [ ! -e $SORTPHOTOS_SCRIPT ] ; then
   echo "ERROR 44: $SORTPHOTOS_SCRIPT does not exist"
   exit 1
 fi
 
-sensible-python3 2&> /dev/null 2>&1
-
-if [ $? -ne 0 ] ; then
-  echo "ERROR 51: python3 is not installed"
-  exit 1
-fi
-
-$(sensible-python3) $SORTPHOTOS_SCRIPT $@
+python $SORTPHOTOS_SCRIPT "$@"
