@@ -1,0 +1,3 @@
+[submodule "universal/bin/bin/SortPhotos"]
+	path = universal/bin/bin/SortPhotos
+	url = https://github.com/andrewning/sortphotos
