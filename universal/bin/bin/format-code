@@ -3,9 +3,8 @@
 #
 #  OVERVIEW
 #  ========
-#  This script will attempt to clean common caches, trashes, and things of
-#  that sort to free up space on an OSX system. It aims to be roughly
-#  comparable in featureset to CCLeaner for Mac.
+#  This script will locate all files (via find) with the matching -name regex 
+#  suppkied on $1. It will display them on stdout in a pleasant format. 
 #  
 ########10########20########30#### LISCENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -39,40 +38,30 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-index () {
-  current="$(pwd)"
-  cd "$1"
-  printf "$1 \t" >> "$2"
-  SIZE=$(BLOCKSIZE=512 du | tail -n 1 | cut -f1)
-  echo $(($SIZE * 512)) >> "$2"
-  cd "$current"
+printf_n () {
+  str=$1
+  num=$2
+  printf "%0.s$str" $(seq 1 $num)
 }
 
-APPNAME="mac-cleanup"
-echo $APPNAME
-TIMESTAMP="$(iso8601date)"
-APPTAG="$APPNAME-$$-$TIMESTAMP"
+format_code () {
+  # $1 . . . the path to the file to format 
+  TARGET_FILE="$1"
+  TARET_BASENAME=$(basename "$TARGET_FILE")
+  FNAME_LENGTH="$(echo -n $TARET_BASENAME | wc -m)"
+  SEP_LEN=$(expr \( 84 - $FNAME_LENGTH \) / 2 - 1)
+  SEP_CHAR='~'
+  printf "\f\n"
+  printf "      "
+  printf_n $SEP_CHAR $SEP_LEN
+  printf " %s " "$(echo $TARET_BASENAME)"
+  printf_n $SEP_CHAR $SEP_LEN
+  echo ""
+  echo ""
+  cat -n "$TARGET_FILE"
+  
+}
 
-temputils $APPTAG create
-TMP_DIR=$(temputils $APPTAG get)
-
-printf "indexing files... "
-
-IDX="$TMP_DIR/index.txt"
-touch "$IDX"
-if [ $? -ne 0 ] ; then
-  echo "ERROR 63: failed to create index file!"
-  exit 1
-fi
-
-index "$HOME/.Trash" "$IDX"
-index "$HOME/Library/Caches" "$IDX"
-
-echo "DONE"
-echo "Junk directory sizes (in bytes)..."
-cat "$IDX"
-
-counts=$(cut -f2 < "$IDX")
-bytes="$(( ${counts//$'\n'/+} ))"
-echo "Total: $bytes bytes, $(echo $bytes| format-bytes)"
-temputils $APPTAG destroy
+for target in $(find ./ -type f -name "$1") ; do
+  format_code "$target"
+done

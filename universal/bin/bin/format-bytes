@@ -3,8 +3,12 @@
 #
 #  OVERVIEW
 #  ========
-#  This script will locate all .h and .hpp files under ./ recursively, then
-#  print them to stdout in a pleasant format for printing.
+#  This script takes an integer number of bytes on stdin and displays a human
+#  readable output on stdout. 
+#  
+#  Sourced from here: 
+#  
+#  http://unix.stackexchange.com/questions/44040/a-standard-tool-to-convert-a-byte-count-into-human-kib-mib-etc-like-du-ls1
 #  
 ########10########20########30#### LISCENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -38,35 +42,12 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-printf_n () {
-  str=$1
-  num=$2
-  printf "%0.s$str" $(seq 1 $num)
-}
-
-format_header () {
-  # $1 . . . the path to the file to format 
-  TARGET_FILE="$1"
-  TARET_BASENAME=$(basename "$TARGET_FILE")
-  FNAME_LENGTH="$(echo -n $TARET_BASENAME | wc -m)"
-  SEP_LEN=$(expr \( 84 - $FNAME_LENGTH \) / 2 - 1)
-  SEP_CHAR='~'
-  printf "\f\n"
-  printf "      "
-  printf_n $SEP_CHAR $SEP_LEN
-  printf " %s " "$(echo $TARET_BASENAME)"
-  printf_n $SEP_CHAR $SEP_LEN
-  echo ""
-  echo ""
-  cat -n "$TARGET_FILE"
-  
-}
-
-for target in $(find ./ -type f -name "*.h") ; do
-  format_header "$target"
-  #format_header $target
-done
-for target in $(find ./ -type f -name "*.hpp") ; do
-  format_header "$target"
-  #format_header $target
-done
+awk 'function human(x) {
+         s=" B   KiB MiB GiB TiB EiB PiB YiB ZiB"
+         while (x>=1024 && length(s)>1) 
+               {x/=1024; s=substr(s,5)}
+         s=substr(s,1,4)
+         xf=(s==" B  ")?"%5d   ":"%8.2f"
+         return sprintf( xf"%s\n", x, s)
+      }
+      {gsub(/^[0-9]+/, human($1)); print}'
