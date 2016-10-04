@@ -14,6 +14,7 @@ install:
 	cd universal && $(STOW_CMD) fish
 	cd universal && $(STOW_CMD) tmux
 	cd universal && $(STOW_CMD) vim
+	cd universal && $(STOW_CMD) todotxt
 install-osx: install clear-iterm-config
 	cd OSX && $(STOW_CMD) subl
 	cd OSX && $(STOW_CMD) iterm2
@@ -26,6 +27,7 @@ uninstall:
 	cd universal && $(STOW_CMD) -D fish
 	cd universal && $(STOW_CMD) -D tmux
 	cd universal && $(STOW_CMD) -D vim
+	cd universal && $(STOW_CMD) -D todotxt
 uninstall-osx: uninstall clear-iterm-config
 	cd OSX && $(STOW_CMD) -D subl
 uninstall-unix:
