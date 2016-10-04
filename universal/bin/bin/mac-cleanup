@@ -41,17 +41,61 @@
 
 index () {
   current="$(pwd)"
-  cd "$1"
-  printf "$1 \t" >> "$2"
-  SIZE=$(BLOCKSIZE=512 du | tail -n 1 | cut -f1)
-  echo $(($SIZE * 512)) >> "$2"
-  cd "$current"
+  if [ ! -e "$1" ] ; then
+    return 1
+  fi
+  if [ -d "$1" ] ; then
+    cd "$1"
+    printf "$1 \t" >> "$2"
+    SIZE=$(BLOCKSIZE=512 du | tail -n 1 | cut -f1)
+    echo $(($SIZE * 512)) >> "$2"
+    cd "$current"
+  fi
+  if [ -f "$1" ] ; then
+    printf "$1 \t" >> "$2"
+    SIZE=$(BLOCKSIZE=512 du "$1" | tail -n 1 | cut -f1)
+    echo $(($SIZE * 512)) >> "$2"
+  fi
+}
+
+remove () {
+  if [ ! -e "$1" ] ; then
+    echo "WARNING 63: $1 does not exist, cannot remove it"
+    return 1
+  fi
+  if [ -d "$1" ] ; then
+    printf "removing $1... "
+    rm -rf "$1" > /dev/null 2>&1
+    if [ $? -ne 0 ] ; then
+      echo "FAIL"
+      echo "ERROR 71: failed to remove directory $1"
+      return 1
+    fi
+    echo "DONE"
+    return 0
+  fi
+  if [ -f "$1" ] ; then
+    printf "removing $1... "
+    rm -f "$1" > /dev/null 2>&1
+    if [ $? -ne 0 ] ; then
+      echo "FAIL"
+      echo "ERROR 81: failed to remove file $1"
+      return 1
+    fi
+    echo "DONE"
+    return 0
+  fi
 }
 
 APPNAME="mac-cleanup"
 echo $APPNAME
 TIMESTAMP="$(iso8601date)"
 APPTAG="$APPNAME-$$-$TIMESTAMP"
+TARGETS="$HOME/.Trash
+$HOME/Library/Caches
+$HOME/Library/Cookies 
+$HOME/Library/Application Support/Google/Chrome/Default/Cookies
+$HOME/Library/Application Support/Google/Chrome/Default/Application Cache"
 
 temputils $APPTAG create
 TMP_DIR=$(temputils $APPTAG get)
@@ -65,14 +109,45 @@ if [ $? -ne 0 ] ; then
   exit 1
 fi
 
-index "$HOME/.Trash" "$IDX"
-index "$HOME/Library/Caches" "$IDX"
+while read -r target ; do
+  index "$target" "$IDX"
+done <<< "$TARGETS"
 
 echo "DONE"
 echo "Junk directory sizes (in bytes)..."
 cat "$IDX"
 
+
+
 counts=$(cut -f2 < "$IDX")
 bytes="$(( ${counts//$'\n'/+} ))"
 echo "Total: $bytes bytes, $(echo $bytes| format-bytes)"
+
+printf "Are you sure you want to delete these files/directories? This action "
+echo "CAN NOT be undone! "
+prompt-bool "proceed?"
+
+if [ $? -ne 0 ] ; then
+  echo "ERROR 96: user declined to proceed with operation"
+  temputils $APPTAG destroy
+  exit 1
+fi
+
+echo "The script must close Chrome, Safari, and Firefox to proceed, is this ok?"
+prompt-bool "proceed?"
+
+if [ $? -ne 0 ] ; then
+  echo "ERROR 111: user declined to proceed with operation"
+  temputils $APPTAG destroy
+  exit 1
+fi
+
+osascript -e 'tell application "safari" to quit'
+osascript -e 'tell application "firefox" to quit'
+osascript -e 'tell application "chrome" to quit'
+
+while read -r target ; do
+  remove "$target"
+done <<< "$TARGETS"
+
 temputils $APPTAG destroy
