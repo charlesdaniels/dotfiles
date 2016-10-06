@@ -1,0 +1,156 @@
+#!/bin/sh
+
+PY_BEGIN=33
+TIMESTAMP=$(iso8601date)
+APPTAG="sort-notes_$TIMESTAMP"
+temputils $APPTAG create
+TEMP_DIR=$(temputils $APPTAG get)
+tail -n +$PY_BEGIN < $0 | WORKSPACE_DIR="$TEMP_DIR" invoke-sensible-python3
+
+prompt-bool "proceed with moving these files? "
+if [ $? -ne 0 ] ; then
+  echo "ERROR 12: user declined to proceed"
+  temputils $APPTAG destroy
+  exit 0
+fi
+
+printf "INFO: moving files... "
+sh $TEMP_DIR/do_move.sh
+echo "DONE"
+
+temputils $APPTAG destroy
+exit 0
+
+
+
+
+
+
+
+
+
+
+
+
+########10########20########30##### IMPORTS ####50########60########70########80
+
+import subprocess
+import os
+import sys
+import re
+
+########10########20########30## CONFIGURATION #50########60########70########80
+
+# constants
+HOME = os.getenv('HOME')
+stdout = sys.stdout.write
+stderr = sys.stderr.write
+WORKSPACE_DIR = os.getenv('WORKSPACE_DIR')
+CWD = os.getcwd()
+
+# actual configuration stuff
+
+# file extensions which are considered valid candidates for notes
+file_extensions = ['pdf', 'rst']
+# directory where school-related documents are stored
+school_dir = os.path.join(HOME, "Documents/School/Fall 2016")
+# substrings which indicate lecture notes
+lecture_notes = ['lecture notes', 'lecture']
+# substrings which indicate projects
+projects = ['project', 'assignment', 'report', 'quiz', 'test', 'exam', 
+            'graded', 'homework']
+
+########10########20########30########40########50########60########70########80
+
+stdout("INFO: valid file extensions are: {}\n".format(file_extensions))
+stdout("INFO: school documents are kept in: {}\n".format(school_dir))
+stdout("INFO: workspace is: {}\n".format(WORKSPACE_DIR))
+stdout("INFO: indexing files in current directory ({})... ".format(CWD))
+
+candidates = []
+for dirname, dirnames, filenames in os.walk('.'):
+  for filename in filenames:
+    if not os.path.isfile(filename):
+      continue
+    if not filename.lower().endswith(tuple(file_extensions)):
+      continue
+
+    # if we get to this point, we can assume that the candidate is a file and 
+    # has an appropriate extension
+    
+    candidates.append(filename)
+
+stdout("DONE\n")
+stdout("INFO: candidates are: \n")
+for c in candidates:
+  print("\t"+c)
+    
+stdout("INFO: evaluating course codes... ")
+
+matched = []  # [course, path]
+for c in candidates:
+  pattern = re.compile("[a-zA-Z]{4}[0-9]{3}")
+  course = pattern.search(c)
+  if course != None:
+    matched.append([course.group(0), c])
+
+stdout("DONE\n")
+stdout("INFO: matched {} course codes for {} files:\n"
+       .format(len(matched), len(candidates)))
+for m in matched:
+  print("\t{}: {}".format(m[1], m[0]))
+
+
+validated = []
+stdout("INFO: validating course codes... ")
+for m in matched:
+  current = os.path.join(school_dir, m[0])
+  if not os.path.exists(current):
+    stderr("\nWARN: course directory {} does not exist\n".format(current))
+  else:
+    validated.append(m)
+stdout("DONE\n")
+stdout("INFO: validated {} course codes for {} files:\n"
+       .format(len(validated), len(matched)))
+for v in validated:
+  print("\t{}: {}".format(v[1], v[0]))
+
+targets = []  # [path, course, ntype]
+stdout("INFO: evaluating note types... ")
+for v in validated:
+  course = v[0]
+  path = v[1]
+  ntype = "Other Notes"
+  if any(note_type in path.lower() for note_type in lecture_notes):
+    ntype = "Lecture Notes"
+  elif any(note_type in path.lower() for note_type in projects):
+    ntype = "Projects"
+  targets.append([path, course, ntype])
+
+stdout("DONE\n")
+
+stdout("INFO: matched notes types as such: \n")
+for t in targets:
+  print("\t{}: {}".format(t[0], t[2]))
+
+valid_targets = []
+stdout("INFO: validating target paths... ")
+for t in targets:
+  targetpath = os.path.join(school_dir, t[1], t[2])
+  if not os.path.isdir(targetpath):
+    stderr("\nWARN: {} does not exist!".format(targetpath))
+  else:
+    valid_targets.append(t)
+stdout("DONE\n")
+
+with open(os.path.join(WORKSPACE_DIR, 'do_move.sh'), 'w') as f:
+  for t in valid_targets:
+    source = os.path.join(CWD, t[0])
+    target = os.path.join(school_dir, t[1], t[2])
+    source = source.replace(' ', '\\ ')
+    target = target.replace(' ', '\\ ')
+    source = source.replace('(', '\\(')
+    target = target.replace('(', '\\(')
+    source = source.replace(')', '\\)')
+    target = target.replace(')', '\\)')
+    f.write("mv {} {}\n".format(source, target))
