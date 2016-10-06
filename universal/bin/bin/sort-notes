@@ -1,6 +1,47 @@
 #!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#  This script will sort all the files that look like they might be school
+#  notes in the current directory into appropriate folders within the current
+#  semester's directory structure.
+#
+#  This script depends on Python 3
+#
+########10########20########30#### LISCENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30########40########50########60########70########80
 
-PY_BEGIN=33
+PY_BEGIN=66
 TIMESTAMP=$(iso8601date)
 APPTAG="sort-notes_$TIMESTAMP"
 temputils $APPTAG create
@@ -20,16 +61,6 @@ echo "DONE"
 
 temputils $APPTAG destroy
 exit 0
-
-
-
-
-
-
-
-
-
-
 
 
 ########10########20########30##### IMPORTS ####50########60########70########80
@@ -57,7 +88,7 @@ school_dir = os.path.join(HOME, "Documents/School/Fall 2016")
 # substrings which indicate lecture notes
 lecture_notes = ['lecture notes', 'lecture']
 # substrings which indicate projects
-projects = ['project', 'assignment', 'report', 'quiz', 'test', 'exam', 
+projects = ['project', 'assignment', 'report', 'quiz', 'test', 'exam',
             'graded', 'homework']
 
 ########10########20########30########40########50########60########70########80
@@ -75,16 +106,16 @@ for dirname, dirnames, filenames in os.walk('.'):
     if not filename.lower().endswith(tuple(file_extensions)):
       continue
 
-    # if we get to this point, we can assume that the candidate is a file and 
+    # if we get to this point, we can assume that the candidate is a file and
     # has an appropriate extension
-    
+
     candidates.append(filename)
 
 stdout("DONE\n")
 stdout("INFO: candidates are: \n")
 for c in candidates:
   print("\t"+c)
-    
+
 stdout("INFO: evaluating course codes... ")
 
 matched = []  # [course, path]
