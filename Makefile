@@ -15,6 +15,7 @@ install:
 	cd universal && $(STOW_CMD) tmux
 	cd universal && $(STOW_CMD) vim
 	cd universal && $(STOW_CMD) todotxt
+	cd universal && $(STOW_CMD) profile
 install-osx: install clear-iterm-config
 	cd OSX && $(STOW_CMD) subl
 	cd OSX && $(STOW_CMD) iterm2
@@ -32,3 +33,7 @@ uninstall-osx: uninstall clear-iterm-config
 	cd OSX && $(STOW_CMD) -D subl
 uninstall-unix:
 	cd other-unix && $(STOW_CMD) -D i3
+
+ports:
+	-@mkdir $(shell echo $GOPATH)
+	cd ports/micro && make install

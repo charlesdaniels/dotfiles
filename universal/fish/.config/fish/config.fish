@@ -24,13 +24,7 @@ set fish_greeting ""
 # aliases
 alias ls="ls --color=never"
 
-# setup environment variables
-set -x PATH $HOME/bin $PATH
-set -x CAD_ETC_PATH $HOME/etc
-set -x CAD_BIN_PATH $HOME/bin
-set -x PATH $PATH $CAD_BIN_PATH
-set -x EDITOR vim
-set -x VISUAL vim
+
 
 
 # fix intel gpu driver stuff
@@ -48,12 +42,12 @@ end
 
 functions --erase ls # prevents ls from breaking on BSD
 
-
-set -x LC_ALL en_US.UTF-8
-set -x LANG en_US.UTF-8
-set -x LANGUAGE en_US.UTF-8
-set -g fish_user_paths "/usr/local/sbin" $fish_user_paths
-set -g fish_user_paths "/opt/local/bin" $fish_user_paths 
-set -g fish_user_paths "/usr/local/bin" $fish_user_paths
+# setup environment variables
+set -x PATH $HOME/bin $PATH
+set -x GOPATH "$HOME/.go-workspace"
+set -x PATH $GOPATH/bin $PATH
+set -x PATH "/usr/local/sbin" $PATH
+set -x PATH "/opt/local/bin" $PATH
+set -x PATH "/usr/local/bin" $PATH
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish

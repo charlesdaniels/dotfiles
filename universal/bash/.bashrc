@@ -1,9 +1,11 @@
 # Setup for my custom paths
-export CAD_ETC_PATH=$HOME/etc
-export CAD_BIN_PATH=$HOME/bin
-export PATH=$CAD_BIN_PATH:$PATH
 export EDITOR=vim
 export VISUAL=vim
+export PATH=$PATH:$HOME/bin
+export GOPATH=$HOME/.go-workspace
+export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:/opt/local/bin
+export PATH=$PATH:/opt/local/sbin
 
 if [ "$TERM" == "xterm-termite" ] ; then
   export TERM="xterm"
