@@ -16,6 +16,7 @@ install:
 	cd universal && $(STOW_CMD) vim
 	cd universal && $(STOW_CMD) todotxt
 	cd universal && $(STOW_CMD) profile
+	cd universal && $(STOW_CMD) micro
 install-osx: install clear-iterm-config
 	cd OSX && $(STOW_CMD) subl
 	cd OSX && $(STOW_CMD) iterm2
