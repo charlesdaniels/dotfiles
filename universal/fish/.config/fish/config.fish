@@ -43,11 +43,13 @@ end
 functions --erase ls # prevents ls from breaking on BSD
 
 # setup environment variables
-set -x PATH $HOME/bin $PATH
-set -x GOPATH "$HOME/.go-workspace"
-set -x PATH $GOPATH/bin $PATH
-set -x PATH "/usr/local/sbin" $PATH
-set -x PATH "/opt/local/bin" $PATH
-set -x PATH "/usr/local/bin" $PATH
+set -gx EDITOR micro
+set -gx VISUAL micro
+set -gx PATH $HOME/bin $PATH
+set -gx GOPATH "$HOME/.go-workspace"
+set -gx PATH $GOPATH/bin $PATH
+set -gx PATH "/usr/local/sbin" $PATH
+set -gx PATH "/opt/local/bin" $PATH
+set -gx PATH "/usr/local/bin" $PATH
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
