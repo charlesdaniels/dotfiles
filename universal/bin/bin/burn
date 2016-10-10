@@ -53,7 +53,7 @@ echo "INFO: dd command is \"$DD_COMMAND\""
 echo "INFO: source size is: $SOURCE_SIZE bytes"
 
 test -e "$SOURCE"
-if [ $? -ne 0 ] ; then
+if [ $? -ne 0 ] ; then  # using -e here consistently produces bogus results
   echo "ERROR 49: source \"$SOURCE\" might not exist!"
   exit 1
 fi 
