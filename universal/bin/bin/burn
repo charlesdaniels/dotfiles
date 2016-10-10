@@ -45,13 +45,17 @@
 SOURCE="$1"
 DESTINATION="$2"
 DD_COMMAND="$(sensible-dd)"
+SOURCE_SIZE=$(wc -c $SOURCE | cut -d\  -f2)
 
 echo "INFO: Source is \"$SOURCE\""
 echo "INFO: Destination is \"$DESTINATION\""
 echo "INFO: dd command is \"$DD_COMMAND\""
+echo "INFO: source size is: $SOURCE_SIZE bytes"
 
-if [ ! -e "$SOUCE" ] ; then
-  echo "WARNING 49: source \"$SOURCE\" might not exist!"
+test -e "$SOURCE"
+if [ $? -ne 0 ] ; then
+  echo "ERROR 49: source \"$SOURCE\" might not exist!"
+  exit 1
 fi 
 
 prompt-bool "proceed with burn? "
@@ -65,7 +69,7 @@ echo "INFO: beginning burn in 5 seconds... "
 sleep 5
 echo "INFO: beginning burn"
 
-$DD_COMMAND if="$SOURCE" | pv | $DD_COMMAND of="$DESTINATION"
+$DD_COMMAND if="$SOURCE" | pv --size $SOURCE_SIZE | $DD_COMMAND of="$DESTINATION"
 
 if [ $? -ne 0 ] ; then 
   echo "ERROR 69: burn failed"
