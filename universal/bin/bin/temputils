@@ -15,6 +15,13 @@
 #   
 #   $2 . . . . Action - one of several operations enumerated below
 #   
+#  ENVIRONMENT VARIABLES
+#  =====================
+#  
+#   TEMPUTILS_PREFIX_DIR . . . if set, will be used as the parent for all
+#                              temputils created directories, otherwise
+#                              defaults to `/tmp/`
+#  
 #  ACTIONS
 #  =======
 #  
@@ -66,9 +73,15 @@ if [ $# -ne 2 ] ; then
   exit 1
 fi
 
+if ! (: "${TEMPUTILS_PREFIX_DIR?}") 2>/dev/null; then
+  TEMP_DIR=/tmp
+else
+  TEMP_DIR="$TEMPUTILS_PREFIX_DIR"
+fi
+
+
 APPTAG="$1"
 ACTION="$2"
-TEMP_DIR=/tmp
 
 case $ACTION in 
   get)
