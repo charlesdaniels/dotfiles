@@ -99,7 +99,7 @@ echo "hostname: $(hostname)" >> $LOG_FILE
 echo "system time: $(iso8601date)" >> $LOG_FILE
 echo "current user: $(whoami)" >> $LOG_FILE
 echo "MD5 sums for local directory:" >> $LOG_FILE
-find . -type f -exec md5 {} \; >> $LOG_FILE 2>&1
+find . -type f -exec invoke-sensible-md5 {} \; >> $LOG_FILE 2>&1
 echo "SHA256 sums for local directory:" >> $LOG_FILE
 find . -type f -exec shasum {} \; >> $LOG_FILE 2>&1
 echo "DONE"

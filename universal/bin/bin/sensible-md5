@@ -4,10 +4,10 @@
 #
 #  OVERVIEW
 #  ========
-#  This script will locate a sensible dd. It will attempt check the following
+#  This script will locate a sensible md5. It will check in order:
 #  
-#  * gdd
-#  * dd
+#  * md5
+#  * md5sum
 #  
 ########10########20########30#### LISCENSE ####50########60########70########80
 # Copyright (c) 2016, Charles Daniels
@@ -40,7 +40,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 ########10########20########30########40########50########60########70########80
 
-get_dd () 
+get_md5 () 
 {
   command -v $1 > /dev/null
   if [ $? -eq 0 ] ; then
@@ -50,9 +50,9 @@ get_dd ()
 
 }
 
-get_dd "gdd"
-get_dd "dd"
+get_md5 md5
+get_md5 md5sum+
 
-echo "ERROR: failed to locate a sensible dd"
+echo "ERROR: failed to locate a sensible md5"
 exit 1
 
