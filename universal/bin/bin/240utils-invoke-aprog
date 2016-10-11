@@ -47,7 +47,7 @@ ARGV="$@"
 
 invoke_aprog () {
   if [ -f "$1" ] ; then
-    ./"$1" "$ARGV"
+    ./$1 $ARGV
     exit
   fi
 }
