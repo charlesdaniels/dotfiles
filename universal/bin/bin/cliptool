@@ -12,6 +12,9 @@
 #  very least, it should work on an macOS system, as pbcopy/pbpaste are OS
 #  components for Mac. Most Linux systems will come with either xsel or xclip.
 #  
+#  Note that if no supported clipboard manager is found, cliptool will
+#  failover to keeping clipboard contents in /tmp/cliptool_clipboard.txt.
+#  
 #  USAGE
 #  =====
 #  
@@ -120,23 +123,22 @@ fi
 
 case $ACTION in
   copy)
-    STDIN="$(</dev/stdin)"
     case $CLIPBOARD_MANAGER in 
       pbcopy)
-        echo "$STDIN" | pbcopy
+        pbcopy < /dev/stdin
         ;;
       xclip)
-        echo "$STDIN" | xclip
+        xclip < /dev/stdin
         ;;
       copyq)
         #TODO: this needs to be tested
-        echo "$STDIN" | copyq -e "x = input(); copySelection(x); copy(x); add(x)"
+        copyq -e "x = input(); copySelection(x); copy(x); add(x)" < /dev/stdin
         ;;
       xsel)
-        echo "$STDIN" | xsel -i
+        xsel -i < /dev/stdin
         ;;
       failover)
-        echo "$STDIN" > /tmp/cliptool_clipboard.txt
+        cat /dev/stdin > /tmp/cliptool_clipboard.txt
         ;;
     esac
     ;;
