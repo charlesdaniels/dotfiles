@@ -5,8 +5,16 @@
 #  ========
 #  Utility for CSCE240. Given a tarfile containing an assignment submission,
 #  test it to see if it works, and also create a logfile to prove this.
-#   
-#
+# 
+#  DEPENDANCIES
+#  ============
+#  * iso8601date
+#  * temputils
+#  * extract
+#  * invoke-sensible-md5 
+#  * sensible-md5 (dependency of the above)
+#  * format-code
+# 
 ########10########20########30#### LISCENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.

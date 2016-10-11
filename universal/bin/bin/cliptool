@@ -1,0 +1,160 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#  Tool for interacting with clipboards on various platforms. Currently,
+#  support is implemented, although not fully tested for pbcopy (OSX), xsel
+#  and xclip (generic UNIX), and copyQ (cross platform).
+#  
+#  Because it supports the most common and popular clipboard managers
+#  available, this tool should work correctly on most UNIX systems. At the
+#  very least, it should work on an macOS system, as pbcopy/pbpaste are OS
+#  components for Mac. Most Linux systems will come with either xsel or xclip.
+#  
+#  USAGE
+#  =====
+#  
+#   $1 . . . . if `copy` - copy standard input to the system clipboard
+#              if `get`  - output the system clipboard contents to stdout
+#              
+#  CLIPBOARD MANAGER PRIORITY
+#  ==========================
+#  The clipboard manager which is used is selected by testing for the presence
+#  of a given binary in $PATH. If multiple clipboard managers are present, one
+#  will be chosen base on the following order:
+#  
+#  * copyQ
+#  * pbcopy/pbpaste
+#  * xsel
+#  * xclip
+#  
+#  EVIRONMENT VARIABLES
+#  ====================
+#  CLIPTOOL_CLIPBOARD_MANAGER . . . if set, the specified clipboard manager
+#                                   will be used instead of following the
+#                                   above hierarchy. Note that the specified
+#                                   clipboard manager must be one of the
+#                                   supported ones, or the program will crash.
+#                               
+# 
+########10########20########30#### LISCENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+ACTION="$1"
+
+# select clipboard manager
+CLIPBOARD_MANAGER="ERROR"
+
+command -v "xclip" > /dev/null
+if [ $? -eq 0 ] ; then
+  CLIPBOARD_MANAGER="xclip"
+fi
+
+command -v "xsel" > /dev/null
+if [ $? -eq 0 ] ; then
+  CLIPBOARD_MANAGER="xsel"
+fi
+
+command -v "pbcopy" > /dev/null
+if [ $? -eq 0 ] ; then
+  CLIPBOARD_MANAGER="pbcopy"
+fi
+
+command -v "copyq" > /dev/null
+if [ $? -eq 0 ] ; then
+  CLIPBOARD_MANAGER="copyq"
+fi
+
+if (: "${CLIPTOOL_CLIPBOARD_MANAGER?}") 2>/dev/null; then
+  CLIPBOARD_MANAGER="$CLIPTOOL_CLIPBOARD_MANAGER"
+fi
+
+if [ "$CLIPBOARD_MANAGER" == "ERROR" ] ; then
+  echo "ERROR 59: failed to detect any installed clipboard manager"
+  exit 1
+fi
+
+command -v "$CLIPBOARD_MANAGER" > /dev/null
+if [ $? -ne 0 ] ; then
+  echo "ERROR 104: selected clipboard manager $CLIPBOARD_MANAGER not found"
+  exit 1
+fi
+
+
+if [ "$#" -lt 1 ] ; then
+  echo "ERROR 43: at least one argument is required"
+  echo "USAGE: cliptool [command]"
+  exit 1
+fi
+
+case $ACTION in
+  copy)
+    STDIN="$(</dev/stdin)"
+    case $CLIPBOARD_MANAGER in 
+      pbcopy)
+        echo "$STDIN" | pbcopy
+        ;;
+      xclip)
+        echo "$STDIN" | xclip
+        ;;
+      copyq)
+        #TODO: this needs to be tested
+        echo "$STDIN" | copyq -e "x = input(); copySelection(x); copy(x); add(x)"
+        ;;
+      xsel)
+        echo "$STDIN" | xsel -i
+        ;;
+    esac
+    ;;
+  get)
+    case $CLIPBOARD_MANAGER in
+      pbcopy)
+        pbpaste
+        ;;
+      xclip)
+        xclip -o
+        ;;
+      xsel)
+        xsel -o
+        ;;
+      copyq)
+        copyq read 0
+        ;;
+    esac
+    ;;
+  *)
+    echo "ERROR 112: no such action $ACTION"
+    exit 1
+    ;;
+esac 
+        
