@@ -51,7 +51,7 @@ get_md5 ()
 }
 
 get_md5 md5
-get_md5 md5sum+
+get_md5 md5sum
 
 echo "ERROR: failed to locate a sensible md5"
 exit 1
