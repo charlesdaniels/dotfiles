@@ -4,7 +4,12 @@
 #  OVERVIEW
 #  ========
 #  Utility for CSCE240 - attempts to open a binary in the local directory named
-#  `Aprog`, `aprog`, `a.out` or `assignment`, in that order. 
+#  `Aprog`, `aprog`, `a.out` or `assignment`, in that order.
+#  
+#  USAGE
+#  =====
+#   $@ . . . passed through to program binary
+#   
 #
 ########10########20########30#### LISCENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -38,17 +43,19 @@
 #  
 ########10########20########30########40########50########60########70########80
 
+ARGV="$@"
+
 invoke_aprog () {
   if [ -f "$1" ] ; then
-    ./"$1" "$@"
+    ./"$1" "$ARGV"
     exit
   fi
 }
 
-invoke_aprog Aprog "$@"
-invoke_aprog aprog "$@"
-invoke_aprog a.out "$@"
-invoke_aprog assignment "$@"
+invoke_aprog Aprog
+invoke_aprog aprog
+invoke_aprog a.out
+invoke_aprog assignment
 
-echo "ERROR 53: no acceptable binary found"
+echo "ERROR 53: no suitable binary found"
 exit 1
