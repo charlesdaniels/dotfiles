@@ -73,7 +73,7 @@ if test -e /usr/local/bin
 end 
 
 if test -e /opt/net.cdaniels/bin
-  set -gx PATH "/opt/net.cdaniels/bin/ $PATH
+  set -gx PATH "/opt/net.cdaniels/bin/" $PATH
 end 
 
 
