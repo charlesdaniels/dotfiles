@@ -72,4 +72,9 @@ if test -e /usr/local/bin
 	set -gx PATH "/usr/local/bin" $PATH
 end 
 
+if test -e /opt/net.cdaniels/bin
+  set -gx PATH "/opt/net.cdaniels/bin/ $PATH
+end 
+
+
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
