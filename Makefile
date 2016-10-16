@@ -35,6 +35,3 @@ uninstall-osx: uninstall clear-iterm-config
 uninstall-unix:
 	cd other-unix && $(STOW_CMD) -D i3
 
-ports:
-	-@mkdir $(shell echo $GOPATH)
-	cd ports/micro && make install

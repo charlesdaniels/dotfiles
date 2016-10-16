@@ -1,0 +1,175 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#  This script wills setup a new project directory in a sensible way. The user
+#  will be prompted for their name, the name of the project, and the desired
+#  template. Alternatively, this information can be provided via command line
+#  arguments. 
+#  
+#  Note that for the template query, it is not necessary to enter the entire
+#  template name, only a unique substring from it's name. If your substring is
+#  not sufficiently unique, the script will fail and the project will not be
+#  created.
+#  
+#  USAGE
+#  =====
+#    
+#    $1 . . . . (optional) the name of the project
+#    
+#    $2 . . . . (optional) the name of the author
+#    
+#    $3 . . . . (optional) the template query
+#    
+#  TEMPLATE FORMAT
+#  ===============
+#  
+#  Any directory which is placed in $TEMPLATES_PATH is recognized as a valid
+#  template. All templates should have a script named `installer.sh` which
+#  will handle any template specific setup tasks. If none are needed, it is
+#  acceptable to just exit with a zero return code. `installer.sh` will be
+#  called with the first command line argument being the project name, and the
+#  second being the author name. Note that installer.sh will be deleted after
+#  it is executed.
+#   
+#
+########10########20########30## CONFIGURATION #50########60########70########80
+
+TEMPLATES_PATH=$HOME/dotfiles/lib/create-project
+PROJECTS_DIR=$HOME/Projects
+CURRENT_YEAR=2016
+
+########10########20########30#### LISCENSE ####50########60########70########80
+#  Copyright (c) 2016, Charles Daniels
+#  All rights reserved.
+# 
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+# 
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#  
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+# 
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+# 
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#  
+########10########20########30########40########50########60########70########80
+
+echo "INFO: lets setup a new project!"
+
+# this if statement check if $1 does not exist or is null
+if ! (: "${1?}") 2>/dev/null; then
+  # if $1 does not exist, ask the user for the project name
+  printf "QUERY: name of project > "
+  read PROJECT_NAME
+else
+  # if $1 does exist, we'll use that as the project name
+  PROJECT_NAME="$1"
+  echo "INFO: read project name from argv: \"$PROJECT_NAME\""
+fi
+
+if ! (: "${2?}") 2>/dev/null; then
+  printf "QUERY: name of author > "
+  read AUTHOR_NAME
+else
+  AUTHOR_NAME="$2"
+  echo "INFO: read author name from argv: \"$AUTHOR_NAME\""
+fi
+
+# find the available templates by searching for directories ending in
+# .template inside of the templates path (configured above)
+echo "INFO: available templates are: "
+TEMPLATES=$(find $TEMPLATES_PATH -name "*.template" -type d -exec basename {} \;)
+echo "$TEMPLATES" | while read TEMPLATE ; do
+  echo "\t$TEMPLATE"
+done
+
+# check to see if we have a third argument
+if ! (: "${3?}") 2>/dev/null; then
+  printf "QUERY: which template should I use? > "
+  read DESIRED_TEMPLATE
+else
+  DESIRED_TEMPLATE="$3"
+  echo "INFO: read template query from argv: \"$DESIRED_TEMPLATE\""
+fi
+
+# find all candidates that match the user's query; if there is only one, use
+# it, otherwise error.
+CANDIATE_TEMPLATES=`echo "$TEMPLATES" | grep "$DESIRED_TEMPLATE"`
+if [ `echo "$CANDIATE_TEMPLATES" | wc -l` -ne 1 ] ; then
+  echo "ERROR 61: more than 1 matches for query \"$DESIRED_TEMPLATE\""
+  exit 1
+fi
+SELECTED_TEMPLATE="$CANDIATE_TEMPLATES"
+
+# confirm the project settings with the user
+echo "INFO: creating a project with these settings: "
+echo "\tPROJECT_NAME=$PROJECT_NAME"
+echo "\tAUTHOR_NAME=$AUTHOR_NAME"
+echo "\tSELECTED_TEMPLATE=$SELECTED_TEMPLATE"
+
+prompt-bool "proceed with creating project? "
+if [ $? -ne 0 ] ; then
+  echo "ERROR 73: user declined to create project"
+  exit 1
+fi
+
+# check if the projects folder already exists, if not, create it
+if [ ! -e "$PROJECTS_DIR" ] ; then
+  printf "INFO: projects folder \"$PROJECTS_DIR\" does not exist, creating it... "
+  mkdir -p "$PROJECTS_DIR"
+  # make sure we created the directory successfully
+  if [ $? -ne 0 ] ; then
+    echo "FAIL"
+    echo "ERROR 82: failed to create project directory"
+    exit 1
+  fi
+  echo "DONE"
+fi
+
+# create a folder for the project
+PROJECT_PATH="$PROJECTS_DIR/$PROJECT_NAME"
+echo "INFO: creating project"
+if [ -e "$PROJECT_PATH" ] ; then
+  echo "ERROR 94: project \"$PROJECT_PATH\" already exists"
+  exit 1
+fi 
+
+# copy the template into the project folder
+cp -r "$TEMPLATES_PATH/$SELECTED_TEMPLATE" "$PROJECT_PATH"
+# generate the license 
+echo "Copyright (c) $CURRENT_YEAR, $AUTHOR_NAME" > "$PROJECT_PATH/LICENSE.txt"
+cat "$TEMPLATES_PATH/LICENSE.txt" >> "$PROJECT_PATH/LICENSE.txt"
+
+# now run the template's installer, giving it the project name and the author
+# name 
+CURRENT_DIR="$(pwd)"
+cd "$PROJECT_PATH"
+./installer.sh "$PROJECT_NAME" "$AUTHOR_NAME"
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "ERROR 100: failed to execute template installer"
+  exit 1
+fi
+rm installer.sh 
+cd "$CURRENT_DIR"
+
+echo "INFO: project created successfully"
+exit 0

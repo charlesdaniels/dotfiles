@@ -43,7 +43,7 @@ end
 functions --erase ls # prevents ls from breaking on BSD
 
 # setup environment variables
-if command -v micro
+if command -v micro > /dev/null
 	set -gx EDITOR vim
 	set -gx VISUAL vim
 else
