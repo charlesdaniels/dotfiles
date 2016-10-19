@@ -90,6 +90,7 @@ lecture_notes = ['lecture notes', 'lecture']
 # substrings which indicate projects
 projects = ['project', 'assignment', 'report', 'quiz', 'test', 'exam',
             'graded', 'homework']
+other_notes = ['practice']
 
 ########10########20########30########40########50########60########70########80
 
@@ -152,7 +153,9 @@ for v in validated:
   course = v[0]
   path = v[1]
   ntype = "Other Notes"
-  if any(note_type in path.lower() for note_type in lecture_notes):
+  if any(note_type in path.lower() for note_type in other_notes):
+    ntype = "Other Notes"
+  elif any(note_type in path.lower() for note_type in lecture_notes):
     ntype = "Lecture Notes"
   elif any(note_type in path.lower() for note_type in projects):
     ntype = "Projects"

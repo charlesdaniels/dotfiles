@@ -2,7 +2,7 @@
 
 function fish_prompt
     set EXIT_STATUS $status
-    set USER (whoami)
+    set USER (whoami) > /dev/null 2>&1  # squelches an error on some sysems
     set HOST (hostname)
     set TIME (date +"%H:%M:%S")
     set CWD  (prompt_pwd)
