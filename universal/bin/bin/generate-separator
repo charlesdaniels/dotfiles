@@ -134,13 +134,17 @@ import re
 
 length = 80
 heading = ""
-header_position = "center"
+heading_position = "center"
 style = "hash"
+# spacing between label ends
+label_pitch = 10
 
 # keys are styles, values are list of aliases
 styles = {"hash":["python", "sh", "shell"],
           "c":["c++", "java", "cpp", "star"],
           "percent":["latex", "tex", "ps"]}
+# comment characters
+comment_chars = {"hash": "#", "c": "*", "percent": "%"}
 
 argv = sys.argv
 argc = len(sys.argv)
@@ -160,7 +164,7 @@ if argc > 2:
 if argc > 3:
   if argv[3] != 'center':
     try:
-      header_position = int(argv[3])
+      heading_position = int(argv[3])
     except Exception:
       print("ERROR 160: invalid header position: '{}'".format(argv[3]))
       exit(1)
@@ -179,6 +183,55 @@ if argc > 4:
       print("ERROR 172: no such style: '{}'".format(argv[4]))
       exit(1)
 
-print(length, heading, header_position, style)
+separator = length*comment_chars[style]
+separator = list(separator)  # this lets us do subscription on the string
+
+run_length = 0
+# we want to get length inclusive, whereas range is by default exclusive on
+# the upper bound.
+for i in range(0, length + 1):
+  if run_length >= label_pitch:
+    current_col = str(i)  # we need to read things out of this by subscript
+    label_idx = 0  # position in subscripting the label (current_col)
+    char_idx = len(current_col) 
+    while char_idx > 0:
+      # i - char_idx will be the position of the first character of the label
+      # this is so that the last character of the label will lie in the column
+      # that it indicates. This line writes the current character from the
+      # label, left-to-right into the current (leftmost) index of the
+      # separator.
+      separator[i - char_idx] = current_col[label_idx]
+      label_idx += 1
+      char_idx -= 1
+    # while char_idx > 0:
+    run_length = 0
+  # if run_length >= label_pitch:
+  run_length += 1
 
 
+if style == "c":
+  separator[0] = '/'
+
+# to have the heading centered, the leftmost character of the heading must lie
+# at the index contained in `center`
+center = int(length / 2) - int(0.5 * len(heading)) 
+
+if heading_position == 'center':
+  heading_position = center
+
+# validate that we have room for the heading
+if heading_position > (length - len(heading)):
+  print("ERROR 224: heading is too long, or is explicitly placed out of bounds")
+  exit(1)
+
+# write heading into the separator
+for heading_idx in range(0, len(heading)):
+  separator[heading_position + heading_idx] = heading[heading_idx]
+
+# add spaces around the heading
+separator[heading_position - 1] = ' '
+separator[heading_position + len(heading)] = ' '
+
+
+separator = ''.join(separator)  # re-constitute the list back into a string
+sys.stdout.write(separator)
