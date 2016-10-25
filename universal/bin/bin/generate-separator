@@ -48,6 +48,22 @@
 #            this argument.
 #            
 #   $4 . . . (optional) the style to use. Default value is `hash`
+#   
+#  EXAMPLES
+#  ========
+#  
+#  > generate-separator 80
+#  ########10########20########30########40########50########60########70########80⏎         [cad@Daedalus.local][16:33:55][~/dotfiles]
+#  > generate-separator 80 HEADING
+#  ########10########20########30##### HEADING ####50########60########70########80⏎         [cad@Daedalus.local][16:33:58][~/dotfiles]
+#  > generate-separator 80 HEADING 12
+#  ########10# HEADING ########30########40########50########60########70########80⏎         [cad@Daedalus.local][16:34:05][~/dotfiles]
+#  > generate-separator 80 'THIS IS A VERY LONG HEADING' 12
+#  ########10# THIS IS A VERY LONG HEADING ########50########60########70########80⏎         [cad@Daedalus.local][16:34:15][~/dotfiles]
+#  > generate-separator 80 'THIS IS A VERY LONG HEADING' 12 c
+#  /*******10* THIS IS A VERY LONG HEADING ********50********60********70********80⏎         [cad@Daedalus.local][16:34:21][~/dotfiles]
+#  > generate-separator 80 'THIS IS A VERY LONG HEADING' 12 latex
+#  %%%%%%%%10% THIS IS A VERY LONG HEADING %%%%%%%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80⏎
 #            
 ########10########20########30# CONFIGURATION  #50########60########70########80
 
@@ -214,7 +230,7 @@ if style == "c":
 
 # to have the heading centered, the leftmost character of the heading must lie
 # at the index contained in `center`
-center = int(length / 2) - int(0.5 * len(heading)) 
+center = int(length / 2) - int(0.5 * len(heading)) - 1
 
 if heading_position == 'center':
   heading_position = center
@@ -228,9 +244,10 @@ if heading_position > (length - len(heading)):
 for heading_idx in range(0, len(heading)):
   separator[heading_position + heading_idx] = heading[heading_idx]
 
-# add spaces around the heading
-separator[heading_position - 1] = ' '
-separator[heading_position + len(heading)] = ' '
+# add spaces around the heading, only if the heading is non-empty
+if len(heading) > 0:
+  separator[heading_position - 1] = ' '
+  separator[heading_position + len(heading)] = ' '
 
 
 separator = ''.join(separator)  # re-constitute the list back into a string

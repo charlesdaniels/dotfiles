@@ -43,7 +43,7 @@
 ########10########20########30########40########50########60########70########80
 SED_CMD=$(sensible-sed)
 echo $theStr | sed s/./A/5
-SEP=$(generate-separator 80 | tr '#' '*' | $SED_CMD 's/\(.\{0\}\)./\1\\\//' )
+SEP=$(generate-separator 80 '' center c )
 if [ $? -ne 0 ] ; then
   echo "ERROR 48: failed to generate separator"
   exit 1
