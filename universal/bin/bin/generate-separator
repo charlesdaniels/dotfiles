@@ -6,14 +6,48 @@
 #  This script creates nicely formatted separators, optionally with headings
 #  burned into them. 
 #  
+#  STYLES
+#  ======
+#    hash . . . languages where `#` indicates a comment 
+#    
+#    python . . alias for hash
+#    
+#    sh . . . . alias for hash
+#    
+#    shell  . . alias for hash
+#    
+#    c  . . . . c and c-like languages
+#    
+#    java . . . aliased to c
+#    
+#    c++  . . . aliased to c
+#    
+#    cpp  . . . aliased to c
+#    
+#    star . . . aliased to c
+#    
+#    percent  . languages where `%` indicates a comment
+#    
+#    latex  . . aliased to percent 
+#    
+#    tex  . . . aliased to percent
+#    
+#    ps . . . . aliased to percent
+#    
+#    
+#  
 #  USAGE
 #  =====
-#   $1 . . . the length of the separator
+#   $1 . . . (optional) the length of the separator, defaults to 80
 #   
-#   $2 . . . the heading to burn in (optional)
+#   $2 . . . (optional) the heading to burn in 
 #   
-#   $3 . . . the position in which to place the header (optional). If not
-#            specified, the heading will be centered in the separator.
+#   $3 . . . (optional) the position in which to place the header . If not
+#            specified, the heading will be centered in the separator. If you
+#            wish to specify centering explicitly, you may use `center` for
+#            this argument.
+#            
+#   $4 . . . (optional) the style to use. Default value is `hash`
 #            
 ########10########20########30# CONFIGURATION  #50########60########70########80
 
@@ -52,14 +86,8 @@
 # WORKSPACE_DIR="$TEMP_DIR" invoke-sensible-python3
 #exit 0
 
-if [ "$#" -lt 1 ] ; then
-  echo "ERROR: expected 1 - 3 arguments, but got $# arguments"
-  echo "USAGE: $0 [length] [heading]"
-  exit 1
-fi
 
-
-PY_BEGIN=80
+PY_BEGIN=120
 APPTAG="generate-separator-$(iso8601date)"
 temputils $APPTAG create > /dev/null
 TEMP_DIR="$(temputils $APPTAG get)" > /dev/null
@@ -80,6 +108,21 @@ exit 0
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ########10########20########30##### IMPORTS ####50########60########70########80
 
 import subprocess
@@ -89,34 +132,53 @@ import re
 
 ########10########20########30########40########50########60########70########80
 
-length = int(sys.argv[1])
+length = 80
 heading = ""
-start_pos = "center"
-if len(sys.argv) > 2:
-  heading = sys.argv[2]
-if len(sys.argv) > 3:
-  start_pos = int(sys.argv[3])
+header_position = "center"
+style = "hash"
 
-sep = length*'#'
-sep = list(sep)
-i = 8
-while i < length:
-  col = str(i+2)
-  sep[i] = col[0]
-  sep[i+1] = col[1]
-  i += 10
+# keys are styles, values are list of aliases
+styles = {"hash":["python", "sh", "shell"],
+          "c":["c++", "java", "cpp", "star"],
+          "percent":["latex", "tex", "ps"]}
 
-if start_pos == "center":
-  start_pos = int(0.5*length) - int(0.5*len(heading)) - 1
+argv = sys.argv
+argc = len(sys.argv)
+# get length and typecast it
+if argc > 1:
+  try:
+    length = int(argv[1])
+  except Exception:
+    print("ERROR 146: invalid length: '{}'".format(argv[1]))
+    exit(1)
 
-for j in range(0, len(heading)):
-  sep[j+start_pos] = heading[j]
+# get heading
+if argc > 2:
+  heading = argv[2]
 
-if len(heading) > 0:
-  sep[start_pos-1] = ' '
-  sep[start_pos+len(heading)] = ' '
+# get position
+if argc > 3:
+  if argv[3] != 'center':
+    try:
+      header_position = int(argv[3])
+    except Exception:
+      print("ERROR 160: invalid header position: '{}'".format(argv[3]))
+      exit(1)
 
-sep = ''.join(sep)
+# get style
+if argc > 4:
+  if argv[4] in styles:
+    style = argv[4]
+  else:
+    found = False
+    for key in styles:
+      if argv[4] in styles[key]:
+        found = True
+        style = key
+    if not found:
+      print("ERROR 172: no such style: '{}'".format(argv[4]))
+      exit(1)
+
+print(length, heading, header_position, style)
 
 
-print(sep)
