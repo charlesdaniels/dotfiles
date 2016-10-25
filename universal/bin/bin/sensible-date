@@ -50,8 +50,9 @@ get_date()
   fi
 }
 
+get_date "gnu-date"
 get_date "gdate"
 get_date "date"
 
-echo "ERROR: failed to locate a sensible python"
+echo "ERROR: failed to locate a sensible date"
 exit 1

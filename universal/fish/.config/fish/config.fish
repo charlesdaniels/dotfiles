@@ -51,30 +51,17 @@ else
 	set -gx VISUAL micro
 end
 
-if test -e $HOME/bin
-	set -gx PATH $HOME/bin $PATH 
-end
-
-if test -e $HOME/.go-workspace
-	set -gx GOPATH "$HOME/.go-workspace"
-	set -gx PATH $GOPATH/bin $PATH
-end 
-
-if test -e /usr/local/sbin
-	set -gx PATH "/usr/local/sbin" $PATH
-end
-
-if test -e /opt.local/bin
-	set -gx PATH "/opt/local/bin" $PATH
-end
-
-if test -e /usr/local/bin
-	set -gx PATH "/usr/local/bin" $PATH
-end 
-
-if test -e /opt/net.cdaniels/bin
-  set -gx PATH "/opt/net.cdaniels/bin/" $PATH
-end 
+# TODO: should probably fix these so they test for path existence
+set -gx PATH $HOME/bin $PATH  
+set -gx GOPATH "$HOME/.go-workspace" 
+set -gx PATH $GOPATH/bin $PATH 
+set -gx PATH "/usr/local/sbin" $PATH 
+set -gx PATH "/opt/local/bin" $PATH 
+set -gx PATH "/usr/local/bin" $PATH 
+set -gx PATH "/opt/net.cdaniels/bin/" $PATH
+set -gx PATH "/Library/TeX/texbin/" $PATH
 
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
+
+clear

@@ -8,3 +8,4 @@ fi
 export PATH=/opt/local/bin:$PATH
 export PATH=/opt/local/sbin:$PATH
 export PATH=/opt/net.cdaniels/bin:$PATH
+export PATH=/Library/TeX/texbin/:$PATH

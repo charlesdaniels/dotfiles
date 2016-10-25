@@ -6,6 +6,8 @@ export GOPATH=$HOME/.go-workspace
 export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:/opt/local/bin
 export PATH=$PATH:/opt/local/sbin
+export PATH=$PATH:/Library/TeX/texbin/
+
 
 if [ "$TERM" == "xterm-termite" ] ; then
   export TERM="xterm"
