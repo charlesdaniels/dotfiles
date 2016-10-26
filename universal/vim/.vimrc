@@ -29,10 +29,15 @@ set laststatus=2
 set colorcolumn=80,160,240,320,400,480,660,740,800
 set nocompatible  "fix odd behaviour on some older systems 
 set ruler  " display column and line number in statusline
-set mouse=a  " enable mouse support
 
 " show non-printing characters
-set list
+" NOTE: it seems that for whatever reason, using anything involving set list
+" or set listchars breaks horribly under FreeBSD 11. For that reason, FreeBSD
+" wont trigger these commands. 
+if g:uname != "FreeBSD"
+	set list
+endif
+
 if (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on 
 						  " freeBSD quite right
 	" if we have multi byte support, enable pretty characters
@@ -49,7 +54,7 @@ if (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on
 			" do nothing
 		endtry
 	endif
-else
+elseif (g:uname != "FreeBSD")
 	set listchars=tab:>-
 	set listchars+=trail:_
 endif
