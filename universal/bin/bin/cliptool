@@ -107,7 +107,7 @@ if (: "${CLIPTOOL_CLIPBOARD_MANAGER?}") 2>/dev/null; then
   fi
 fi
 
-if [ "$CLIPBOARD_MANAGER" == "ERROR" ] ; then
+if [ "$CLIPBOARD_MANAGER" = "ERROR" ] ; then
   echo "WARNING 59: failed to detect any installed clipboard manager"
   echo "INFO: failing over to temp file"
   CLIPBOARD_MANAGER="failover"
