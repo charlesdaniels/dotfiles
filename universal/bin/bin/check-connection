@@ -3,15 +3,21 @@
 #
 #  OVERVIEW
 #  ========
+# 
+#  This script checks various aspects of network connectivity, such as ability
+#  to perform various DNS lookups, connectivity to the default gateway, and
+#  ability to ping various hosts on the internet.
 #  
-#  This script will modify CSCE240 assignment templates to use a pleasing
-#  format. It will also add an attribution line. Files are modified in place.
-#  
-#  USAGE
-#  =====
-#  
-#   $@ . . file(s) to format 
-#    
+########10########20########30## CONFIGURATION #50########60########70########80
+
+WAN_IPS="208.67.222.222 208.67.220.220 8.8.8.8 8.8.4.4"
+GATEWAY="192.168.1.1"
+WAN_HOSTS="google.com yahoo.com twitter.com youtube.com reddit.com"
+PING_TIMEOUT='3'
+PING_OPTS="-c 1 -t $PING_TIMEOUT"
+TAB='    '
+SPEEDTEST_CMD='speedtest-cli'
+
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
 #  All rights reserved.
@@ -43,47 +49,65 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 #  
 ########10########20########30########40########50########60########70########80
-SED_CMD=$(sensible-sed)
-echo $theStr | sed s/./A/5
-SEP=$(generate-separator 80 '' center c )
+
+TIMESTAMP=$(invoke-sensible-date)
+echo "BEGIN CONNECTION CHECK"
+echo "TIMESTAMP: $TIMESTAMP"
+echo "PING TIMEOUT: $PING_TIMEOUT"
+echo "GATEWAY: $GATEWAY"
+
+# gateway check
+printf "GATEWAY STATUS: "
+ping $GATEWAY $PING_OPTS > /dev/null 
 if [ $? -ne 0 ] ; then
-  echo "ERROR 48: failed to generate separator"
-  exit 1
+  echo "FAIL"
+else
+  echo "OK"
 fi
 
-printf "INFO: replacing separators... "
-for target in "$@" ; do
-  $SED_CMD -i "s/^.\/*\*\*\*.*\$/$SEP/" "$target"
+# DNS
+echo "BEGIN DNS RESOLUTION CHECK"
+for host in $WAN_HOSTS ; do
+  printf "$TAB$host: "
+  host $host > /dev/null
+  if [ $? -ne 0 ] ; then
+    echo "FAIL"
+  else
+    echo "OK"
+  fi
 done
-echo "DONE"
+echo "END DNS RESOLUTION CHECK"
 
-printf "INFO: removing extraneous column counters... "
-for target in "$@" ; do
-  $SED_CMD -i "s/^.*123456789.*\$//" "$target"
+# hosts (by addr)
+echo "BEGIN WAN CONNECIVITY CHECK (by name)"
+for host in $WAN_HOSTS ; do
+  printf "$TAB$host: "
+  ping $host $PING_OPTS > /dev/null
+  if [ $? -ne 0 ] ; then
+    echo "FAIL"
+  else
+    echo "OK"
+  fi
 done
-echo "DONE"
+echo "END WAN CONNECIVITY CHECK (by name)"
 
-printf "INFO: repairing comment style... "
-for target in "$@" ; do
-  $SED_CMD -i "s/^\ \*/\ /" "$target"
+# hosts by IP
+echo "BEGIN WAN CONNECIVITY CHECK (by ip)"
+for host in $WAN_IPS ; do
+  printf "$TAB$host: "
+  ping $host $PING_OPTS > /dev/null
+  if [ $? -ne 0 ] ; then
+    echo "FAIL"
+  else
+    echo "OK"
+  fi
 done
-echo "DONE"
+echo "END WAN CONNECIVITY CHECK (by ip)"
 
-printf "INFO: updating attribution... "
-for target in "$@" ; do
-  TIMESTAMP="\ \ Date last modified: $(invoke-sensible-date)"
-  ATTRIBUTION="\ \ Used with permission and modified by Charles Daniels"
-  # this appends the $ATTRIBUTION after the Author: line
-  $SED_CMD -i "/Author.*\$/a $ATTRIBUTION" "$target"
+echo "BEGIN SPEEDTEST"
+$SPEEDTEST_CMD --simple |  sed "s/^/$TAB/"
+echo "END SPEEDTEST"
 
-  # this updates the date last modified
-  $SED_CMD -i "s/.*Date.*/$TIMESTAMP/" "$target"
-done 
-echo "DONE"
+echo "TEST COMPLETED AT: $(invoke-sensible-date)"
+echo "END CONNECIVITY CHECK"
 
-printf "INFO: generating headers... "
-for target in "$@" ; do
-  # this adds the ATTRIBUTION header
-  $SED_CMD -i "/Author.*\$/i \ \ ATTRIBUTION\n\ \ ===========" "$target"
-done
-echo "DONE"
