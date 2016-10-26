@@ -58,7 +58,7 @@ echo "GATEWAY: $GATEWAY"
 
 # gateway check
 printf "GATEWAY STATUS: "
-ping $GATEWAY $PING_OPTS > /dev/null 
+ping $PING_OPTS $GATEWAY > /dev/null 
 if [ $? -ne 0 ] ; then
   echo "FAIL"
 else
