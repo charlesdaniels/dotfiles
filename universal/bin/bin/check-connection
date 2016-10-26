@@ -82,7 +82,7 @@ echo "END DNS RESOLUTION CHECK"
 echo "BEGIN WAN CONNECIVITY CHECK (by name)"
 for host in $WAN_HOSTS ; do
   printf "$TAB$host: "
-  ping $host $PING_OPTS > /dev/null
+  ping $PING_OPTS $host > /dev/null
   if [ $? -ne 0 ] ; then
     echo "FAIL"
   else
@@ -95,7 +95,7 @@ echo "END WAN CONNECIVITY CHECK (by name)"
 echo "BEGIN WAN CONNECIVITY CHECK (by ip)"
 for host in $WAN_IPS ; do
   printf "$TAB$host: "
-  ping $host $PING_OPTS > /dev/null
+  ping $PING_OPTS $host > /dev/null
   if [ $? -ne 0 ] ; then
     echo "FAIL"
   else
