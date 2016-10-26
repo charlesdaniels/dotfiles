@@ -16,7 +16,7 @@ WAN_HOSTS="google.com yahoo.com twitter.com youtube.com reddit.com"
 PING_TIMEOUT='3'
 PING_OPTS="-c 1 -t $PING_TIMEOUT"
 TAB='    '
-SPEEDTEST_CMD='speedtest-cli'
+SPEEDTEST_CMD='speedtest'
 
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
