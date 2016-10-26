@@ -30,7 +30,8 @@ set mouse=a  " enable mouse support
 
 " show non-printing characters
 set list
-if has("multi_byte")
+if (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on 
+						  " freeBSD quite right
 	" if we have multi byte support, enable pretty characters
 	set listchars=tab:▸\ 
 	set listchars+=trail:¬
