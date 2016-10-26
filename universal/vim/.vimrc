@@ -14,6 +14,7 @@ if has ("multi_byte")
 	set langmenu=en_US.UTF-8
 endif
 
+set shell=/bin/sh
 let g:uname = substitute(system("uname"), '\n\+$', '', '')
 
 if v:version <= 702
