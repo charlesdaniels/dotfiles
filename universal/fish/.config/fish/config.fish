@@ -1,30 +1,13 @@
 #!/usr/bin/fish
 
-function fish_prompt
-    set EXIT_STATUS $status
-    set USER (whoami) > /dev/null 2>&1  # squelches an error on some sysems
-    set HOST (hostname)
-    set TIME (date +"%H:%M:%S")
-    set CWD  (prompt_pwd)
-	printf "[$USER@$HOST][$TIME][$CWD]"
-
-    # show exist status of previous command
-    if [ $EXIT_STATUS != 0 ]
-        set_color red
-        printf "[$EXIT_STATUS]"
-        set_color normal
-    end
-    
-    printf "\n> "
-end
+source $HOME/.config/fish/add-to-path.fish
+source $HOME/.config/fish/fish-prompt.fish
 
 # squelch greeting
 set fish_greeting ""
 
 # aliases
 alias ls="ls --color=never"
-
-
 
 
 # fix intel gpu driver stuff
@@ -51,17 +34,21 @@ else
 	set -gx VISUAL micro
 end
 
-# TODO: should probably fix these so they test for path existence
-set -gx PATH $HOME/bin $PATH  
 set -gx GOPATH "$HOME/.go-workspace" 
-set -gx PATH $GOPATH/bin $PATH 
-set -gx PATH "/usr/local/sbin" $PATH 
-set -gx PATH "/opt/local/bin" $PATH 
-set -gx PATH "/usr/local/bin" $PATH 
-set -gx PATH "/opt/net.cdaniels/bin/" $PATH
-set -gx PATH "/Library/TeX/texbin/" $PATH
+
+add-to-path $HOME/bin
+add-to-path $GOPATH/bin
+add-to-path "/usr/local/sbin"
+add-to-path "/opt/local/bin"
+add-to-path "/usr/local/bin"
+add-to-path "/opt/net.cdaniels/bin/"
+add-to-path "/Library/TeX/texbin/"
+
+set -gx LC_ALL "en_US.UTF-8"
+set -gx LANG "en_US.UTF-8"
+set -gx LANGUAGE "en_US.UTF-8"
 
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
-clear
+

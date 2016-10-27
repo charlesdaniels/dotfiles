@@ -121,6 +121,7 @@ if [ "$#" -lt 1 ] ; then
   exit 1
 fi
 
+
 case $ACTION in
   copy)
     case $CLIPBOARD_MANAGER in 
