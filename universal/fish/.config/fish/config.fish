@@ -44,11 +44,5 @@ add-to-path "/usr/local/bin"
 add-to-path "/opt/net.cdaniels/bin/"
 add-to-path "/Library/TeX/texbin/"
 
-set -gx LC_ALL "en_US.UTF-8"
-set -gx LANG "en_US.UTF-8"
-set -gx LANGUAGE "en_US.UTF-8"
-
-
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
-
 
