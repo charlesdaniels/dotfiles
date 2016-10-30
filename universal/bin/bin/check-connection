@@ -10,9 +10,9 @@
 #  
 ########10########20########30## CONFIGURATION #50########60########70########80
 
-WAN_IPS="208.67.222.222 208.67.220.220 8.8.8.8 8.8.4.4"
+WAN_IPS="208.67.222.222 208.67.220.220 8.8.8.8 8.8.4.4 139.130.4.5 4.2.2.1"
 GATEWAY="192.168.1.1"
-WAN_HOSTS="google.com yahoo.com twitter.com youtube.com reddit.com"
+WAN_HOSTS="google.com yahoo.com twitter.com youtube.com reddit.com freebsd.org github.com cdaniels.net"
 PING_TIMEOUT='3'
 PING_OPTS="-c 1 -t $PING_TIMEOUT"
 TAB='    '
