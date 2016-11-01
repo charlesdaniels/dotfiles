@@ -22,6 +22,7 @@ install-osx: install clear-iterm-config
 	cd OSX && $(STOW_CMD) iterm2
 install-unix: install
 	cd other-unix && $(STOW_CMD) i3
+	cd other-unix && $(STOW_CMD) subl
 
 uninstall:
 	cd universal && $(STOW_CMD) -D bash

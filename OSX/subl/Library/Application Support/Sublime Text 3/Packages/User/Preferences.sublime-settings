@@ -1,12 +1,21 @@
 {
 	"color_scheme": "Packages/Colorsublime - Themes/dimmed-monokai.tmTheme",
 	"draw_white_space": "all",
-	"font_face": "Monaco",
+	"font_face": "Noto Mono Regular",
 	"font_size": 12,
 	"highlight_line": true,
 	"ignored_packages":
 	[
-		"Vintage"
+		"AppleScript Extensions",
+		"fish-shell",
+		"Gnuplot",
+		"JavaScript & NodeJS Snippets",
+		"Markdown Preview",
+		"MIPS Syntax",
+		"Restructured Text (RST) Snippets",
+		"Vintage",
+		"Whitespace",
+		"Wrap Plus"
 	],
 	"rulers":
 	[
