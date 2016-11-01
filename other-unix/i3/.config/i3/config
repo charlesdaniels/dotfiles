@@ -163,7 +163,7 @@ bindsym Print exec teiler
 bindsym Shift+Print exec "teiler --cast" 
 
 # i3lock
-exec "xautolock -time 15 -locker ~/bin/system-lock &"
+exec "xautolock -time 10 -locker ~/bin/system-lock &"
 
 # borders
 for_window [class="^.*"] border pixel 2

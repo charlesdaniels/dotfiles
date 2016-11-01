@@ -23,6 +23,8 @@ install-osx: install clear-iterm-config
 install-unix: install
 	cd other-unix && $(STOW_CMD) i3
 	cd other-unix && $(STOW_CMD) subl
+	cd other-unix && $(STOW_CMD) xdg-user-dirs
+	xdg-user-dirs-update
 
 uninstall:
 	cd universal && $(STOW_CMD) -D bash

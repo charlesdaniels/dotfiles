@@ -162,19 +162,28 @@
 			"buffers":
 			[
 				{
-					"contents": "111111\naaaaaa",
+					"file": "/home/cad/dotfiles/universal/bin/bin/system-statusline",
 					"settings":
 					{
-						"buffer_size": 13,
-						"line_ending": "Unix",
-						"name": "111111"
+						"buffer_size": 1092,
+						"encoding": "UTF-8",
+						"line_ending": "Unix"
 					}
 				},
 				{
-					"file": "/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+					"file": "/home/cad/dotfiles/other-unix/xdg-user-dirs/.config/user-dirs.dirs",
 					"settings":
 					{
-						"buffer_size": 346,
+						"buffer_size": 271,
+						"encoding": "UTF-8",
+						"line_ending": "Unix"
+					}
+				},
+				{
+					"file": "/home/cad/dotfiles/Makefile",
+					"settings":
+					{
+						"buffer_size": 1246,
 						"encoding": "UTF-8",
 						"line_ending": "Unix"
 					}
@@ -222,8 +231,18 @@
 				"side_bar_visible": false,
 				"status_bar_visible": false
 			},
+			"expanded_folders":
+			[
+				"/home/cad/dotfiles",
+				"/home/cad/dotfiles/other-unix",
+				"/home/cad/dotfiles/other-unix/xdg-user-dirs",
+				"/home/cad/dotfiles/other-unix/xdg-user-dirs/.config",
+				"/home/cad/dotfiles/universal/bin",
+				"/home/cad/dotfiles/universal/bin/bin"
+			],
 			"file_history":
 			[
+				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
 				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings"
 			],
 			"find":
@@ -256,75 +275,102 @@
 				"whole_word": false,
 				"wrap": true
 			},
+			"folders":
+			[
+				{
+					"path": "/home/cad/dotfiles"
+				}
+			],
 			"groups":
 			[
 				{
-					"selected": 0,
+					"selected": 2,
 					"sheets":
 					[
 						{
 							"buffer": 0,
+							"file": "/home/cad/dotfiles/universal/bin/bin/system-statusline",
 							"semi_transient": false,
 							"settings":
 							{
-								"buffer_size": 13,
+								"buffer_size": 1092,
 								"regions":
 								{
 								},
 								"selection":
 								[
 									[
-										13,
-										13
+										460,
+										460
 									]
 								],
 								"settings":
 								{
-									"auto_name": "111111",
+									"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+									"tab_size": 2,
+									"translate_tabs_to_spaces": true
+								},
+								"translation.x": 0.0,
+								"translation.y": 0.0,
+								"zoom_level": 1.0
+							},
+							"stack_index": 2,
+							"type": "text"
+						},
+						{
+							"buffer": 1,
+							"file": "/home/cad/dotfiles/other-unix/xdg-user-dirs/.config/user-dirs.dirs",
+							"semi_transient": false,
+							"settings":
+							{
+								"buffer_size": 271,
+								"regions":
+								{
+								},
+								"selection":
+								[
+									[
+										31,
+										31
+									]
+								],
+								"settings":
+								{
 									"syntax": "Packages/Text/Plain text.tmLanguage"
 								},
 								"translation.x": 0.0,
 								"translation.y": 0.0,
 								"zoom_level": 1.0
 							},
-							"stack_index": 0,
+							"stack_index": 1,
 							"type": "text"
-						}
-					]
-				},
-				{
-					"selected": 0,
-					"sheets":
-					[
+						},
 						{
-							"buffer": 1,
-							"file": "/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+							"buffer": 2,
+							"file": "/home/cad/dotfiles/Makefile",
 							"semi_transient": false,
 							"settings":
 							{
-								"buffer_size": 346,
+								"buffer_size": 1246,
 								"regions":
 								{
 								},
 								"selection":
 								[
 									[
-										153,
-										153
+										862,
+										862
 									]
 								],
 								"settings":
 								{
-									"edit_settings_other_view_id": 32,
-									"edit_settings_view": "user",
-									"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-									"translate_tabs_to_spaces": false
+									"syntax": "Packages/Makefile/Makefile.sublime-syntax"
 								},
 								"translation.x": 0.0,
 								"translation.y": 0.0,
 								"zoom_level": 1.0
 							},
-							"stack_index": 1,
+							"stack_index": 0,
 							"type": "text"
 						}
 					]
@@ -336,7 +382,7 @@
 			},
 			"input":
 			{
-				"height": 0.0
+				"height": 49.0
 			},
 			"layout":
 			{
@@ -347,18 +393,11 @@
 						0,
 						1,
 						1
-					],
-					[
-						1,
-						0,
-						2,
-						1
 					]
 				],
 				"cols":
 				[
 					0.0,
-					0.5,
 					1.0
 				],
 				"rows":
@@ -414,8 +453,8 @@
 			"show_minimap": true,
 			"show_open_files": false,
 			"show_tabs": true,
-			"side_bar_visible": false,
-			"side_bar_width": 225.0,
+			"side_bar_visible": true,
+			"side_bar_width": 409.0,
 			"status_bar_visible": true,
 			"template_settings":
 			{
