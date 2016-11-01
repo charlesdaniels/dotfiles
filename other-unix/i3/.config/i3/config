@@ -163,7 +163,7 @@ bindsym Print exec teiler
 bindsym Shift+Print exec "teiler --cast" 
 
 # i3lock
-exec "xautolock -time 15 -locker \"i3lock -t -i ~/.wallpapers/lock\" &"
+exec "xautolock -time 15 -locker ~/bin/system-lock &"
 
 # borders
 for_window [class="^.*"] border pixel 2
@@ -214,7 +214,8 @@ bindsym Control+End   exec "playerctl play-pause; deadbeef --play-pause"
 #client.urgent               $rd        $rd         $hi		$rd			$rd
 
 bar {
-	status_command i3status
+	#status_command i3status
+  status_command $HOME/bin/system-statusline
 }
 
 # Start i3bar to display a workspace bar (plus the system information i3status
