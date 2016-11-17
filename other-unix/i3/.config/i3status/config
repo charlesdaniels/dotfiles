@@ -1,21 +1,15 @@
 
 general 
 {
-	#color_bad = "#AB4642"
-	#color_good = "#7CAFC2"
-	#color_degraded = "#F7CA88"
 	colors = true
 	interval = 5
 }
 
 order += "disk /"
-order += "disk /Archive"
 order += "disk /home"
-order += "ethernet enp0s25"
-#order += "path_exists VPN"
 order += "load"
 order += "volume master"
-#order += "battery 0"
+order += "battery 0"
 order += "tztime local" 
 
 cpu_temperature 0 {
@@ -23,25 +17,9 @@ cpu_temperature 0 {
 	max_threshold = 60
 }
 
-path_exists VPN {
-	path = "/proc/sys/net/ipv4/conf/tun0"
-}
-
-wireless wlp3s0 {
-	format_up = "W: %essid (%bitrate %ip)"
-	format_down = "W: DOWN"
-}
-ethernet enp0s25 {
-	format_up = "E: %ip"
-	format_down = "E: DOWN"
-}
-
-run_watch DHCP {
-	pidfile = "/var/run/dhclient*.pid"
-}
 
 battery 0 {
-	format = "%status %percentage  %remaining (%consumption)"
+	format = "%status %percentage  %remaining"
 	format_down = "NO BATTERY"
 	status_chr = "⚇ CHR"
 	status_bat = "⚡ BAT"
@@ -69,11 +47,6 @@ load
 disk "/"
 {
 	format = "/ %free free"
-}
-
-disk "/Archive"
-{
-	format = "NAS %free free"
 }
 
 disk "/home"

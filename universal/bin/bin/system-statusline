@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# system statusline for i3 or whatsuch
+INTERVAL=2.5
+
+while true ; do
+  DATE=$(invoke-sensible-date +"%Y-%m-%d %H:%M:%S")
+  LOAD=$(uptime | cut -d\  -f 12-14 | tr -d ',')
+  MEMFREE=$(cat /proc/meminfo | grep MemFree | tr -d "MemFree:" | sed "s/^[ \t]*//" | cut -d\  -f 1 | awk '{$1=$1/1024; print $1,"MB";}')
+
+  BATTINFO=$(acpi | cut -d: -f 2-5 | acpi | cut -d: -f 2-5)
+
+  BATTINFO=$(echo $BATTINFO | sed "s/Discharging/bat/g")
+  BATTINFO=$(echo $BATTINFO | sed "s/Charging/ac/g")
+  BATTINFO=$(echo $BATTINFO | sed "s/remaining/rem/g")
+  BATTINFO=$(echo $BATTINFO | sed "s/until charged/to full/g")
+
+  CURRENT_BACKLIGHT=$(xbacklight)
+  CURRENT_BACKLIGHT=$(printf "%.0f\n" "$CURRENT_BACKLIGHT")
+  
+  TEMP=$(sensors | grep Physical | cut -d\  -f 5)
+  VOLUME=$(pamixer --get-volume)
+  IP=$(ip addr | grep inet | grep -v 127 | grep -v inet6 | cut -d\  -f 6 | head -n 1)
+  if [ $(pamixer --get-mute) == "true" ] ; then
+    VOLUME="$VOLUME (MUTE)"
+  fi
+  echo "light $CURRENT_BACKLIGHT | cpu $TEMP | $MEMFREE free | ip $IP | $LOAD | vol $VOLUME | $BATTINFO | $DATE"
+  sleep $INTERVAL
+done
