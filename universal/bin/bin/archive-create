@@ -69,12 +69,26 @@ mkdir -p $TEMP_DIR
 echo "done"
 
 printf "STATUS: generating md5 sums... "
-find "$ARCHIVE_DIR" -type f | parallel md5 {} 2> /dev/null > $TEMP_DIR/md5sums.txt
+find "$ARCHIVE_DIR" -type f | parallel md5 {} 2> $TEMP_DIR/md5.log > $TEMP_DIR/md5sums.txt
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "ERROR 75: failed to generate md5 sums"
+  echo "INFO: will now display $TEMP_DIR/md5.log"
+  cat $TEMP_DIR/md5.log
+  exit 1
+fi
 echo "done"
 echo "INFO: computed $(wc -l < $TEMP_DIR/md5sums.txt) checksums"
 
 printf "STATUS: generating SHA sums... "
-find "$ARCHIVE_DIR" -type f | parallel shasum {} 2> /dev/null > $TEMP_DIR/shasums.txt
+find "$ARCHIVE_DIR" -type f | parallel shasum {} 2> $TEMP_DIR/shasum.log > $TEMP_DIR/shasums.txt
+if [ $? -ne 0 ] ; then
+  echo "FAIL"
+  echo "ERROR 87: failed to generate sha sums"
+  echo "INFO: will now display $TEMP_DIR/shasum.log"
+  cat $TEMP_DIR/shasum.log
+  exit 1
+fi
 echo "done"
 echo "INFO: computed $(wc -l < $TEMP_DIR/shasums.txt) checksums"
 

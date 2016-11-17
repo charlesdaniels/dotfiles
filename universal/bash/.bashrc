@@ -19,3 +19,6 @@ export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
 alias ls="ls --color=never"
+
+# source global shell variables
+source $HOME/dotfiles/lib/configs/MASTER.CFG

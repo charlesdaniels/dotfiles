@@ -89,32 +89,25 @@ case $ACTION in
     exit 0
     ;;
   create)
-    printf "creating temp dir for $APPTAG... "
     if [ -d $($0 $APPTAG get) ] ; then 
-      echo "FAIL"
       echo "ERROR 85: $($0 $APPTAG get) exists, refusing to overwrite"
       exit 1
     fi
     mkdir $($0 $APPTAG get)
     if [ $? -ne 0 ] ; then
-      echo "FAIL"
       echo "ERROR 92: unknown error while creating $($0 $APPTAG get)"
       exit 1
     fi
-    echo "DONE"
     exit 0
     ;;
   destroy)
-    printf "destroying temp dir for $APPTAG... "
     if [ -d $($0 $APPTAG get) ] ; then
       rm -rf $($0 $APPTAG get)
       if [ $? -ne 0 ] ; then
-        echo "FAIL"
         echo "ERROR 104: failed to remove temp directory $($0 $APPTAG get)"
         exit 1
       fi
     fi 
-    echo "DONE"
     exit 0
     ;;
   *)
