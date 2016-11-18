@@ -22,3 +22,4 @@ OSX/subl/Library/Application Support/Sublime Text 3/Packages/pygments/
 OSX/subl/Library/Application Support/Sublime Text 3/Packages/pyyaml/
 universal/micro/.config/micro/buffers
 lib/system-specific
+lib/configs/SYSTEM_SPECIFIC.CFG

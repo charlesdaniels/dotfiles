@@ -53,7 +53,7 @@ get_sed()
 
 get_sed "gnu-sed"
 get_sed "gsed"
-get_sed "date"
+get_sed "sed"
 
 echo "ERROR: failed to locate a sensible sed"
 exit 1
