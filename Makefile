@@ -17,14 +17,14 @@ install:
 	cd universal && $(STOW_CMD) todotxt
 	cd universal && $(STOW_CMD) profile
 	cd universal && $(STOW_CMD) micro
+
 install-osx: install clear-iterm-config
 	cd OSX && $(STOW_CMD) subl
 	cd OSX && $(STOW_CMD) iterm2
+
 install-unix: install
 	cd other-unix && $(STOW_CMD) i3
 	cd other-unix && $(STOW_CMD) subl
-	cd other-unix && $(STOW_CMD) xdg-user-dirs
-	xdg-user-dirs-update
 
 uninstall:
 	cd universal && $(STOW_CMD) -D bash
@@ -33,8 +33,14 @@ uninstall:
 	cd universal && $(STOW_CMD) -D tmux
 	cd universal && $(STOW_CMD) -D vim
 	cd universal && $(STOW_CMD) -D todotxt
+	cd universal && $(STOW_CMD) -D profile
+	cd universal && $(STOW_CMD) -D micro
+
 uninstall-osx: uninstall clear-iterm-config
 	cd OSX && $(STOW_CMD) -D subl
+	cd OSX && $(STOW_CMD) -D iterm2
+
 uninstall-unix:
 	cd other-unix && $(STOW_CMD) -D i3
+	cd other-unix && $(STOW_CMD) -D subl
 
