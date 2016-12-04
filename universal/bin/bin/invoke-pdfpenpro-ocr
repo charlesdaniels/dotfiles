@@ -1,16 +1,15 @@
-#!/bin/sh
+#!/usr/bin/osascript
 ########10########20########30## DOCUMENTATION #50########60########70########80
 #
 #  OVERVIEW
 #  ========
 #  
-#  Downloads the current weather from wttr.in . Server handles geolocation
-#  based on IP. Requires curl to be installed, and internet access for obvious
-#  reasons.
+#  Invokes PDFPen Pro to OCR a document via automator. 
+#
+#  USAGE
+#  =====
 #  
-#  In case further functionality needs to be added in the future, wttr.in
-#  supports query zip codes and airport codes at `wtter.in/CODE`. Full
-#  documentation here: https://github.com/chubin/wttr.in
+#   $1 . . . pdf to ocr
 #    
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -44,4 +43,38 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-curl wttr.in
+
+# from this gist: https://gist.github.com/prenagha/1355037
+# credit to Padraic Renaghan
+on getAppName()
+  tell application "Finder"
+    try
+      try
+        set appName to name of application file id "com.smileonmymac.PDFpen"
+      on error
+        set appName to name of application file id "com.smileonmymac.PDFpenPro"
+      end try
+    on error
+      set appName to name of application file id "com.smileonmymac.PDFPen.MacAppStore"
+    end try
+  end tell
+  return appName as string
+end getAppName
+
+
+on run argv
+  set appName to my getAppName()
+  set argvFile to POSIX file (item 1 of argv)
+  tell application appName
+    activate
+    using terms from application "PDFPen"
+      open argvFile
+      set theDoc to document 1
+      ocr theDoc
+      repeat while performing ocr of theDoc
+      end repeat
+      save theDoc
+      close theDoc
+    end using terms from
+  end tell
+end run

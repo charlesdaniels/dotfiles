@@ -4,13 +4,12 @@
 #  OVERVIEW
 #  ========
 #  
-#  Downloads the current weather from wttr.in . Server handles geolocation
-#  based on IP. Requires curl to be installed, and internet access for obvious
-#  reasons.
+#  OCRs a pdf with pdf-ocr, then optimizes it with pdf-optimize. 
+#
+#  USAGE
+#  =====
 #  
-#  In case further functionality needs to be added in the future, wttr.in
-#  supports query zip codes and airport codes at `wtter.in/CODE`. Full
-#  documentation here: https://github.com/chubin/wttr.in
+#   $1 . . . pdf to ingest
 #    
 ########10########20########30##### LICENSE ####50########60########70########80
 #  Copyright (c) 2016, Charles Daniels
@@ -44,4 +43,6 @@
 #  
 ########10########20########30########40########50########60########70########80
 
-curl wttr.in
+pdf-ocr "$1"
+pdf-optimize "$1"
+mv "$1-optimized.pdf" "$1"
