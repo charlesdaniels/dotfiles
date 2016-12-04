@@ -6,6 +6,14 @@
 #  
 #  Invokes PDFPen Pro to OCR a document via automator. 
 #
+#  Note that this sometimes takes an inordinate amount of time to complete,
+#  although it will complete successfully given enough time. I suspect it
+#  might be the `repeat while performing ocr of theDoc`, but I can't be
+#  certain without more digging. 
+#  
+#  In my test, OCRing an 18 page pdf took about an hour via this script, but
+#  ~2-3 minutes using PDFPen Pro directly.
+#
 #  USAGE
 #  =====
 #  

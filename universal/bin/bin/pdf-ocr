@@ -11,6 +11,19 @@
 #  ======================
 #  
 #  * PDFPen Pro (6.2.1+)
+#  
+#  FUTURE DEVELOPMENT
+#  ==================
+#  
+#  * it would be cool for Linux/BSD systems if adobe acrobat could be used
+#    from the commandline, as acrobat 8 runs fairly well via WINE.
+#  
+#  * tessearct support would be neat, but I'm not sure how to get it to "burn
+#    in" text.
+#    
+#  * should add support for PDFPen, in addition to PDFPen pro, should just be
+#    an extra check, as invoke-pdfpenpro-ocr, despite it's name, should work
+#    correctly with PDFPen already.
 #
 #  USAGE
 #  =====
