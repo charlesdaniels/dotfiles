@@ -43,6 +43,10 @@ add-to-path "/opt/local/bin"
 add-to-path "/usr/local/bin"
 add-to-path "/opt/net.cdaniels/bin/"
 add-to-path "/Library/TeX/texbin/"
+add-to-path "/opt.net.cdaniels.toolchest/bin"
+add-to-path "/opt/net.cdaniels.toolchest/local/bin"
+add-to-path "$HOME/.net.cdaniels.toolchest/bin"
+add-to-path "$HOME/.net.cdaniels.toolchest/local/bin"
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
