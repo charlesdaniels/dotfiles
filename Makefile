@@ -10,7 +10,6 @@ clear-iterm-config:
 
 install:
 	cd universal && $(STOW_CMD) bash
-	cd universal && $(STOW_CMD) bin
 	cd universal && $(STOW_CMD) fish
 	cd universal && $(STOW_CMD) tmux
 	cd universal && $(STOW_CMD) vim
