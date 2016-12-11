@@ -1,2 +1,0 @@
-run:
-	@invoke-sensible-python3 $(MAIN_FILE)
