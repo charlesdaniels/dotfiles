@@ -12,7 +12,8 @@
 	[
 		0,
 		80,
-		120
+		160,
+		240
 	],
 	"scroll_past_end": true,
 	"spell_check": true,
