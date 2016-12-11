@@ -1,8 +1,0 @@
-#!/bin/sh
-
-DPI_SCRIPT=$HOME/dotfiles/lib/system-specific/setdpi
-if [ -e "$DPI_SCRIPT" ] ; then
-	$DPI_SCRIPT
-	exit $?
-fi
-exit 0
