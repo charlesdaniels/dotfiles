@@ -14,5 +14,3 @@ export PATH=$PATH:/opt/net.cdaniels.toolchest/local/bin
 export PATH=$PATH:$HOME/.net.cdaniels.toolchest/bin
 export PATH=$PATH:$HOME/.net.cdaniels.toolchest/local/bin
 
-# source global shell variables
-source $HOME/dotfiles/lib/configs/MASTER.CFG
