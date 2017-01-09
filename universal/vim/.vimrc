@@ -17,16 +17,15 @@ endif
 set shell=/bin/sh
 let g:uname = substitute(system("uname"), '\n\+$', '', '')
 
-if v:version <= 702
-	language en
-endif
-
 syntax on  " enable syntax highlighting
 filetype plugin indent on  " guess indent based on file type
 set cursorline  " highlight the active line
 set number  " use line numbering
 set laststatus=2
-set colorcolumn=80,160,240,320,400,480,660,740,800
+if version >= 703
+	" setting colorcolumn in VIM 7.2.22 on OSX 10.5.8 PPC breaks
+	set colorcolumn=80,160,240,320,400,480,660,740,800
+endif
 set nocompatible  "fix odd behaviour on some older systems 
 set ruler  " display column and line number in statusline
 
