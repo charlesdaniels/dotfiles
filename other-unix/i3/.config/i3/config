@@ -215,7 +215,7 @@ bindsym Control+End   exec "playerctl play-pause; deadbeef --play-pause"
 
 bar {
 	#status_command i3status
-  status_command $HOME/bin/system-statusline
+	status_command system-statusline
 }
 
 # Start i3bar to display a workspace bar (plus the system information i3status
