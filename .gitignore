@@ -23,3 +23,6 @@ OSX/subl/Library/Application Support/Sublime Text 3/Packages/pyyaml/
 universal/micro/.config/micro/buffers
 lib/system-specific
 lib/configs/SYSTEM_SPECIFIC.CFG
+other-unix/subl/.config/sublime-text-3/Cache/*
+other-unix/subl/.config/sublime-text-3/Index/*
+other-unix/subl/.config/sublime-text-3/*/*.sublime_license

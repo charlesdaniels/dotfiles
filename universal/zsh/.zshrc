@@ -1,3 +1,5 @@
+# Created by newuser for 5.0.7
+
 # Setup for my custom paths
 export EDITOR=vim
 export VISUAL=vim
@@ -13,14 +15,13 @@ export PATH=$PATH:$HOME/.net.cdaniels.toolchest/bin
 export PATH=$PATH:$HOME/.net.cdaniels.toolchest/local/bin
 
 
-if [ "$TERM" == "xterm-termite" ] ; then
+if [ "$TERM" = "xterm-termite" ] ; then
   export TERM="xterm"
 fi 
 
-export PS1="[\u@\h][\A][\w]\n(bash) $ \[$(tput sgr0)\]"
+PS1='[%n@%M][%T][%~]
+(zsh) $ '
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-
-# source global shell variables
-source $HOME/dotfiles/lib/configs/MASTER.CFG
+   

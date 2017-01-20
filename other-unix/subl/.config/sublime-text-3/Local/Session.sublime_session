@@ -1,10 +1,11 @@
 {
 	"folder_history":
 	[
+		"/home/cad/.net.cdaniels.toolchest",
 		"/home/cad/dotfiles"
 	],
 	"last_version": 3126,
-	"last_window_id": 4,
+	"last_window_id": 9,
 	"log_indexing": false,
 	"settings":
 	{
@@ -60,6 +61,9 @@
 			},
 			"file_history":
 			[
+				"/home/cad/dotfiles/Makefile",
+				"/home/cad/dotfiles/universal/bin/bin/system-statusline",
+				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
 				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings"
 			],
 			"find":
@@ -98,7 +102,7 @@
 			},
 			"input":
 			{
-				"height": 0.0
+				"height": 49.0
 			},
 			"menu_visible": true,
 			"output.find_results":
@@ -141,8 +145,8 @@
 			"show_minimap": true,
 			"show_open_files": false,
 			"show_tabs": true,
-			"side_bar_visible": false,
-			"side_bar_width": 225.0,
+			"side_bar_visible": true,
+			"side_bar_width": 409.0,
 			"status_bar_visible": true,
 			"template_settings":
 			{
@@ -157,28 +161,18 @@
 			{
 				"selected_items":
 				[
+					[
+						"SRC",
+						"SRC_DIR"
+					],
+					[
+						"DEST",
+						"DEST_DIR"
+					]
 				]
 			},
 			"buffers":
 			[
-				{
-					"contents": "111111\naaaaaa",
-					"settings":
-					{
-						"buffer_size": 13,
-						"line_ending": "Unix",
-						"name": "111111"
-					}
-				},
-				{
-					"file": "/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
-					"settings":
-					{
-						"buffer_size": 346,
-						"encoding": "UTF-8",
-						"line_ending": "Unix"
-					}
-				}
 			],
 			"build_system": "",
 			"build_system_choices":
@@ -187,10 +181,14 @@
 			"build_varint": "",
 			"command_palette":
 			{
-				"height": 142.0,
-				"last_filter": "remove",
+				"height": 92.0,
+				"last_filter": "convert t",
 				"selected_items":
 				[
+					[
+						"convert t",
+						"Indentation: Convert to Spaces"
+					],
 					[
 						"remove",
 						"Package Control: Remove Package"
@@ -204,7 +202,7 @@
 						"Install Package Control"
 					]
 				],
-				"width": 701.0
+				"width": 449.0
 			},
 			"console":
 			{
@@ -222,13 +220,55 @@
 				"side_bar_visible": false,
 				"status_bar_visible": false
 			},
+			"expanded_folders":
+			[
+				"/home/cad/.net.cdaniels.toolchest",
+				"/home/cad/.net.cdaniels.toolchest/bin",
+				"/home/cad/.net.cdaniels.toolchest/lib",
+				"/home/cad/.net.cdaniels.toolchest/local",
+				"/home/cad/.net.cdaniels.toolchest/packages",
+				"/home/cad/.net.cdaniels.toolchest/packages/240utils",
+				"/home/cad/.net.cdaniels.toolchest/packages/240utils/bin",
+				"/home/cad/.net.cdaniels.toolchest/packages/carbonite",
+				"/home/cad/.net.cdaniels.toolchest/packages/carbonite/bin",
+				"/home/cad/.net.cdaniels.toolchest/packages/physutils",
+				"/home/cad/.net.cdaniels.toolchest/packages/physutils/bin",
+				"/home/cad/.net.cdaniels.toolchest/packages/physutils/lib"
+			],
 			"file_history":
 			[
+				"/home/cad/Documents/School/Spring 2017/PHYS212/Work/PHYS212 Equipotential Lab/data/2017-01-17 PHYS212 Equipotential Data.csv",
+				"/home/cad/Documents/School/Spring 2017/MATH242/Work/2017-01-19 MATH242 Classwork-01/makeplot.py",
+				"/home/cad/.net.cdaniels.toolchest/lib/generic-uninstall.sh",
+				"/home/cad/.net.cdaniels.toolchest/packages/carbonite/bin/carbonite",
+				"/home/cad/.net.cdaniels.toolchest/lib/generic-install.sh",
+				"/home/cad/.net.cdaniels.toolchest/packages/physutils/lib/physutils-mkplot.py",
+				"/home/cad/.net.cdaniels.toolchest/CHANGELOG",
+				"/home/cad/.net.cdaniels.toolchest/packages/universal-tools/bin/burn",
+				"/home/cad/.net.cdaniels.toolchest/packages/physutils/bin/physutils-mkplot",
+				"/home/cad/.net.cdaniels.toolchest/packages/240utils/bin/240utils-testassignment",
+				"/home/cad/.net.cdaniels.toolchest/packages/phys-utils/lib/physutils-mkplot.py",
+				"/home/cad/.net.cdaniels.toolchest/packages/archiveutils/dep/system",
+				"/home/cad/.net.cdaniels.toolchest/bin/toolchest",
+				"/home/cad/.net.cdaniels.toolchest/packages/phys-utils/brief.txt",
+				"/home/cad/.net.cdaniels.toolchest/packages/phys-utils/description.txt",
+				"/home/cad/.net.cdaniels.toolchest/packages/phys-utils/physutils-figen/physutils-figen.py",
+				"/home/cad/.net.cdaniels.toolchest/packages/phys-utils/bin/physutils-mkplot",
+				"/home/cad/.net.cdaniels.toolchest/packages/archiveutils/preinstall.sh",
+				"/home/cad/Documents/School/Spring 2017/CSCE311/Work/Homework-01/Makefile",
+				"/home/cad/Documents/School/Spring 2017/CSCE311/Work/Homework-01/results.txt",
+				"/home/cad/Documents/School/Spring 2017/CSCE311/Work/Homework-01/2017-01-17 CSCE311 Charles Daniels Assignment 1.rst",
+				"/home/cad/Documents/School/Spring 2017/CSCE311/Work/Homework-01/results/results.contents",
+				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/sublime-rst-completion.sublime-settings",
+				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/sublime-rst-completion/sublime-rst-completion.sublime-settings",
+				"/home/cad/dotfiles/Makefile",
+				"/home/cad/dotfiles/universal/bin/bin/system-statusline",
+				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
 				"/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings"
 			],
 			"find":
 			{
-				"height": 0.0
+				"height": 34.0
 			},
 			"find_in_files":
 			{
@@ -256,87 +296,27 @@
 				"whole_word": false,
 				"wrap": true
 			},
+			"folders":
+			[
+				{
+					"path": "/home/cad/.net.cdaniels.toolchest"
+				}
+			],
 			"groups":
 			[
 				{
-					"selected": 0,
 					"sheets":
 					[
-						{
-							"buffer": 0,
-							"semi_transient": false,
-							"settings":
-							{
-								"buffer_size": 13,
-								"regions":
-								{
-								},
-								"selection":
-								[
-									[
-										13,
-										13
-									]
-								],
-								"settings":
-								{
-									"auto_name": "111111",
-									"syntax": "Packages/Text/Plain text.tmLanguage"
-								},
-								"translation.x": 0.0,
-								"translation.y": 0.0,
-								"zoom_level": 1.0
-							},
-							"stack_index": 0,
-							"type": "text"
-						}
-					]
-				},
-				{
-					"selected": 0,
-					"sheets":
-					[
-						{
-							"buffer": 1,
-							"file": "/home/cad/dotfiles/other-unix/subl/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
-							"semi_transient": false,
-							"settings":
-							{
-								"buffer_size": 346,
-								"regions":
-								{
-								},
-								"selection":
-								[
-									[
-										153,
-										153
-									]
-								],
-								"settings":
-								{
-									"edit_settings_other_view_id": 32,
-									"edit_settings_view": "user",
-									"syntax": "Packages/JavaScript/JSON.sublime-syntax",
-									"translate_tabs_to_spaces": false
-								},
-								"translation.x": 0.0,
-								"translation.y": 0.0,
-								"zoom_level": 1.0
-							},
-							"stack_index": 1,
-							"type": "text"
-						}
 					]
 				}
 			],
 			"incremental_find":
 			{
-				"height": 0.0
+				"height": 26.0
 			},
 			"input":
 			{
-				"height": 0.0
+				"height": 49.0
 			},
 			"layout":
 			{
@@ -347,18 +327,11 @@
 						0,
 						1,
 						1
-					],
-					[
-						1,
-						0,
-						2,
-						1
 					]
 				],
 				"cols":
 				[
 					0.0,
-					0.5,
 					1.0
 				],
 				"rows":
@@ -373,11 +346,11 @@
 				"height": 0.0
 			},
 			"pinned_build_system": "",
-			"position": "0,0,0,0,0,0,30,2560,1565,2560,1600",
+			"position": "0,0,0,0,0,0,0,1366,749,1366,768",
 			"project": "",
 			"replace":
 			{
-				"height": 0.0
+				"height": 48.0
 			},
 			"save_all_on_build": true,
 			"select_file":
@@ -414,13 +387,13 @@
 			"show_minimap": true,
 			"show_open_files": false,
 			"show_tabs": true,
-			"side_bar_visible": false,
-			"side_bar_width": 225.0,
+			"side_bar_visible": true,
+			"side_bar_width": 280.0,
 			"status_bar_visible": true,
 			"template_settings":
 			{
 			},
-			"window_id": 2,
+			"window_id": 9,
 			"workspace_name": ""
 		}
 	],
