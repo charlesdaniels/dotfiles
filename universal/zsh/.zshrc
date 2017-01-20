@@ -32,14 +32,31 @@ set show-all-if-ambiguous on
 set completion-ignore-case on
 # disable correction
 unsetopt correct_all
+# lines of history to store
+HISTSIZE=1000
+# place to store them
+HISTFILE=~/.zsh_history
+# lines to store on disk
+SAVEHIST=1000
+# append history to file without writing
+setopt appendhistory
+# share history across sessions
+setopt sharehistory
+# immediately append history lines, rather then on session close
+setopt incappendhistory
 
 # use autocompletion, if supported
 which acquire-toolchest-dirs | grep acquire-toolchest-dirs > /dev/null
 if [ $? -eq 0 ] ; then
   $(acquire-toolchest-dirs)
   AUTOSUGGESTIONS_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/lib/zsh-autosuggestions/src"
+  SYNTAX_HIGHLIGHTING_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/lib/zsh-syntax-highlighting/src"
   if [ -e "$AUTOSUGGESTIONS_PATH" ] ; then
     source "$AUTOSUGGESTIONS_PATH/zsh-autosuggestions.zsh"
     ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=cyan'
+  fi
+  # zsh syntax highlighting has to be sourced last
+  if [ -e "$SYNTAX_HIGHLIGHTING_PATH" ] ; then
+    source "$SYNTAX_HIGHLIGHTING_PATH/zsh-syntax-highlighting.zsh"
   fi
 fi
