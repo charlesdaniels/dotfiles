@@ -25,6 +25,14 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 
+# zsh specific settings
+# immediately show amgiguous completions
+set show-all-if-ambiguous on
+# ignore case for completions
+set completion-ignore-case on
+# disable correction
+unsetopt correct_all
+
 # use autocompletion, if supported
 which acquire-toolchest-dirs | grep acquire-toolchest-dirs > /dev/null
 if [ $? -eq 0 ] ; then
