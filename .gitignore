@@ -26,3 +26,10 @@ lib/configs/SYSTEM_SPECIFIC.CFG
 other-unix/subl/.config/sublime-text-3/Cache/*
 other-unix/subl/.config/sublime-text-3/Index/*
 other-unix/subl/.config/sublime-text-3/*/*.sublime_license
+other-unix/subl/.config/sublime-text-3/*/*.sublime_session
+other-unix/subl/.config/sublime-text-3/*/*.cache/*
+other-unix/subl/.config/sublime-text-3/*/*/*.cache/*
+other-unix/subl/.config/sublime-text-3/*/*/Package\ Control.cache/*
+other-unix/subl/.config/sublime-text-3/Packages/User/Package Control.cache/*
+*.sublime-session
+.last-run

@@ -24,4 +24,14 @@ PS1='[%n@%M][%T][%~]
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
-   
+
+# use autocompletion, if supported
+which acquire-toolchest-dirs | grep acquire-toolchest-dirs > /dev/null
+if [ $? -eq 0 ] ; then
+  $(acquire-toolchest-dirs)
+  AUTOSUGGESTIONS_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/lib/zsh-autosuggestions/src"
+  if [ -e "$AUTOSUGGESTIONS_PATH" ] ; then
+    source "$AUTOSUGGESTIONS_PATH/zsh-autosuggestions.zsh"
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=cyan'
+  fi
+fi
