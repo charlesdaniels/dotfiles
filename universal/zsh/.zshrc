@@ -46,8 +46,7 @@ setopt sharehistory
 setopt incappendhistory
 
 # use autocompletion, if supported
-which acquire-toolchest-dirs | grep acquire-toolchest-dirs > /dev/null
-if [ $? -eq 0 ] ; then
+if [ -e `which acquire-toolchest-dirs` ] ; then
   $(acquire-toolchest-dirs)
   AUTOSUGGESTIONS_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/lib/zsh-autosuggestions/src"
   SYNTAX_HIGHLIGHTING_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/lib/zsh-syntax-highlighting/src"
