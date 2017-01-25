@@ -17,6 +17,7 @@ install:
 	cd universal && $(STOW_CMD) profile
 	cd universal && $(STOW_CMD) micro
 	cd universal && $(STOW_CMD) zsh
+	cd universal && $(STOW_CMD) ksh
 
 install-osx: install clear-iterm-config
 	cd OSX && $(STOW_CMD) subl

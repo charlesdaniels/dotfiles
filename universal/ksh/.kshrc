@@ -12,12 +12,8 @@ export PATH=$PATH:/opt/net.cdaniels.toolchest/local/bin
 export PATH=$PATH:$HOME/.net.cdaniels.toolchest/bin
 export PATH=$PATH:$HOME/.net.cdaniels.toolchest/local/bin
 
-
-if [ "$TERM" == "xterm-termite" ] ; then
-  export TERM="xterm"
-fi 
-
-export PS1="[\u@\h][\A][\w]\n(bash) $ \[$(tput sgr0)\]"
+export PS1="[${USER}@$(hostname)][$(date +"%H:%M")][${PWD}] \ 
+(ksh) $ "
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
