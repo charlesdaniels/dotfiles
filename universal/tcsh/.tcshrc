@@ -1,0 +1,20 @@
+# Setup for my custom paths
+setenv EDITOR vim
+setenv VISUAL vim
+setenv PATH $PATH\:$HOME/bin
+setenv GOPATH $HOME/.go-workspace
+setenv PATH $PATH\:$GOPATH/bin
+setenv PATH /opt/local/bin\:$PATH
+setenv PATH /opt/local/sbin\:$PATH
+setenv PATH $PATH\:/Library/TeX/texbin/
+setenv PATH $PATH\:/opt.net.cdaniels.toolchest/bin
+setenv PATH $PATH\:/opt/net.cdaniels.toolchest/local/bin
+setenv PATH $PATH\:$HOME/.net.cdaniels.toolchest/bin
+setenv PATH $PATH\:$HOME/.net.cdaniels.toolchest/local/bin
+
+#export PS1="[\u@\h][\A][\w]\n(bash) $ \[$(tput sgr0)\]"
+set prompt='[%n@%m][%T][%~]\n(tcsh) \$ '
+setenv LC_ALL en_US.UTF-8
+setenv LANG en_US.UTF-8
+setenv LANGUAGE en_US.UTF-8
+

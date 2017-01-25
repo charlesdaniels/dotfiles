@@ -18,6 +18,7 @@ install:
 	cd universal && $(STOW_CMD) micro
 	cd universal && $(STOW_CMD) zsh
 	cd universal && $(STOW_CMD) ksh
+	cd universal && $(STOW_CMD) tcsh
 
 install-osx: install clear-iterm-config
 	cd OSX && $(STOW_CMD) subl
@@ -36,6 +37,9 @@ uninstall:
 	cd universal && $(STOW_CMD) -D todotxt
 	cd universal && $(STOW_CMD) -D profile
 	cd universal && $(STOW_CMD) -D micro
+	cd universal && $(STOW_CMD) -D zsh
+	cd universal && $(STOW_CMD) -D ksh
+	cd univesral && $(STOW_CMD) -D tcsh
 
 uninstall-osx: uninstall clear-iterm-config
 	cd OSX && $(STOW_CMD) -D subl
