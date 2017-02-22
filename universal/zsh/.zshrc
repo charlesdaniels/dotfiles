@@ -11,8 +11,8 @@ export PATH=/opt/local/sbin:$PATH
 export PATH=$PATH:/Library/TeX/texbin/
 export PATH=$PATH:/opt.net.cdaniels.toolchest/bin
 export PATH=$PATH:/opt/net.cdaniels.toolchest/local/bin
-export PATH=$PATH:$HOME/.net.cdaniels.toolchest/bin
-export PATH=$PATH:$HOME/.net.cdaniels.toolchest/local/bin
+export PATH=$HOME/.net.cdaniels.toolchest/bin:$PATH
+export PATH=$HOME/.net.cdaniels.toolchest/local/bin:$PATH
 
 
 if [ "$TERM" = "xterm-termite" ] ; then
