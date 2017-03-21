@@ -45,14 +45,6 @@ if (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on
 	set listchars+=precedes:«
 	set listchars+=extends:»
 	set listchars+=eol:↲
-	if v:version >= 704
-		" if we are using a supported vim version, show whitespace
-		try
-			set listchars+=space:␣
-		catch 
-			" do nothing
-		endtry
-	endif
 elseif (g:uname != "FreeBSD")
 	set listchars=tab:>-
 	set listchars+=trail:_

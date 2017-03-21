@@ -39,6 +39,7 @@ $ npm run test
 ## Credits
 
 Themes creators
+ - [Josh Trujillo](https://github.com/trujillojosh)
  - [LingTalfi](https://github.com/lingtalfi)
  - [Zayn Ali](https://twitter.com/zaynali53)
  - Neil Cresswell ([Dark Room](https://github.com/NeilCresswell/themes) themes)
@@ -99,3 +100,6 @@ Themes creators
  - Giovane de Oliveira ([Mosquito13](https://github.com/Mosquito13))
  - Odepax ([Mars Peacock](https://github.com/Odepax/mars-peacock))
  - weop ([weop](https://github.com/weop))
+ - Abraham Howland ([liminalisht](http://github.com/liminalisht))
+ - Rune Warhuus ([DinkDonk](https://github.com/DinkDonk))
+ - [Nico Schuele](https://twitter.com/nicoschuele) ([Snakecasts](https://github.com/nicoschuele/snakecasts-theme))

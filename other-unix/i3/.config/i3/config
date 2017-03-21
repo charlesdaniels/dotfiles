@@ -13,7 +13,7 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec "mate-terminal"
+bindsym $mod+Return exec "xfce4-terminal"
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -182,6 +182,10 @@ exec twmnd
 exec "numlockx on"
 exec "copyq"
 exec "mate-settings-daemon"
+# set wallpaper
+exec "feh --bg-fill ~/.wallpapers/current" 
+# configure screenlayout
+exec "sh ~/.screenlayout.sh"
 
 # media keys 
 bindsym XF86AudioPlay 		   exec "playerctl play-pause; deadbeef --play-pause"
