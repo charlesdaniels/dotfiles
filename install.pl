@@ -94,13 +94,13 @@ copy "./.vimrc", "$ENV{HOME}/.vimrc";
 print "DONE\n";
 
 # tmux.conf
-print "INFO: installing tmux.conf...";
+print "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
 copy "./.tmux.conf", "$ENV{HOME}/.tmux.conf";
 print "DONE\n";
 
 # fish
-print "INFO: installing fish config...";
+print "INFO: installing fish config... ";
 backup_file ".config/fish/add-to-path.fish";
 backup_file ".config/fish/config.fish";
 backup_file ".config/fish/fish-prompt.fish";
@@ -109,3 +109,8 @@ copy "./add-to-path.fish", "$ENV{HOME}/.config/fish/add-to-path.fish";
 copy "./fish-prompt.fish", "$ENV{HOME}/.config/fish/fish-prompt.fish";
 print "DONE\n";
 
+# ksh
+print "INFO: installing kshrc... ";
+backup_file ".kshrc";
+copy "./.kshrc", "$ENV{HOME}/.kshrc";
+print "DONE\n";
