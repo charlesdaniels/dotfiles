@@ -54,7 +54,7 @@ my $TOOLCHEST = 0;
 foreach(@ARGV) {
   if ($_ eq "--nobackup")     { $NOBACKUP  = 1;}
   elsif ($_ eq "--toolchest") { $TOOLCHEST = 1;}
-  else {print "ERROR 53: unrecognized option \"$_\"\n"; die;}
+  else {printf "ERROR 53: unrecognized option \"$_\"\n"; die;}
 }
 
 if ( ! -e "./dotfiles-sigil" ) {
@@ -80,37 +80,74 @@ sub backup_file {
 }
 
 # bashrc
-print "INFO: installing bashrc... ";
+printf "INFO: installing bashrc... ";
 backup_file ".bashrc";
 backup_file ".bash_profile";
 copy "./.bashrc", "$ENV{HOME}/.bashrc";
 copy "./.bashrc", "$ENV{HOME}/.bash_profile";
-print "DONE\n";
+printf "DONE\n";
 
 # vimrc
-print "INFO: installing vimrc... ";
+printf "INFO: installing vimrc... ";
 backup_file ".vimrc";
 copy "./.vimrc", "$ENV{HOME}/.vimrc";
-print "DONE\n";
+printf "DONE\n";
 
 # tmux.conf
-print "INFO: installing tmux.conf... ";
+printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
 copy "./.tmux.conf", "$ENV{HOME}/.tmux.conf";
-print "DONE\n";
+printf "DONE\n";
 
 # fish
-print "INFO: installing fish config... ";
+printf "INFO: installing fish config... ";
 backup_file ".config/fish/add-to-path.fish";
 backup_file ".config/fish/config.fish";
 backup_file ".config/fish/fish-prompt.fish";
+if ( ! -e "$ENV{HOME}/.config/fish" ) { mkdir "$ENV{HOME}/.config/fish"; }
 copy "./config.fish", "$ENV{HOME}/.config/fish/config.fish";
 copy "./add-to-path.fish", "$ENV{HOME}/.config/fish/add-to-path.fish";
 copy "./fish-prompt.fish", "$ENV{HOME}/.config/fish/fish-prompt.fish";
-print "DONE\n";
+printf "DONE\n";
 
 # ksh
-print "INFO: installing kshrc... ";
+printf "INFO: installing kshrc... ";
 backup_file ".kshrc";
 copy "./.kshrc", "$ENV{HOME}/.kshrc";
-print "DONE\n";
+printf "DONE\n";
+
+# profile
+printf "INFO: installing profile... ";
+backup_file ".profile",
+copy "./.profile", "$ENV{HOME}/.profile";
+printf "DONE\n";
+
+# tcsh
+printf "INFO: installing tshrc... ";
+backup_file ".tcsh";
+copy "./.tcshrc", "$ENV{HOME}/.tcshrc";
+printf "DONE\n";
+
+# todotxt
+printf "INFO: installing todo.txt config... ";
+backup_file ".todo/config";
+if ( ! -e "$ENV{HOME}/.todo" ) { mkdir "$ENV{HOME}/.todo"; }
+copy "./todo-config", "$ENV{HOME}/.todo/config";
+printf "DONE\n";
+
+# zsh 
+printf "INFO: installing zshrc... ";
+backup_file ".zshrc";
+copy "./.zshrc", "$ENV{HOME}/.zshrc";
+printf "DONE\n";
+
+
+
+
+
+
+
+
+
+
+
