@@ -50,3 +50,4 @@ add-to-path "$HOME/.net.cdaniels.toolchest/local/bin"
 
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
+
