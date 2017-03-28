@@ -68,14 +68,14 @@ my $TIMESTAMP = sprintf("%04d%02d%02d%02d%02d%02d",
 my $BACKUP_NAME = "dotfiles_backup-$TIMESTAMP";
 my $BACKUP_DIR  = "$ENV{HOME}/$BACKUP_NAME";
 
-mkdir "$BACKUP_DIR";
+if ( ! $NOBACKUP ) { mkdir "$BACKUP_DIR"; }
 
 sub backup_file {
   my $target_file = shift;  # relative to home directory
   if ( $NOBACKUP ) {
   	unlink "$ENV{HOME}/$target_file"; 
   } else {
-  	move "$ENV{HOME}$/target_file", "$BACKUP_DIR";
+  	move "$ENV{HOME}/$target_file", "$BACKUP_DIR";
   }
 }
 
@@ -141,7 +141,19 @@ backup_file ".zshrc";
 copy "./.zshrc", "$ENV{HOME}/.zshrc";
 printf "DONE\n";
 
+# backup tarball
+if ( ! $NOBACKUP ) {
+  printf "INFO: generating backups tarball... ";
+  chdir "$ENV{HOME}";
+  `tar cfz "$BACKUP_NAME.tar.gz" "$BACKUP_NAME"`;
+  `rm -rf "$BACKUP_NAME"`;
+  printf "DONE\n";
+  printf "INFO: your previous dotfiles are in: ~/$BACKUP_NAME.tar.gz\n";
+}
 
+if ( $TOOLCHEST ) {
+  printf "INFO: toolchest installation is TODO\n";
+}
 
 
 
