@@ -141,20 +141,41 @@ backup_file ".zshrc";
 copy "./.zshrc", "$ENV{HOME}/.zshrc";
 printf "DONE\n";
 
+if ( $TOOLCHEST ) {
+  printf "INFO: installing net.cdaniels.toolchest... ";
+  my $GIT_PATH = `which git`;
+  chomp $GIT_PATH;
+  if ( ! -e "$GIT_PATH" ) {
+    printf "FAIL\n";
+    printf "ERROR 159: git is not installed\n";
+    die;
+  }
+  if ( -e "$ENV{HOME}/.net.cdaniels.toolchest" ) { 
+    # back up any existing install
+    move "$ENV{HOME}/.net.cdaniels.toolchest", "$BACKUP_DIR/.net.cdaniels.toolchest";
+  }
+  chdir "$ENV{HOME}";
+  `git clone https://bitbucket.org/charlesdaniels/toolchest >/dev/null 2>&1`;
+  move "$ENV{HOME}/toolchest", "$ENV{HOME}/.net.cdaniels.toolchest";
+  chdir "$ENV{HOME}/.net.cdaniels.toolchest";
+  `git checkout 1.X.X-STABLE > /dev/null 2>&1`;;
+  `git pull origin 1.X.X-STABLE > /dev/null 2>&1`;
+  chdir "$ENV{HOME}";
+  `$ENV{HOME}/.net.cdaniels.toolchest/bin/toolchest setup`;
+  printf "DONE\n";
+
+}
+
+
 # backup tarball
 if ( ! $NOBACKUP ) {
   printf "INFO: generating backups tarball... ";
   chdir "$ENV{HOME}";
   `tar cfz "$BACKUP_NAME.tar.gz" "$BACKUP_NAME"`;
-  `rm -rf "$BACKUP_NAME"`;
+  `rm -rf "$BACKUP_NAME" > /dev/null 2>&1`;
   printf "DONE\n";
   printf "INFO: your previous dotfiles are in: ~/$BACKUP_NAME.tar.gz\n";
 }
-
-if ( $TOOLCHEST ) {
-  printf "INFO: toolchest installation is TODO\n";
-}
-
 
 
 
