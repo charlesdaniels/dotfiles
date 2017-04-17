@@ -1,4 +1,4 @@
-""""""""" Master Keybind List """""""""""""""
+"""""""" Master Keybind List """""""""""""""
 " Alt + l - next buffer
 " Alt + k - previous buffer
 """""""""""""""""""""""""""""""""""""""""""""
@@ -65,3 +65,34 @@ set wildmode=longest:full,full
 
 " enable mouse support
 set mouse=a
+
+" spaces instead of tabs
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set softtabstop=2
+
+" hook into pathogen
+execute pathogen#infect()
+
+" NERDTree
+noremap <C-e> :NERDTreeToggle<CR>
+
+" configure indenting to work gqap correctly - not working quite right at the
+" moment 
+set showbreak=\ \\_
+if exists('+breakindent')  " breakindent was not merged until 2014
+  set breakindent
+else
+  " a more primative and hacky solution - does not work as well as breakindent
+  set formatioptions=l
+  set lbr
+endif
+
+" disable hard wrapping
+set wrap linebreak textwidth=0
+
+" enable spell checking
+set spell spelllang=en_us
+set complete+=kspell " allow words as completions 
+

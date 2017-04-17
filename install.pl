@@ -4,7 +4,7 @@
 #  OVERVIEW
 #  ========
 #  
-#  Installs my dotfiles, preserving a backup of any existing dotfiles. 
+#  Installs my dotfiles, preserving a backup of any existing dotfiles.
 #
 #  USAGE
 #  =====
@@ -95,7 +95,33 @@ printf "DONE\n";
 
 # .vim
 backup_file ".vim";
+`mkdir -p ~/.vim/autoload`;
+`mkdir -p ~/.vim/syntax`;
 
+# pathogen
+printf "INFO: installing pathogen.vim... ";
+`curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim > /dev/null 2>&1`;
+printf "DONE\n";
+
+# NERDtree
+printf "INFO: installing NERDtree... ";
+`git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree > /dev/null 2>&1`;
+printf "DONE\n";
+
+# netwr
+printf "INFO: installing netrw.vba... ";
+`wget http://www.drchip.org/astronaut/vim/vbafiles/netrw.vba.gz > /dev/null 2>&1`;
+`gzip -d netrw.vba.gz > /dev/null 2>&1`; 
+`vim -c 'so %' -c 'q' netrw.vba > /dev/null 2>&1`; 
+`rm netrw.vba`;
+printf "DONE\n";
+
+# vim-tex-syntax
+printf "INFO: installing vim-tex-syntax... ";
+`git clone https://github.com/gi1242/vim-tex-syntax > /dev/null 2>&1`;
+`mv vim-tex-syntax/syntax/tex.vim ~/.vim/syntax/tex.vim`;
+`rm -rf vim-tex-syntax`;
+printf "DONE\n";
 
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
