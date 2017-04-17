@@ -17,8 +17,8 @@ endif
 set shell=/bin/sh
 let g:uname = substitute(system("uname"), '\n\+$', '', '')
 
-syntax on  " enable syntax highlighting
 filetype plugin indent on  " guess indent based on file type
+syntax on  " enable syntax highlighting
 set cursorline  " highlight the active line
 set number  " use line numbering
 set laststatus=2
@@ -58,3 +58,10 @@ nnoremap <C-k> :bprevious!<CR>
 set backspace=indent,eol,start " fix dumbass default backspace behaviour 
 
 set nowrap " disable line wrapping
+
+" enable a nice interactive menu for tab-completing buffers and such
+set wildmenu
+set wildmode=longest:full,full
+
+" enable mouse support
+set mouse=a

@@ -93,6 +93,10 @@ backup_file ".vimrc";
 copy "./.vimrc", "$ENV{HOME}/.vimrc";
 printf "DONE\n";
 
+# .vim
+backup_file ".vim";
+
+
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
