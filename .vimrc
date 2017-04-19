@@ -26,7 +26,7 @@ if version >= 703
 	" setting colorcolumn in VIM 7.2.22 on OSX 10.5.8 PPC breaks
 	set colorcolumn=80,160,240,320,400,480,660,740,800
 endif
-set nocompatible  "fix odd behaviour on some older systems 
+set nocompatible  "fix odd behavior on some older systems 
 set ruler  " display column and line number in statusline
 
 " show non-printing characters
@@ -55,7 +55,7 @@ nnoremap <C-l> :bnext!<CR>
 nnoremap <C-k> :bprevious!<CR>
 
 
-set backspace=indent,eol,start " fix dumbass default backspace behaviour 
+set backspace=indent,eol,start " fix dumbass default backspace behavior 
 
 set nowrap " disable line wrapping
 
@@ -95,6 +95,9 @@ set wrap linebreak textwidth=0
 " enable spell checking
 set spell spelllang=en_us
 set complete+=kspell " allow words as completions 
+" render misspelled words with underlines, rather than highlights
+highlight clear SpellBad
+highlight SpellBad cterm=underline 
 
 " enable content continuation on enter
 set formatoptions+=cro
@@ -112,3 +115,4 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.m set syntax=octave
   autocmd BufNewFile,BufRead *.m set filetype=octave
 endif
+
