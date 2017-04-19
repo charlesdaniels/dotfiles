@@ -116,3 +116,7 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.m set filetype=octave
 endif
 
+" solarized colorscheme
+set background=dark
+colorscheme solarized
+

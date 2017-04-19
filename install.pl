@@ -129,6 +129,12 @@ printf "INFO: installing octave.vim... ";
 `mv octave.vim ~/.vim/syntax/octave.vim`;
 printf "DONE\n";
 
+# vim-colors-solarized
+printf "INFO: installing vim-colors-solarized... ";
+`git clone git://github.com/altercation/vim-colors-solarized.git > /dev/null 2>&1`;
+`mv vim-colors-solarized ~/.vim/bundle/vim-colors-solarized`;
+printf "DONE\n";
+
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
