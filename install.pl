@@ -123,6 +123,12 @@ printf "INFO: installing vim-tex-syntax... ";
 `rm -rf vim-tex-syntax`;
 printf "DONE\n";
 
+# octave.vim
+printf "INFO: installing octave.vim... ";
+`wget http://www.vim.org/scripts/download_script.php?src_id=24730 -O octave.vim > /dev/null 2>&1`;
+`mv octave.vim ~/.vim/syntax/octave.vim`;
+printf "DONE\n";
+
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";

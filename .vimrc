@@ -96,3 +96,19 @@ set wrap linebreak textwidth=0
 set spell spelllang=en_us
 set complete+=kspell " allow words as completions 
 
+" enable content continuation on enter
+set formatoptions+=cro
+
+" This is required to make octave.vim work correctly
+if has("autocmd") && exists("+omnifunc") 
+  autocmd Filetype octave 
+    \ if &omnifunc == "" | 
+    \ setlocal omnifunc=syntaxcomplete#Complete | 
+    \ endif 
+endif 
+
+" set octave syntax highlighting for .m
+if has("autocmd")
+  autocmd BufNewFile,BufRead *.m set syntax=octave
+  autocmd BufNewFile,BufRead *.m set filetype=octave
+endif
