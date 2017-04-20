@@ -121,6 +121,12 @@ if has('gui_running')
   " if the GUI is running, we don't need to do anything special
   set background=dark
   colorscheme solarized
+elseif (&term == 'screen-256color')
+  " we are running inside of tmux, so we also need to fix the background
+  set background=dark
+  let g:solarized_termcolors=256
+  set t_ut=   " fixes background refresh problem in tmux
+  colorscheme solarized
 elseif (&t_Co == 256)
   " if we are using a terminal which supports 256 colors, use degrated 256 
   " color mode for solarized 
