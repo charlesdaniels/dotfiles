@@ -207,15 +207,15 @@ if ("$^O" ne "darwin") {
   copy("./i3config", "$ENV{HOME}/.config/i3/config");
   copy("./i3statusconfig", "$ENV{HOME}/.config/i3status/config");
   printf "DONE\n";
+
+
+  # .Xresources
+  printf "INFO: installing .Xresources... ";
+  backup_file ".Xresources";
+  copy("./.Xresources", "$ENV{HOME}/.Xresources");
+  `xrdb -merge ~/.Xresources`; 
+  printf "DONE\n";
 }
-
-# .Xresources
-printf "INFO: installing .Xresources... ";
-backup_file ".Xresources";
-copy("./.Xresources", "$ENV{HOME}/.Xresources");
-`xrdb -merge ~/.Xresources`; 
-printf "DONE\n";
-
 
 
 if ( $TOOLCHEST ) {
