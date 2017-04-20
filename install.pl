@@ -209,6 +209,15 @@ if ("$^O" ne "darwin") {
   printf "DONE\n";
 }
 
+# .Xresources
+printf "INFO: installing .Xresources... ";
+backup_file ".Xresources";
+copy("./.Xresources", "$ENV{HOME}/.Xresources");
+`xrdb -merge ~/.Xresources`; 
+printf "DONE\n";
+
+
+
 if ( $TOOLCHEST ) {
   printf "INFO: installing net.cdaniels.toolchest... ";
   my $GIT_PATH = `which git`;

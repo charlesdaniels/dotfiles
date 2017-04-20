@@ -116,9 +116,27 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.m set filetype=octave
 endif
 
-" solarized colorscheme
-set background=dark
-colorscheme solarized
+" colorscheme handling
+if has('gui_running')
+  " if the GUI is running, we don't need to do anything special
+  set background=dark
+  colorscheme solarized
+elseif (&t_Co == 256)
+  " if we are using a terminal which supports 256 colors, use degrated 256 
+  " color mode for solarized 
+  set background=dark
+  let g:solarized_termcolors=256
+  colorscheme solarized
+elseif (&t_Co == 88)
+  " likewise for 88 colors
+  set background=dark
+  let g:solarized_termcolors=88
+else
+  " give up and assume this is a 16-color terminal
+  " do nothing
+endif
+
+
 
 " correct handling of tabs and spaces in python files
 autocmd FileType python setlocal tabstop=4
