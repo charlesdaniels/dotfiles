@@ -194,6 +194,21 @@ backup_file ".zshrc";
 copy "./.zshrc", "$ENV{HOME}/.zshrc";
 printf "DONE\n";
 
+# i3
+if ("$^O" ne "darwin") {
+  printf "INFO: installing i3 config... ";
+  backup_file ".i3";
+  backup_file ".config/i3";
+  backup_file ".config/i3status";
+  backup_file ".i3status";
+  mkdir("$ENV{HOME}/.config");
+  mkdir("$ENV{HOME}/.config/i3");
+  mkdir("$ENV{HOME}/.config/i3status");
+  copy("./i3config", "$ENV{HOME}/.config/i3/config");
+  copy("./i3statusconfig", "$ENV{HOME}/.config/i3status/config");
+  printf "DONE\n";
+}
+
 if ( $TOOLCHEST ) {
   printf "INFO: installing net.cdaniels.toolchest... ";
   my $GIT_PATH = `which git`;
