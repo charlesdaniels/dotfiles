@@ -47,6 +47,7 @@
 use strict;
 use warnings;
 use File::Copy;
+use File::Path;
 
 my $NOBACKUP = 0;
 my $TOOLCHEST = 0;
@@ -95,8 +96,10 @@ printf "DONE\n";
 
 # .vim
 backup_file ".vim";
-`mkdir -p ~/.vim/autoload`;
-`mkdir -p ~/.vim/syntax`;
+mkdir("$ENV{HOME}/.vim");
+mkdir("$ENV{HOME}/.vim/autoload");
+mkdir("$ENV{HOME}/.vim/bundle");
+mkdir("$ENV{HOME}/.vim/syntax");
 
 # pathogen
 printf "INFO: installing pathogen.vim... ";
@@ -113,38 +116,40 @@ printf "INFO: installing netrw.vba... ";
 `wget http://www.drchip.org/astronaut/vim/vbafiles/netrw.vba.gz > /dev/null 2>&1`;
 `gzip -d netrw.vba.gz > /dev/null 2>&1`; 
 `vim -c 'so %' -c 'q' netrw.vba > /dev/null 2>&1`; 
-`rm netrw.vba`;
+unlink("netrw.vba");
 printf "DONE\n";
 
 # vim-tex-syntax
 printf "INFO: installing vim-tex-syntax... ";
 `git clone https://github.com/gi1242/vim-tex-syntax > /dev/null 2>&1`;
-`mv vim-tex-syntax/syntax/tex.vim ~/.vim/syntax/tex.vim`;
-`rm -rf vim-tex-syntax`;
+move("vim-tex-syntax/syntax/tex.vim", "$ENV{HOME}/.vim/syntax/tex.vim");
+rmtree("vim-tex-syntax");
 printf "DONE\n";
 
 # octave.vim
 printf "INFO: installing octave.vim... ";
 `wget http://www.vim.org/scripts/download_script.php?src_id=24730 -O octave.vim > /dev/null 2>&1`;
-`mv octave.vim ~/.vim/syntax/octave.vim`;
+move("octave.vim", "$ENV{HOME}/.vim/syntax/octave.vim");
 printf "DONE\n";
 
 # vim-colors-solarized
 printf "INFO: installing vim-colors-solarized... ";
 `git clone git://github.com/altercation/vim-colors-solarized.git > /dev/null 2>&1`;
-`mv vim-colors-solarized ~/.vim/bundle/vim-colors-solarized`;
+move("./vim-colors-solarized", "$ENV{HOME}/.vim/bundle/vim-colors-solarized");
+rmtree("./vim-colors-solarized"); # sometimes move doesn't clean up the source
 printf "DONE\n";
 
 # vim-pydocstring
 printf "INFO: installing vim-pydocstring... ";
 `git clone https://github.com/heavenshell/vim-pydocstring > /dev/null 2>&1`;
 move("./vim-pydocstring", "$ENV{HOME}/.vim/bundle/vim-pydocstring");
+rmtree("./vim-pydocstring"); # sometimes move doesn't clean up the source
 printf "DONE\n";
 
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
-copy "./.tmux.conf", "$ENV{HOME}/.tmux.conf";
+copy("./.tmux.conf", "$ENV{HOME}/.tmux.conf");
 printf "DONE\n";
 
 # fish
