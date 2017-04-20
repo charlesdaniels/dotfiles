@@ -135,6 +135,12 @@ printf "INFO: installing vim-colors-solarized... ";
 `mv vim-colors-solarized ~/.vim/bundle/vim-colors-solarized`;
 printf "DONE\n";
 
+# vim-pydocstring
+printf "INFO: installing vim-pydocstring... ";
+`git clone https://github.com/heavenshell/vim-pydocstring > /dev/null 2>&1`;
+move("./vim-pydocstring", "$ENV{HOME}/.vim/bundle/vim-pydocstring");
+printf "DONE\n";
+
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
