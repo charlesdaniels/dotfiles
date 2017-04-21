@@ -147,7 +147,6 @@ else
 endif
 
 
-
 " correct handling of tabs and spaces in python files
 autocmd FileType python setlocal tabstop=4
 autocmd FileType python setlocal shiftwidth=4

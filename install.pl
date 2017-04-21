@@ -132,6 +132,11 @@ printf "INFO: installing octave.vim... ";
 move("octave.vim", "$ENV{HOME}/.vim/syntax/octave.vim");
 printf "DONE\n";
 
+# vim-noctu
+#printf "INFO: installing noctu.vim... ";
+#`git clone git://github.com/noahfrederick/vim-noctu.git ~/.vim/bundle/noctu > /dev/null 2>&1`;
+#printf "DONE\n";
+
 # vim-colors-solarized
 #printf "INFO: installing vim-colors-solarized... ";
 #`git clone git://github.com/altercation/vim-colors-solarized.git > /dev/null 2>&1`;
