@@ -97,7 +97,11 @@ set spell spelllang=en_us
 set complete+=kspell " allow words as completions 
 " render misspelled words with underlines, rather than highlights
 highlight clear SpellBad
+highlight clear SpellCap
+highlight clear SpellRare
+highlight clear SpellLocal
 highlight SpellBad cterm=underline 
+highlight SpellLocal cterm=underline
 
 " enable content continuation on enter
 set formatoptions+=cro
