@@ -133,11 +133,11 @@ move("octave.vim", "$ENV{HOME}/.vim/syntax/octave.vim");
 printf "DONE\n";
 
 # vim-colors-solarized
-printf "INFO: installing vim-colors-solarized... ";
-`git clone git://github.com/altercation/vim-colors-solarized.git > /dev/null 2>&1`;
-move("./vim-colors-solarized", "$ENV{HOME}/.vim/bundle/vim-colors-solarized");
-rmtree("./vim-colors-solarized"); # sometimes move doesn't clean up the source
-printf "DONE\n";
+#printf "INFO: installing vim-colors-solarized... ";
+#`git clone git://github.com/altercation/vim-colors-solarized.git > /dev/null 2>&1`;
+#move("./vim-colors-solarized", "$ENV{HOME}/.vim/bundle/vim-colors-solarized");
+#rmtree("./vim-colors-solarized"); # sometimes move doesn't clean up the source
+#printf "DONE\n";
 
 # vim-pydocstring
 printf "INFO: installing vim-pydocstring... ";
