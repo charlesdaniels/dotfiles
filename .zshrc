@@ -48,17 +48,15 @@ setopt incappendhistory
 # use keybindings that aren't stupid
 bindkey -e
 
-# use autocompletion, if supported
-if [ -e `which acquire-toolchest-dirs` ] ; then
-  $(acquire-toolchest-dirs)
-  AUTOSUGGESTIONS_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/lib/zsh-autosuggestions/src"
-  SYNTAX_HIGHLIGHTING_PATH="$NET_CDANIELS_TOOLCHEST_LOCAL/lib/zsh-syntax-highlighting/src"
-  if [ -e "$AUTOSUGGESTIONS_PATH" ] ; then
-    source "$AUTOSUGGESTIONS_PATH/zsh-autosuggestions.zsh"
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=cyan'
-  fi
-  # zsh syntax highlighting has to be sourced last
-  if [ -e "$SYNTAX_HIGHLIGHTING_PATH" ] ; then
-    source "$SYNTAX_HIGHLIGHTING_PATH/zsh-syntax-highlighting.zsh"
-  fi
-fi
+# git completions
+fpath=(~/.zsh $fpath)
+# http://stackoverflow.com/a/26479426
+autoload -U compinit && compinit
+zmodload -i zsh/complist
+
+# zsh autosuggestions
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# zsh syntax highlighting 
+# MUST BE THE LAST THING SOURCED
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

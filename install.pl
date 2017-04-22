@@ -193,11 +193,38 @@ if ( ! -e "$ENV{HOME}/.todo" ) { mkdir "$ENV{HOME}/.todo"; }
 copy "./todo-config", "$ENV{HOME}/.todo/config";
 printf "DONE\n";
 
-# zsh 
+# .zsh
+printf "INFO: preparing .zsh ...";
+backup_file ".zsh";
+mkdir("$ENV{HOME}/.zsh");
+printf "DONE\n";
+
+# zshrc 
 printf "INFO: installing zshrc... ";
 backup_file ".zshrc";
 copy "./.zshrc", "$ENV{HOME}/.zshrc";
 printf "DONE\n";
+
+# zsh-autosuggestions
+printf "INFO: installing zsh-autosuggestions... ";
+`git clone git://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions > /dev/null 2>&1`;
+printf "DONE\n";
+
+# zsh-syntax-highlighting
+printf "INFO: installing zsh-syntax-highlighting... ";
+` git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting > /dev/null 2>&1`;
+printf "DONE\n";
+
+# git-completions
+printf "INFO: installing git-completion... ";
+backup_file ".git-completion.bash";
+backup_file ".git-completion.zsh";
+`curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash > /dev/null 2>&1`;
+`curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash -o ~/.git-completion.bash > /dev/null 2>&1`;
+`curl -L https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh -o ~/.zsh/git-completion.zsh > /dev/null 2>&1`;
+copy("$ENV{HOME}/.git-completion.zsh", "$ENV{HOME}/.zsh/_git");
+printf "DONE\n";
+
 
 # i3
 if ("$^O" ne "darwin") {
