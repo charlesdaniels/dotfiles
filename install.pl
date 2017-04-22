@@ -211,8 +211,13 @@ printf "INFO: installing zsh-autosuggestions... ";
 printf "DONE\n";
 
 # zsh-syntax-highlighting
-printf "INFO: installing zsh-syntax-highlighting... ";
-` git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting > /dev/null 2>&1`;
+#printf "INFO: installing 155-6102ax-highlighting... ";
+#` git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting > /dev/null 2>&1`;
+#printf "DONE\n";
+
+# zsh-fast-syntax-highlighting
+printf "INFO: installing zsh-fast-syntax-highlighting... ";
+`git clone https://github.com/zdharma/fast-syntax-highlighting ~/.zsh/fast-syntax-highlighting > /dev/null 2>&1`;
 printf "DONE\n";
 
 # git-completions
