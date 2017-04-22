@@ -100,6 +100,7 @@ mkdir("$ENV{HOME}/.vim");
 mkdir("$ENV{HOME}/.vim/autoload");
 mkdir("$ENV{HOME}/.vim/bundle");
 mkdir("$ENV{HOME}/.vim/syntax");
+mkdir("$ENV{HOME}/.vim/macros");
 
 # pathogen
 printf "INFO: installing pathogen.vim... ";

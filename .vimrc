@@ -1,6 +1,7 @@
 """""""" Master Keybind List """""""""""""""
 " Alt + l - next buffer
 " Alt + k - previous buffer
+" Ctl + l - generate documentation if possible
 """""""""""""""""""""""""""""""""""""""""""""
 
 
@@ -150,9 +151,14 @@ else
   " do nothing
 endif
 
-
 " correct handling of tabs and spaces in python files
 autocmd FileType python setlocal tabstop=4
 autocmd FileType python setlocal shiftwidth=4
 autocmd FileType python setlocal softtabstop=4
 autocmd FileType python setlocal expandtab
+
+" documentation helper keymapping (C-l should generate something useful when 
+" possible)
+
+autocmd FileType python nmap <silent> <C-l> <Plug>(pydocstring)
+
