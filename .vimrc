@@ -86,7 +86,7 @@ if exists('+breakindent')  " breakindent was not merged until 2014
   set breakindent
 else
   " a more primative and hacky solution - does not work as well as breakindent
-  set formatioptions=l
+  set formatoptions=l
   set lbr
 endif
 
