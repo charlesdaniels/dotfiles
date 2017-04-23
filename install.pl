@@ -114,7 +114,7 @@ printf "DONE\n";
 
 # netwr
 printf "INFO: installing netrw.vba... ";
-`wget http://www.drchip.org/astronaut/vim/vbafiles/netrw.vba.gz > /dev/null 2>&1`;
+`curl -L -O http://www.drchip.org/astronaut/vim/vbafiles/netrw.vba.gz > /dev/null 2>&1`;
 `gzip -d netrw.vba.gz > /dev/null 2>&1`; 
 `vim -c 'so %' -c 'q' netrw.vba > /dev/null 2>&1`; 
 unlink("netrw.vba");
@@ -129,7 +129,7 @@ printf "DONE\n";
 
 # octave.vim
 printf "INFO: installing octave.vim... ";
-`wget http://www.vim.org/scripts/download_script.php?src_id=24730 -O octave.vim > /dev/null 2>&1`;
+`curl -L http://www.vim.org/scripts/download_script.php?src_id=24730 -o octave.vim > /dev/null 2>&1`;
 move("octave.vim", "$ENV{HOME}/.vim/syntax/octave.vim");
 printf "DONE\n";
 
