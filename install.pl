@@ -80,6 +80,22 @@ sub backup_file {
   }
 }
 
+printf "INFO: performing preflight check:\n";
+printf "\tgit... ";
+if ( -e `which git | tr -d '\n'`) {
+  printf "OK\n";
+} else{
+  printf "NOT FOUND\n";
+  die;
+}
+printf "\tcurl... ";
+if ( -e `which curl | tr -d '\n'`) {
+  printf "OK\n";
+} else{
+  printf "NOT FOUND\n";
+  die;
+}
+
 # bashrc
 printf "INFO: installing bashrc... ";
 backup_file ".bashrc";
