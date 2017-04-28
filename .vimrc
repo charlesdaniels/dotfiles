@@ -122,6 +122,7 @@ if has("autocmd")
 endif
 
 " colorscheme handling
+set background=light
 if has('gui_running')
   " if the GUI is running, we don't need to do anything special
 
