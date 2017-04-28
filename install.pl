@@ -172,7 +172,13 @@ printf "DONE\n";
 printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
 copy("./.tmux.conf", "$ENV{HOME}/.tmux.conf");
-printf "DONE\n";
+if ( -e `which tmux | tr -d '\n'`) {
+  `./mktmux.pl >> ~/.tmux.conf`;
+  printf "DONE\n";
+} else {
+  printf "WARN\n";
+  printf "INFO: tmux ix not installed so mouse support was not enabled in ~/.tmux.conf\n";
+}
 
 # fish
 printf "INFO: installing fish config... ";
