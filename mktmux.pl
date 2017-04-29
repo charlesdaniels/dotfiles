@@ -54,22 +54,34 @@ if ( ! -e "./.tmux.conf" ) {
 my $tmuxvers = `tmux -V | cut -d\\  -f 2 | tr -d '.' | tr -d '\n'`;
 my $currentdate = `date`;
 
-printf "\n# tmux mouse configuration auto-generated during dotfile install\n";
+printf "\n# tmux configuration auto-generated during dotfile install\n";
 printf "# generated on: $currentdate\n";
 printf "# detected tmux version: $tmuxvers\n\n";
 
+# mouse configuration
 if ($tmuxvers ge 21) {
-  printf "# configuration selected because version >= 21\n";
+  printf "# mouse configuration selected because version >= 21\n";
   printf "set -g mouse on\n";
 }
 
 if ($tmuxvers lt 21) {
-  printf "# configuration selected because version < 21\n";
+  printf "# mouse configuration selected because version < 21\n";
   printf "set -g mouse on\n";
   printf "set -g mouse-select-window on\n";
   printf "set -g mouse-select-pane on\n";
   printf "set -g mouse-resize-pane on\n";
   printf "setw -g mouse\n";
+}
+
+# tmux-navigator 
+if ($tmuxvers ge 1.8) {
+  printf "# vim-tmux-navigator configuration selected because version >= 18\n";
+  printf "is_vim=\"ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\\\\S+\\\\\/)?g?(view|n?vim?x?)(diff)?\$'\"\n";
+  printf "bind-key -n C-h if-shell \"\$is_vim\" \"send-keys C-h\"  \"select-pane -L\"\n";
+  printf "bind-key -n C-j if-shell \"\$is_vim\" \"send-keys C-j\"  \"select-pane -D\"\n";
+  printf "bind-key -n C-k if-shell \"\$is_vim\" \"send-keys C-k\"  \"select-pane -U\"\n";
+  printf "bind-key -n C-l if-shell \"\$is_vim\" \"send-keys C-l\"  \"select-pane -R\"\n";
+  printf "bind-key -n C-\\ if-shell \"\$is_vim\" \"send-keys C-\\\\\" \"select-pane -l\"\n";
 }
 
 

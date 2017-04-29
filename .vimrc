@@ -1,10 +1,3 @@
-"""""""" Master Keybind List """""""""""""""
-" Alt + l - next buffer
-" Alt + k - previous buffer
-" Ctl + l - generate documentation if possible
-"""""""""""""""""""""""""""""""""""""""""""""
-
-
 " use utf-8
 if has ("multi_byte")
 	" we can only enable utf-8 if we have multi byte support compiled in
@@ -50,11 +43,6 @@ elseif (g:uname != "FreeBSD")
 	set listchars=tab:>-
 	set listchars+=trail:_
 endif
-
-" buffer cycling
-nnoremap <C-l> :bnext!<CR>
-nnoremap <C-k> :bprevious!<CR>
-
 
 set backspace=indent,eol,start " fix dumbass default backspace behavior 
 
@@ -158,8 +146,8 @@ autocmd FileType python setlocal shiftwidth=4
 autocmd FileType python setlocal softtabstop=4
 autocmd FileType python setlocal expandtab
 
-" documentation helper keymapping (C-l should generate something useful when 
+" documentation helper keymapping (C-g should generate something useful when 
 " possible)
 
-autocmd FileType python nmap <silent> <C-l> <Plug>(pydocstring)
+autocmd FileType python nmap <silent> <C-g> <Plug>(pydocstring)
 

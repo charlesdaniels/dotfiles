@@ -95,6 +95,13 @@ if ( -e `which curl | tr -d '\n'`) {
   printf "NOT FOUND\n";
   die;
 }
+printf "\tgrep... ";
+if ( -e `which grep | tr -d '\n'`) {
+  printf "OK\n";
+} else{
+  printf "NOT FOUND\n";
+  die;
+}
 
 # bashrc
 printf "INFO: installing bashrc... ";
@@ -147,6 +154,10 @@ printf "DONE\n";
 printf "INFO: installing octave.vim... ";
 `curl -L http://www.vim.org/scripts/download_script.php?src_id=24730 -o octave.vim > /dev/null 2>&1`;
 move("octave.vim", "$ENV{HOME}/.vim/syntax/octave.vim");
+printf "DONE\n";
+
+printf "INFO: installing vim-tmux-navigator... ";
+`git clone https://github.com/christoomey/vim-tmux-navigator.git ~/.vim/bundle/vim-tmux-navigator > /dev/null 2>&1`;
 printf "DONE\n";
 
 # vim-noctu
