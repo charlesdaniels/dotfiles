@@ -151,3 +151,15 @@ autocmd FileType python setlocal expandtab
 
 autocmd FileType python nmap <silent> <C-g> <Plug>(pydocstring)
 
+
+" fix broken behaviour for CHANGELOG files
+autocmd BufEnter CHANGELOG setlocal filetype=text
+
+" because net.cdaniels.toolchest uses .lib as an extension for shell
+" libraries, we shall force them to be treated as .sh
+autocmd BufEnter *.lib setlocal filetype=sh
+
+" we will force .m file to be treated as octave, which to my knowledge is the
+" default extension for MATLAB/octave files. The default behavior is to tread
+" *.m as some kind of objective-c header type thing. 
+autocmd BufEnter *.m setlocal filetype=octave 
