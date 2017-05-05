@@ -118,12 +118,15 @@ copy "./.vimrc", "$ENV{HOME}/.vimrc";
 printf "DONE\n";
 
 # .vim
+printf "INFO: preparing ~/.vim directory... ";
 backup_file ".vim";
 mkdir("$ENV{HOME}/.vim");
 mkdir("$ENV{HOME}/.vim/autoload");
 mkdir("$ENV{HOME}/.vim/bundle");
 mkdir("$ENV{HOME}/.vim/syntax");
 mkdir("$ENV{HOME}/.vim/macros");
+mkdir("$ENV{HOME}/.vim/ftplugin");
+printf "DONE\n";
 
 # pathogen
 printf "INFO: installing pathogen.vim... ";
@@ -156,21 +159,10 @@ printf "INFO: installing octave.vim... ";
 move("octave.vim", "$ENV{HOME}/.vim/syntax/octave.vim");
 printf "DONE\n";
 
+# vim-tmux-navigator
 printf "INFO: installing vim-tmux-navigator... ";
 `git clone https://github.com/christoomey/vim-tmux-navigator.git ~/.vim/bundle/vim-tmux-navigator > /dev/null 2>&1`;
 printf "DONE\n";
-
-# vim-noctu
-#printf "INFO: installing noctu.vim... ";
-#`git clone git://github.com/noahfrederick/vim-noctu.git ~/.vim/bundle/noctu > /dev/null 2>&1`;
-#printf "DONE\n";
-
-# vim-colors-solarized
-#printf "INFO: installing vim-colors-solarized... ";
-#`git clone git://github.com/altercation/vim-colors-solarized.git > /dev/null 2>&1`;
-#move("./vim-colors-solarized", "$ENV{HOME}/.vim/bundle/vim-colors-solarized");
-#rmtree("./vim-colors-solarized"); # sometimes move doesn't clean up the source
-#printf "DONE\n";
 
 # vim-pydocstring
 printf "INFO: installing vim-pydocstring... ";
@@ -178,6 +170,39 @@ printf "INFO: installing vim-pydocstring... ";
 move("./vim-pydocstring", "$ENV{HOME}/.vim/bundle/vim-pydocstring");
 rmtree("./vim-pydocstring"); # sometimes move doesn't clean up the source
 printf "DONE\n";
+
+# make sure vim_bridge is available
+my $has_vim_bridge = "NO";
+`python -c "import vim_bridge" > /dev/null 2>&1`;
+if ( $? != 0 ) {
+  printf "WARN 167: vim_bridge is not installed, you may want to install it via pip\n";
+  printf "INFO: because vim_bridge is not installed, some vim modules will be skipped\n";
+  $has_vim_bridge = "NO";
+} else {
+  $has_vim_bridge = "YES";
+}
+
+`vim --version | grep "\-python" > /dev/null 2>&1`;
+if ( $? == 0 ) {
+  printf "WARN 187: vim_bridge may or may not be available, but your vim binary has been compiled with -python\n";
+  printf "INFO: because vim has been compiled with -python, some vim modules will be skipped\n";
+  $has_vim_bridge = "NO";
+}
+printf "INFO: vim_bridge is present and vim has +python... $has_vim_bridge\n";
+
+
+# vim-rst-tables
+printf "INFO: installing vim-rst-tables... ";
+if ( $has_vim_bridge eq "YES" ) {
+  `git clone git://github.com/nvie/vim-rst-tables.git > /dev/null 2>&1`;
+  `cd vim-rst-tables && python build.py > /dev/null 2>&1`;
+  move("vim-rst-tables/ftplugin/rst_tables.vim", "$ENV{HOME}/.vim/ftplugin/rst_tables.vim");
+  rmtree("./vim-rst-tables");
+  `printf "\nsource \"~/.vim/ftplugin/rst_tables.vim\"\n" >> ~/.vimrc`;
+  printf "DONE\n";
+} else {
+  printf "SKIPPED (vim_bridge missing)\n";
+}
 
 # tmux.conf
 printf "INFO: installing tmux.conf... ";

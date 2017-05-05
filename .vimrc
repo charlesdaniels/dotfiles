@@ -31,6 +31,9 @@ if g:uname != "FreeBSD"
 	set list
 endif
 
+" use , as the leader
+let mapleader=","
+
 if (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on 
 						  " freeBSD quite right
 	" if we have multi byte support, enable pretty characters
