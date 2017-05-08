@@ -266,7 +266,7 @@ printf "DONE\n";
 
 # zsh-autosuggestions
 printf "INFO: installing zsh-autosuggestions... ";
-`git clone git://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions > /dev/null 2>&1`;
+`git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions > /dev/null 2>&1`;
 printf "DONE\n";
 
 # zsh-syntax-highlighting
@@ -304,13 +304,16 @@ if ("$^O" ne "darwin") {
   copy("./i3statusconfig", "$ENV{HOME}/.config/i3status/config");
   printf "DONE\n";
 
-
   # .Xresources
   printf "INFO: installing .Xresources... ";
-  backup_file ".Xresources";
-  copy("./.Xresources", "$ENV{HOME}/.Xresources");
-  `xrdb -merge ~/.Xresources`; 
-  printf "DONE\n";
+  if (-e `which xrdb 2>&1 | tr '\n' ' '`) {
+    backup_file ".Xresources";
+    copy("./.Xresources", "$ENV{HOME}/.Xresources");
+    `xrdb -merge ~/.Xresources`; 
+    printf "DONE\n";
+  } else {
+    printf "SKIPPED (no xrdb)\n";
+  }
 }
 
 

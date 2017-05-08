@@ -34,7 +34,15 @@ endif
 " use , as the leader
 let mapleader=","
 
-if (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on 
+let msyscon=$MSYSCON
+
+if (has("multi_byte")) && (msyscon == 'mintty.exe')
+  " disable unsupported listchars in mintty on Windows
+  set listchars=
+  set listchars+=trail:¬
+	set listchars+=precedes:«
+	set listchars+=extends:»
+elseif (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on 
 						  " freeBSD quite right
 	" if we have multi byte support, enable pretty characters
 	set listchars=tab:▸\ 
