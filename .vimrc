@@ -35,6 +35,7 @@ endif
 let mapleader=","
 
 let msyscon=$MSYSCON
+let term=$TERM
 
 if (has("multi_byte")) && (msyscon == 'mintty.exe')
   " disable unsupported listchars in mintty on Windows
@@ -42,6 +43,9 @@ if (has("multi_byte")) && (msyscon == 'mintty.exe')
   set listchars+=trail:¬
 	set listchars+=precedes:«
 	set listchars+=extends:»
+elseif (has("multi_byte")) && (term == 'cygwin')
+  " we are probably running in powershell
+  set listchars=
 elseif (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on 
 						  " freeBSD quite right
 	" if we have multi byte support, enable pretty characters

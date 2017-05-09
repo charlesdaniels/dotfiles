@@ -194,7 +194,7 @@ printf "INFO: vim_bridge is present and vim has +python... $has_vim_bridge\n";
 # vim-rst-tables
 printf "INFO: installing vim-rst-tables... ";
 if ( $has_vim_bridge eq "YES" ) {
-  `git clone git://github.com/nvie/vim-rst-tables.git > /dev/null 2>&1`;
+  `git clone https://github.com/nvie/vim-rst-tables.git > /dev/null 2>&1`;
   `cd vim-rst-tables && python build.py > /dev/null 2>&1`;
   move("vim-rst-tables/ftplugin/rst_tables.vim", "$ENV{HOME}/.vim/ftplugin/rst_tables.vim");
   rmtree("./vim-rst-tables");
@@ -203,6 +203,11 @@ if ( $has_vim_bridge eq "YES" ) {
 } else {
   printf "SKIPPED (vim_bridge missing)\n";
 }
+
+# vim-ps1
+printf "INFO: installing vim-ps1... ";
+printf `git clone https://github.com/PProvost/vim-ps1 ~/.vim/bundle/vim-ps1 > /dev/null 2>&1`;
+printf "DONE\n";
 
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
