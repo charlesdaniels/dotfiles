@@ -321,6 +321,18 @@ if ("$^O" ne "darwin") {
   }
 }
 
+# powershell
+printf "INFO: installing PowerShell profile... ";
+backup_file ".config/powershell";
+`mkdir -p ~/.config/powershell`;
+copy("./profile.ps1", "$ENV{HOME}/.config/powershell/Microsoft.PowerShell_profile.ps1");
+printf "DONE\n";
+
+# minttyrc
+printf "INFO: installing minttyrc... ";
+backup_file ".minttyrc";
+copy("./.minttyrc", "$ENV{HOME}/.minttyrc");
+printf "DONE\n";
 
 if ( $TOOLCHEST ) {
   printf "INFO: installing net.cdaniels.toolchest... ";
