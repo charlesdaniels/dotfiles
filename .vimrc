@@ -15,6 +15,7 @@ filetype plugin indent on  " guess indent based on file type
 syntax on  " enable syntax highlighting
 set cursorline  " highlight the active line
 set number  " use line numbering
+set relativenumber " enable relative numbering too
 set laststatus=2
 if version >= 703
 	" setting colorcolumn in VIM 7.2.22 on OSX 10.5.8 PPC breaks
