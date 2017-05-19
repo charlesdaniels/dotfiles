@@ -74,9 +74,10 @@ if ( ! $NOBACKUP ) { mkdir "$BACKUP_DIR"; }
 sub backup_file {
   my $target_file = shift;  # relative to home directory
   if ( $NOBACKUP ) {
-  	unlink "$ENV{HOME}/$target_file"; 
+    if (-d "$ENV{HOME}/$target_file") {rmtree "$ENV{HOME}/$target_file";}
+    else                              {unlink "$ENV{HOME}/$target_file";}
   } else {
-  	move "$ENV{HOME}/$target_file", "$BACKUP_DIR";
+    move "$ENV{HOME}/$target_file", "$BACKUP_DIR";
   }
 }
 
@@ -102,7 +103,20 @@ if ( -e `which grep | tr -d '\n'`) {
   printf "NOT FOUND\n";
   die;
 }
-
+printf "\tgzip... ";
+if ( -e `which gzip | tr -d '\n'`) {
+  printf "OK\n";
+} else{
+  printf "NOT FOUND\n";
+  die;
+}
+printf "\ttar... ";
+if ( -e `which tar | tr -d '\n'`) {
+  printf "OK\n";
+} else{
+  printf "NOT FOUND\n";
+  die;
+}
 # bashrc
 printf "INFO: installing bashrc... ";
 backup_file ".bashrc";
@@ -115,11 +129,22 @@ printf "DONE\n";
 printf "INFO: installing vimrc... ";
 backup_file ".vimrc";
 copy "./.vimrc", "$ENV{HOME}/.vimrc";
+open(VIMRC, ">>$ENV{HOME}/.vimrc") or die ("failed to open ~/.vimrc");
+my $thedate = `date`;
+print VIMRC <<VIMMSG;
+
+"""""""" begin auto-generated .vimrc configuration """""""" 
+" Generated on $thedate
+
+VIMMSG
 printf "DONE\n";
 
 # .vim
 printf "INFO: preparing ~/.vim directory... ";
 backup_file ".vim";
+if ( -e "$ENV{HOME}/.vim" ) {
+  printf "WARN (~/.vim still exists)... ";
+}
 mkdir("$ENV{HOME}/.vim");
 mkdir("$ENV{HOME}/.vim/autoload");
 mkdir("$ENV{HOME}/.vim/bundle");
@@ -214,6 +239,43 @@ printf "INFO: installing vimwiki... ";
 `git clone --quiet https://github.com/vimwiki/vimwiki.git ~/.vim/bundle/vimwiki`;
 printf "DONE\n";
 
+# tagbar
+printf "INFO: installing tagbar... ";
+if ( -e `which ctags-exuberant | tr -d '\n'`) {
+  `git clone --quiet https://github.com/majutsushi/tagbar.git ~/.vim/bundle/tagbar`;
+  printf VIMRC <<TAGBARCFG;
+" Configuration auto-generated for tagbar
+nmap <F8> :TagbarToggle<CR>  " map tagbar to F8
+let g:tagbar_type_ps1 = {
+    \\ 'ctagstype' : 'powershell',
+    \\ 'kinds'     : [
+        \\ 'f:function',
+        \\ 'i:filter',
+        \\ 'a:alias'
+    \\ ]
+\\ }
+TAGBARCFG
+  printf "DONE\n";
+
+} else{
+  printf "FAIL (no ctags)\n";
+}
+
+# nerdcommenter
+printf "INFO: installing NERDCommenter...";
+`git clone --quiet https://github.com/scrooloose/nerdcommenter.git ~/.vim/bundle/nerdcommenter`;
+printf VIMRC <<NERDCOMMENT;
+
+" Configuration auto-generated for NERDCommenter
+let g:NERDSpaceDelims = 1  " spaces after comment char
+let g:NERDDefaultAlign = 'left'  " align comments to left edge of file
+let g:NERDCommentEmptyLines = 1  " allow empty lines to be commented
+NERDCOMMENT
+printf "DONE\n";
+
+# this is the end of the vim section
+close(VIMRC);
+
 # tmux.conf
 printf "INFO: installing tmux.conf... ";
 backup_file ".tmux.conf";
@@ -243,6 +305,12 @@ backup_file ".kshrc";
 copy "./.kshrc", "$ENV{HOME}/.kshrc";
 printf "DONE\n";
 
+# ctags
+printf "INFO: installing .ctags... ";
+backup_file ".ctags";
+copy "./.ctags", "$ENV{HOME}/.ctags";
+printf "DONE\n";
+
 # profile
 printf "INFO: installing profile... ";
 backup_file ".profile",
@@ -263,7 +331,7 @@ copy "./todo-config", "$ENV{HOME}/.todo/config";
 printf "DONE\n";
 
 # .zsh
-printf "INFO: preparing .zsh ...";
+printf "INFO: preparing .zsh... ";
 backup_file ".zsh";
 mkdir("$ENV{HOME}/.zsh");
 printf "DONE\n";
@@ -374,11 +442,5 @@ if ( ! $NOBACKUP ) {
   printf "DONE\n";
   printf "INFO: your previous dotfiles are in: ~/$BACKUP_NAME.tar.gz\n";
 }
-
-
-
-
-
-
 
 

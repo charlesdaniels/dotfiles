@@ -93,6 +93,7 @@ else
   set formatoptions=l
   set lbr
 endif
+set formatoptions+=q  " allow gqq to wrap comments
 
 " disable hard wrapping
 set wrap linebreak textwidth=0
