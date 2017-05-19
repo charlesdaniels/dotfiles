@@ -81,42 +81,23 @@ sub backup_file {
   }
 }
 
-printf "INFO: performing preflight check:\n";
-printf "\tgit... ";
-if ( -e `which git | tr -d '\n'`) {
-  printf "OK\n";
-} else{
-  printf "NOT FOUND\n";
-  die;
+sub check_cmd_in_path {
+  my $targetCmd = shift;
+  printf "INFO: validating  $targetCmd in PATH... ";
+  if ( -e `which $targetCmd | tr -d '\n'`) {
+    printf "OK\n";
+  } else {
+    printf "FAIL\n";
+    die;
+  }
 }
-printf "\tcurl... ";
-if ( -e `which curl | tr -d '\n'`) {
-  printf "OK\n";
-} else{
-  printf "NOT FOUND\n";
-  die;
-}
-printf "\tgrep... ";
-if ( -e `which grep | tr -d '\n'`) {
-  printf "OK\n";
-} else{
-  printf "NOT FOUND\n";
-  die;
-}
-printf "\tgzip... ";
-if ( -e `which gzip | tr -d '\n'`) {
-  printf "OK\n";
-} else{
-  printf "NOT FOUND\n";
-  die;
-}
-printf "\ttar... ";
-if ( -e `which tar | tr -d '\n'`) {
-  printf "OK\n";
-} else{
-  printf "NOT FOUND\n";
-  die;
-}
+
+check_cmd_in_path("git");
+check_cmd_in_path("curl");
+check_cmd_in_path("grep");
+check_cmd_in_path("gzip");
+check_cmd_in_path("tar");
+
 # bashrc
 printf "INFO: installing bashrc... ";
 backup_file ".bashrc";
@@ -161,15 +142,23 @@ printf "DONE\n";
 # NERDtree
 printf "INFO: installing NERDtree... ";
 `git clone https://github.com/scrooloose/nerdtree.git ~/.vim/bundle/nerdtree > /dev/null 2>&1`;
+printf VIMRC <<NERDTREE;
+" Auto-generated NERDtree config
+noremap <C-e> :NERDTreeToggle<Cr>
+
+NERDTREE
 printf "DONE\n";
 
-# netwr
-printf "INFO: installing netrw.vba... ";
-`curl -L -O http://www.drchip.org/astronaut/vim/vbafiles/netrw.vba.gz > /dev/null 2>&1`;
-`gzip -d netrw.vba.gz > /dev/null 2>&1`; 
-`vim -c 'so %' -c 'q' netrw.vba > /dev/null 2>&1`; 
-unlink("netrw.vba");
-printf "DONE\n";
+# netrw
+#printf "INFO: fetching netrw.vba... ";
+#`curl -L -O http://www.vim.org/scripts/download_script.php?src_id=21427 > /dev/null 2>&1`;
+#printf "DONE\n";
+#printf "INFO: installing netrw.vba... ";
+#move("./download_script.php?src_id=21427", "./netrw.vba.gz");
+#`gzip -d netrw.vba.gz > /dev/null 2>&1`; 
+#`vim -c 'so %' -c 'q' netrw.vba > /dev/null 2>&1`; 
+#unlink("netrw.vba");
+#printf "DONE\n";
 
 # vim-tex-syntax
 printf "INFO: installing vim-tex-syntax... ";
@@ -182,6 +171,32 @@ printf "DONE\n";
 printf "INFO: installing octave.vim... ";
 `curl -L http://www.vim.org/scripts/download_script.php?src_id=24730 -o octave.vim > /dev/null 2>&1`;
 move("octave.vim", "$ENV{HOME}/.vim/syntax/octave.vim");
+print VIMRC <<OCTAVEVIM;
+" Auto-generated octave.vim configuration
+" This is required for octave.vim to work correctly, not entirely sure why
+
+if has("autocmd") && exists("+omnifunc") 
+  autocmd Filetype octave 
+    \\ if &omnifunc == "" | 
+    \\ setlocal omnifunc=syntaxcomplete#Complete | 
+    \\ endif 
+endif 
+
+" set octave syntax highlighting for .m
+if has("autocmd")
+  autocmd BufNewFile,BufRead *.m set syntax=octave
+  autocmd BufNewFile,BufRead *.m set filetype=octave
+endif
+
+" we will force .m file to be treated as octave, which to my knowledge is the
+" default extension for MATLAB/octave files. The default behavior is to tread
+" *.m as some kind of objective-c header type thing. 
+autocmd BufEnter *.m setlocal filetype=octave 
+
+" not 100\% sure why both of the above blocks are required
+
+OCTAVEVIM
+
 printf "DONE\n";
 
 # vim-tmux-navigator
@@ -194,6 +209,12 @@ printf "INFO: installing vim-pydocstring... ";
 `git clone https://github.com/heavenshell/vim-pydocstring > /dev/null 2>&1`;
 move("./vim-pydocstring", "$ENV{HOME}/.vim/bundle/vim-pydocstring");
 rmtree("./vim-pydocstring"); # sometimes move doesn't clean up the source
+printf VIMRC <<PYDOCSTRINGVIM;
+" Auto-generated pydocstring configuration
+
+" C-g should generate docs in supported languages
+autocmd FileType python nmap <silent> <C-g> <Plug>(pydocstring)
+PYDOCSTRINGVIM
 printf "DONE\n";
 
 # make sure vim_bridge is available
@@ -241,9 +262,9 @@ printf "DONE\n";
 
 # tagbar
 printf "INFO: installing tagbar... ";
-if ( -e `which ctags-exuberant | tr -d '\n'`) {
+if ( -e `which ctags | tr -d '\n'`) {
   `git clone --quiet https://github.com/majutsushi/tagbar.git ~/.vim/bundle/tagbar`;
-  printf VIMRC <<TAGBARCFG;
+  print VIMRC <<TAGBARCFG;
 " Configuration auto-generated for tagbar
 nmap <F8> :TagbarToggle<CR>  " map tagbar to F8
 let g:tagbar_type_ps1 = {

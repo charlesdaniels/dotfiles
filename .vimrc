@@ -1,11 +1,11 @@
 " use utf-8
 if has ("multi_byte")
-	" we can only enable utf-8 if we have multi byte support compiled in
-	scriptencoding utf-8
-	set encoding=utf-8
-	set fileencoding=utf-8
-	set fileencodings=ucs-bom,utf8,prc
-	set langmenu=en_US.UTF-8
+  " we can only enable utf-8 if we have multi byte support compiled in
+  scriptencoding utf-8
+  set encoding=utf-8
+  set fileencoding=utf-8
+  set fileencodings=ucs-bom,utf8,prc
+  set langmenu=en_US.UTF-8
 endif
 
 set shell=/bin/sh
@@ -18,8 +18,8 @@ set number  " use line numbering
 set relativenumber " enable relative numbering too
 set laststatus=2
 if version >= 703
-	" setting colorcolumn in VIM 7.2.22 on OSX 10.5.8 PPC breaks
-	set colorcolumn=80,160,240,320,400,480,660,740,800
+  " setting colorcolumn in VIM 7.2.22 on OSX 10.5.8 PPC breaks
+  set colorcolumn=80,160,240,320,400,480,660,740,800
 endif
 set nocompatible  "fix odd behavior on some older systems 
 set ruler  " display column and line number in statusline
@@ -29,7 +29,7 @@ set ruler  " display column and line number in statusline
 " or set listchars breaks horribly under FreeBSD 11. For that reason, FreeBSD
 " wont trigger these commands. 
 if g:uname != "FreeBSD"
-	set list
+  set list
 endif
 
 " use , as the leader
@@ -42,22 +42,23 @@ if (has("multi_byte")) && (msyscon == 'mintty.exe')
   " disable unsupported listchars in mintty on Windows
   set listchars=
   set listchars+=trail:¬
-	set listchars+=precedes:«
-	set listchars+=extends:»
+  set listchars+=precedes:«
+  set listchars+=extends:»
 elseif (has("multi_byte")) && (term == 'cygwin')
   " we are probably running in powershell
   set listchars=
-elseif (has("multi_byte")) && (g:uname != "FreeBSD")  " multi byte dosent work on 
-						  " freeBSD quite right
-	" if we have multi byte support, enable pretty characters
-	set listchars=tab:▸\ 
-	set listchars+=trail:¬
-	set listchars+=precedes:«
-	set listchars+=extends:»
-	set listchars+=eol:↲
+
+" multi byte support causes some weirdness on FreeBSD 
+elseif (has("multi_byte")) && (g:uname != "FreeBSD") 
+  " if we have multi byte support, enable pretty characters
+  set listchars=tab:▸\ 
+  set listchars+=trail:¬
+  set listchars+=precedes:«
+  set listchars+=extends:»
+  set listchars+=eol:↲
 elseif (g:uname != "FreeBSD")
-	set listchars=tab:>-
-	set listchars+=trail:_
+  set listchars=tab:>-
+  set listchars+=trail:_
 endif
 
 set backspace=indent,eol,start " fix dumbass default backspace behavior 
@@ -79,9 +80,6 @@ set softtabstop=2
 
 " hook into pathogen
 execute pathogen#infect()
-
-" NERDTree
-noremap <C-e> :NERDTreeToggle<CR>
 
 " configure indenting to work gqap correctly - not working quite right at the
 " moment 
@@ -111,20 +109,6 @@ highlight SpellLocal cterm=underline
 
 " enable content continuation on enter
 set formatoptions+=cro
-
-" This is required to make octave.vim work correctly
-if has("autocmd") && exists("+omnifunc") 
-  autocmd Filetype octave 
-    \ if &omnifunc == "" | 
-    \ setlocal omnifunc=syntaxcomplete#Complete | 
-    \ endif 
-endif 
-
-" set octave syntax highlighting for .m
-if has("autocmd")
-  autocmd BufNewFile,BufRead *.m set syntax=octave
-  autocmd BufNewFile,BufRead *.m set filetype=octave
-endif
 
 " colorscheme handling
 set background=light
@@ -163,12 +147,6 @@ autocmd FileType python setlocal shiftwidth=4
 autocmd FileType python setlocal softtabstop=4
 autocmd FileType python setlocal expandtab
 
-" documentation helper keymapping (C-g should generate something useful when 
-" possible)
-
-autocmd FileType python nmap <silent> <C-g> <Plug>(pydocstring)
-
-
 " fix broken behaviour for CHANGELOG files
 autocmd BufEnter CHANGELOG setlocal filetype=text
 
@@ -176,7 +154,4 @@ autocmd BufEnter CHANGELOG setlocal filetype=text
 " libraries, we shall force them to be treated as .sh
 autocmd BufEnter *.lib setlocal filetype=sh
 
-" we will force .m file to be treated as octave, which to my knowledge is the
-" default extension for MATLAB/octave files. The default behavior is to tread
-" *.m as some kind of objective-c header type thing. 
-autocmd BufEnter *.m setlocal filetype=octave 
+
