@@ -291,8 +291,27 @@ printf VIMRC <<NERDCOMMENT;
 let g:NERDSpaceDelims = 1  " spaces after comment char
 let g:NERDDefaultAlign = 'left'  " align comments to left edge of file
 let g:NERDCommentEmptyLines = 1  " allow empty lines to be commented
+
 NERDCOMMENT
 printf "DONE\n";
+
+# tabular
+printf "INFO: installing tabular...";
+`git clone --quiet https://github.com/godlygeek/tabular.git ~/.vim/bundle/tabular`;
+printf "DONE\n";
+
+# riv.vim
+printf "INFO: installing riv.vim...";
+`git clone --quiet https://github.com/Rykka/riv.vim ~/.vim/bundle/riv`;
+printf VIMRC <<RIVCONFIG;
+" configuration auto-generated for riv.vim
+let g:riv_global_leader = "<C-U>"
+let g:riv_fold_level = 1
+let g:riv_fold_blank = 1
+
+RIVCONFIG
+printf "DONE\n";
+
 
 # this is the end of the vim section
 close(VIMRC);
