@@ -48,6 +48,9 @@ setopt incappendhistory
 # use keybindings that aren't stupid
 bindkey -e
 
+# make sure perms on ~/.zsh are ok (WSL likes to reset them)
+chmod -R 755 ~/.zsh
+
 # git completions
 fpath=(~/.zsh $fpath)
 # http://stackoverflow.com/a/26479426
@@ -60,3 +63,4 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # zsh syntax highlighting 
 # MUST BE THE LAST THING SOURCED
 source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+

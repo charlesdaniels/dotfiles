@@ -1,11 +1,26 @@
 " use utf-8
-if has ("multi_byte")
+if (has("multi_byte") || has ("multi_byte_ime/dyn"))
   " we can only enable utf-8 if we have multi byte support compiled in
   scriptencoding utf-8
   set encoding=utf-8
   set fileencoding=utf-8
   set fileencodings=ucs-bom,utf8,prc
   set langmenu=en_US.UTF-8
+endif
+
+if has('gui_running')
+  " take a wild guess that we have UTF support available
+  scriptencoding utf-8
+  set encoding=utf-8
+  set fileencoding=utf-8
+  set fileencodings=ucs-bom,utf8,prc
+  set langmenu=en_US.UTF-8
+
+  " set the GUI font
+  set guifont=Andale_Mono:h8
+
+  " make the GUI be not stupid
+  set guioptions=Ace
 endif
 
 set shell=/bin/sh
@@ -39,7 +54,12 @@ let mapleader=","
 let msyscon=$MSYSCON
 let term=$TERM
 
-if (has("multi_byte")) && (msyscon == 'mintty.exe')
+if (has("windows"))
+  set listchars=
+  set listchars+=trail:¬
+  set listchars+=precedes:«
+  set listchars+=extends:»
+elseif (has("multi_byte")) && (msyscon == 'mintty.exe')
   " disable unsupported listchars in mintty on Windows
   set listchars=
   set listchars+=trail:¬
