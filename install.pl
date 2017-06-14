@@ -49,6 +49,7 @@ use warnings;
 use File::Copy;
 use File::Path;
 use File::Spec;
+use File::Copy::Recursive qw(dircopy);
 
 my $NOBACKUP = 0;
 my $TOOLCHEST = 0;
@@ -144,6 +145,7 @@ my $VIMBUNDLE   = File::Spec->catdir($VIMDIR, "bundle");
 my $VIMSYNTAX   = File::Spec->catdir($VIMDIR, "syntax");
 my $VIMMACROS   = File::Spec->catdir($VIMDIR, "macros");
 my $VIMFTPLUGIN = File::Spec->catdir($VIMDIR, "ftplugin");
+my $VIMPLUGIN   = File::Spec->catdir($VIMDIR, "plugin");
 
 printf "INFO: preparing ~/.vim directory... ";
 backup_file $VIMDIRNAME;
@@ -157,6 +159,7 @@ mkdir($VIMBUNDLE );
 mkdir($VIMSYNTAX );
 mkdir($VIMMACROS );
 mkdir($VIMFTPLUGIN );
+mkdir($VIMPLUGIN);
 
 printf "DONE\n";
 
@@ -316,6 +319,62 @@ my $vimxmledit = File::Spec->catdir($VIMBUNDLE, "xmledit");
 `git clone --quiet https://github.com/sukima/xmledit "$vimxmledit"`;
 printf "DONE\n";
 
+# jcommenter
+printf "INFO: installing jcommenter... ";
+`git clone --quiet https://github.com/vim-scripts/jcommenter.vim`;
+my $JCOMMENTER = File::Spec->catfile("jcommenter.vim", "plugin", "jcommenter.vim");
+move($JCOMMENTER, File::Spec->catfile($VIMPLUGIN, "jcommenter.vim"));
+rmtree("jcommenter.vim");
+my $GITUSER=`git config user.name`;
+chomp $GITUSER;
+my $GITEMAIL=`git config user.email`;
+chomp $GITEMAIL;
+my $AUTHORNAME="$GITUSER ($GITEMAIL)";
+printf "detect author: '$AUTHORNAME'... ";
+printf VIMRC <<JCOMMENTERCONFIG;
+" configuration auto-generated for jcommenter.vim
+autocmd FileType java nmap <silent> <C-g> :call JCommentWriter()<CR>
+autocmd FileType java let b:jcommenter_class_author='$AUTHORNAME'
+autocmd FileType java let b:jcommenter_file_author='$AUTHORNAME'
+
+JCOMMENTERCONFIG
+printf "DONE\n";
+
+# trailer trash
+printf "INFO: installing Trailer Trash... ";
+`git clone --quiet https://github.com/csexton/trailertrash.vim`;
+my $TRAILERTRASH = File::Spec->catfile("trailertrash.vim", "plugin", "trailertrash.vim");
+move ($TRAILERTRASH, File::Spec->catfile($VIMPLUGIN, "trailertrash.vim"));
+rmtree("trailertrash.vim");
+printf VIMRC <<TRAILERTRASH;
+" configuration auto-generated for trailertrash.vim
+
+" note that I just want :TrailerTrim, so I disable hilighting like so
+autocmd BufEnter * TrailerHide
+autocmd InsertLeave * TrailerHide
+nnoremap <Leader>tt :TrailerTrim<CR>
+
+TRAILERTRASH
+printf "DONE\n";
+
+# java_getset
+printf "INFO: installing java_getset.vim... ";
+my $JGS_PATH = File::Spec->catfile($VIMFTPLUGIN, "java_getset.vim");
+`curl $CURL_OPT -LSs "https://vim.sourceforge.io/scripts/download_script.php?src_id=1523" -o $JGS_PATH`;
+printf "DONE\n";
+
+# easytags
+printf "INFO: installing easytags... ";
+if (-e get_cmd_path("ctags")) {
+  my $vimeasytags = File::Spec->catdir($VIMBUNDLE, "vim-easytags");
+  my $vimmisc = File::Spec->catdir($VIMBUNDLE, "vim-misc");
+  `git clone --quiet "https://github.com/xolox/vim-misc" $vimmisc`;
+  `git clone --quiet "https://github.com/xolox/vim-easytags" $vimeasytags`;
+  printf "DONE\n";
+} else {
+  printf "SKIP (no ctags)\n";
+}
+
 # this is the end of the vim section
 close(VIMRC);
 
@@ -323,8 +382,14 @@ if ( $OSTYPE eq "NT" ) {
   printf "INFO: converting _vimrc to DOS line endings... ";
   `powershell ./set-eol.ps1 -lineEnding win -file "$VIMRCPATH"`;
   printf "DONE\n";
-}
 
+  # git's bundled vim uses ~/.vim, other embedded vims use ~/_vim
+  printf "INFO: creating duplicate VIM_HOME directories... ";
+  dircopy($VIMDIR, File::Spec->catdir($ENV{HOME}, ".vim"));
+  dircopy($VIMDIR, File::Spec->catdir($ENV{HOME}, "_vim"));
+  printf "DONE\n";
+
+}
 
 # bashrc
 printf "INFO: installing bashrc... ";
@@ -335,15 +400,17 @@ copy "./.bashrc", File::Spec->catfile($ENV{HOME}, ".bash_profile");
 printf "DONE\n";
 
 # tmux.conf
-printf "INFO: installing tmux.conf... ";
-backup_file ".tmux.conf";
-copy("./.tmux.conf", File::Spec->catfile($ENV{HOME}, ".tmux.conf"));
-if ( get_cmd_path("tmux") ) {
-  `./mktmux.pl >> ~/.tmux.conf`;
-  printf "DONE\n";
-} else {
-  printf "WARN\n";
-  printf "INFO: tmux is not installed so mouse support was not enabled in ~/.tmux.conf\n";
+if ($OSTYPE ne "NT") {
+  printf "INFO: installing tmux.conf... ";
+  backup_file ".tmux.conf";
+  copy(".tmux.conf", File::Spec->catfile($ENV{HOME}, ".tmux.conf"));
+  if ( -e get_cmd_path("tmux") ) {
+    `./mktmux.pl >> ~/.tmux.conf`;
+    printf "DONE\n";
+  } else {
+    printf "WARN\n";
+    printf "INFO: tmux is not installed so mouse support was not enabled in ~/.tmux.conf\n";
+  }
 }
 
 # fish

@@ -23,8 +23,19 @@ if has('gui_running')
   set guioptions=Ace
 endif
 
-set shell=/bin/sh
+" sometimes vim cannot write to /tmp in embedded configurations like
+" Windows's git bundled POSIX environment.
+let $TMPDIR = $HOME."/tmp"
+
 let g:uname = substitute(system("uname"), '\n\+$', '', '')
+
+set shell=/bin/sh
+" we check if we are using MINGW to prevent git for windows' bundled vim from
+" breaking.
+if has('windows') && (g:uname !~ "MINGW")
+  set shell=C:\Windows\system32\cmd.exe
+endif
+
 
 filetype plugin indent on  " guess indent based on file type
 syntax on  " enable syntax highlighting
@@ -34,16 +45,16 @@ set laststatus=2
 set ignorecase  " use case insitive searching by default
 if version >= 703
   " setting colorcolumn in VIM 7.2.22 on OSX 10.5.8 PPC breaks
-  set colorcolumn=80,160,240,320,400,480,660,740,800
+  set colorcolumn=80,160,240,320,400,480,660,740,820
   set relativenumber " enable relative numbering too
 endif
-set nocompatible  "fix odd behavior on some older systems 
+set nocompatible  "fix odd behavior on some older systems
 set ruler  " display column and line number in statusline
 
 " show non-printing characters
 " NOTE: it seems that for whatever reason, using anything involving set list
 " or set listchars breaks horribly under FreeBSD 11. For that reason, FreeBSD
-" wont trigger these commands. 
+" wont trigger these commands.
 if g:uname != "FreeBSD"
   set list
 endif
@@ -69,10 +80,10 @@ elseif (has("multi_byte")) && (term == 'cygwin')
   " we are probably running in powershell
   set listchars=
 
-" multi byte support causes some weirdness on FreeBSD 
-elseif (has("multi_byte")) && (g:uname != "FreeBSD") 
+" multi byte support causes some weirdness on FreeBSD
+elseif (has("multi_byte")) && (g:uname != "FreeBSD")
   " if we have multi byte support, enable pretty characters
-  set listchars=tab:▸\ 
+  set listchars=tab:▸\
   set listchars+=trail:¬
   set listchars+=precedes:«
   set listchars+=extends:»
@@ -82,7 +93,7 @@ elseif (g:uname != "FreeBSD")
   set listchars+=trail:_
 endif
 
-set backspace=indent,eol,start " fix dumbass default backspace behavior 
+set backspace=indent,eol,start " fix dumbass default backspace behavior
 
 set nowrap " disable line wrapping
 
@@ -103,7 +114,7 @@ set softtabstop=2
 execute pathogen#infect()
 
 " configure indenting to work gqap correctly - not working quite right at the
-" moment 
+" moment
 set showbreak=\ \\_
 if exists('+breakindent')  " breakindent was not merged until 2014
   set breakindent
@@ -119,13 +130,13 @@ set wrap linebreak textwidth=0
 
 " enable spell checking
 set spell spelllang=en_us
-set complete+=kspell " allow words as completions 
+set complete+=kspell " allow words as completions
 " render misspelled words with underlines, rather than highlights
 highlight clear SpellBad
 highlight clear SpellCap
 highlight clear SpellRare
 highlight clear SpellLocal
-highlight SpellBad cterm=underline 
+highlight SpellBad cterm=underline
 highlight SpellLocal cterm=underline
 
 " enable content continuation on enter
@@ -145,15 +156,15 @@ elseif (&term == 'screen-256color')
   "set t_ut=   " fixes background refresh problem in tmux
   "colorscheme solarized
 elseif (&t_Co == 256)
-  " if we are using a terminal which supports 256 colors, use degrated 256 
-  " color mode for solarized 
+  " if we are using a terminal which supports 256 colors, use degrated 256
+  " color mode for solarized
 
   "set background=dark
   "let g:solarized_termcolors=256
   "colorscheme solarized
 elseif (&t_Co == 88)
   " likewise for 88 colors
-  
+
   "set background=dark
   "let g:solarized_termcolors=88
   "colorscheme solarized
