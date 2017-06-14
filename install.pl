@@ -87,10 +87,9 @@ sub backup_file {
 printf "INFO: detecing platform... ";
 my $OSTYPE = "POSIX";
 my $CURL_OPT = "";  # global curl options
-if ( "$^0" =~ "MSWin*" ) { $OSTYPE = "NT"; }
-if ( "$^0" =~ "STDOUT_TOP*" ) { $OSTYPE = "NT"; }
+if ( "$^O" =~ "MSWin*" ) { $OSTYPE = "NT"; }
 if ( $OSTYPE eq "NT" ) { $CURL_OPT = "$CURL_OPT -k "; }
-printf "$^0 => $OSTYPE\n";
+printf "$^O => $OSTYPE\n";
 
 sub get_cmd_path {
   my $cmd = shift;
