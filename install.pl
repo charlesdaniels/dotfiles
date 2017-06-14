@@ -3,12 +3,12 @@
 #
 #  OVERVIEW
 #  ========
-#  
+#
 #  Installs my dotfiles, preserving a backup of any existing dotfiles.
 #
 #  USAGE
 #  =====
-# 
+#
 #  --nobackup . . . delete any existing dotfiles without backing up
 #
 #  --toolchest  . . also install net.cdaniels.toolchest (requires git)
@@ -322,6 +322,13 @@ printf "DONE\n";
 printf "INFO: installing jcommenter... ";
 `git clone --quiet https://github.com/vim-scripts/jcommenter.vim`;
 my $JCOMMENTER = File::Spec->catfile("jcommenter.vim", "plugin", "jcommenter.vim");
+if ($OSTYPE ne "NT") {
+  if (-e get_cmd_path("dos2unix")) {
+    `dos2unix "$JCOMMENTER" 2>&1 >/dev/null`;
+  } else {
+    printf "WARN (failed to convert DOS->UNIX line endings)... ";
+ }
+}
 move($JCOMMENTER, File::Spec->catfile($VIMPLUGIN, "jcommenter.vim"));
 rmtree("jcommenter.vim");
 my $GITUSER=`git config user.name`;

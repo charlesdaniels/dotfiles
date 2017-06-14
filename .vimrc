@@ -25,14 +25,16 @@ endif
 
 " sometimes vim cannot write to /tmp in embedded configurations like
 " Windows's git bundled POSIX environment.
-let $TMPDIR = $HOME."/tmp"
+if has("win32")
+  let $TMPDIR = $HOME."/tmp"
+endif
 
 let g:uname = substitute(system("uname"), '\n\+$', '', '')
 
 set shell=/bin/sh
 " we check if we are using MINGW to prevent git for windows' bundled vim from
 " breaking.
-if has('windows') && (g:uname !~ "MINGW")
+if has('win32') && (g:uname !~ "MINGW")
   set shell=C:\Windows\system32\cmd.exe
 endif
 
