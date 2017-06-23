@@ -1,5 +1,106 @@
-" use utf-8
-if (has("multi_byte") || has ("multi_byte_ime/dyn"))
+""""""""""""""" Platform Independent """"""""""""""""" 
+
+filetype plugin indent on      " guess indent based on file type
+syntax on                      " enable syntax highlighting
+set cursorline                 " highlight the active line
+set number                     " use line numbering
+set laststatus=2               " always render the statusline
+set ignorecase                 " use case insensitive searching by default
+set nocompatible               " fix odd behavior on some older systems
+set ruler                      " display column and line number in statusline
+set backspace=indent,eol,start " fix dumbass default backspace behavior
+set nowrap                     " disable line wrapping
+set formatoptions+=cro         " enable content continuation on enter
+set bg=light                   " assume a light background
+set shortmess+=I               " disable welcome message on blank file
+set virtualedit=block          " allow visual block past EOL
+
+" enable a nice interactive menu for tab-completing buffers and such
+set wildmenu
+set wildmode=longest:full,full
+
+let mapleader=","         " use , as the leader
+
+" enable colorcolumns if available
+if exists("+colorcolumn")
+  set colorcolumn=80,160,240,320,400,480,660,740,820
+endif
+
+" enable relative line numbering if available
+if exists("+relativenumber")
+  set relativenumber " enable relative numbering too
+endif
+
+" enable mouse support if available
+if has("mouse")
+  set mouse=a
+endif
+
+""""""""""""""" Key Mapping """"""""""""""""""
+
+nnoremap n nzz      " center around next match
+nnoremap } }zz      " center around next par break
+nnoremap { {zz      " center around prev par break
+nnoremap <F1> <nop> " don't open help with F1
+
+""""""""""""""" Detect Platform """"""""""""""
+
+let g:uname = substitute(system("uname"), '\n\+$', '', '')
+
+" platform will be POSIX, NT, or UNKNOWN
+" variant refers to the flavor, such as POSIX/Linux, or POSIX/BSD
+
+let g:platform = "UNKNOWN"
+if (has("win32") || has("win64"))
+  let g:platform = "NT"
+  let g:variant = "NT"
+endif
+
+if g:uname =~ "FreeBSD"
+  let g:platform = "POSIX"
+  let g:variant = "BSD"
+endif
+
+if g:uname =~ "Linux"
+  let g:platform = "POSIX"
+  let g:platform = "LINUX"
+endif
+
+if g:uname =~ "MINGW"
+  let g:platform = "POSIX"
+  let g:variant = "MINGW"
+endif
+
+"""""""""""""""" Configure Shell """"""""""""""""'
+
+set shell=/bin/sh
+
+if g:platform == "NT"
+  set shell=C:\Windows\system32\cmd.exe
+endif
+
+"""""""""""""""" Platform-Specific Workarounds """"""""""""""""'
+
+" sometimes vim cannot write to /tmp in embedded configurations like
+" Windows's git bundled POSIX environment.
+if g:platform == "NT"
+  let $TMPDIR = $HOME."/tmp"
+endif
+
+
+"""""""""""""""" UTF-8 Detection & Setup """"""""""""""""
+
+let g:multibytesupport = "NO"
+if has("multi_byte") || has ("multi_byte_ime/dyn")
+  let g:multibytesupport = "YES"
+endif
+
+" this is a shot in the dark, and may break on very old systems
+if has('gui_running')
+  let g:multibytesupport = "YES"
+endif
+
+if g:multibytesupport == "YES"
   " we can only enable utf-8 if we have multi byte support compiled in
   scriptencoding utf-8
   set encoding=utf-8
@@ -8,14 +109,9 @@ if (has("multi_byte") || has ("multi_byte_ime/dyn"))
   set langmenu=en_US.UTF-8
 endif
 
-if has('gui_running')
-  " take a wild guess that we have UTF support available
-  scriptencoding utf-8
-  set encoding=utf-8
-  set fileencoding=utf-8
-  set fileencodings=ucs-bom,utf8,prc
-  set langmenu=en_US.UTF-8
+"""""""""""""""""" GUI Configuration """"""""""""""""""
 
+if has('gui_running')
   " set the GUI font
   set guifont=Andale_Mono:h8
 
@@ -23,97 +119,66 @@ if has('gui_running')
   set guioptions=Ace
 endif
 
-" sometimes vim cannot write to /tmp in embedded configurations like
-" Windows's git bundled POSIX environment.
-if has("win32")
-  let $TMPDIR = $HOME."/tmp"
-endif
-
-let g:uname = substitute(system("uname"), '\n\+$', '', '')
-
-set shell=/bin/sh
-" we check if we are using MINGW to prevent git for windows' bundled vim from
-" breaking.
-if has('win32') && (g:uname !~ "MINGW")
-  set shell=C:\Windows\system32\cmd.exe
-endif
-
-
-filetype plugin indent on  " guess indent based on file type
-syntax on  " enable syntax highlighting
-set cursorline  " highlight the active line
-set number  " use line numbering
-set laststatus=2
-set ignorecase  " use case insitive searching by default
-if version >= 703
-  " setting colorcolumn in VIM 7.2.22 on OSX 10.5.8 PPC breaks
-  set colorcolumn=80,160,240,320,400,480,660,740,820
-  set relativenumber " enable relative numbering too
-endif
-set nocompatible  "fix odd behavior on some older systems
-set ruler  " display column and line number in statusline
+""""""""""""""""" listchars Configuration """""""""""""""""
 
 " show non-printing characters
-" NOTE: it seems that for whatever reason, using anything involving set list
-" or set listchars breaks horribly under FreeBSD 11. For that reason, FreeBSD
-" wont trigger these commands.
-if g:uname != "FreeBSD"
-  set list
-endif
 
-" use , as the leader
-let mapleader=","
+set list
+set listchars=
+set listchars+=trail:¬
+set listchars+=precedes:«
+set listchars+=extends:»
+set listchars+=tab:>-
 
-let msyscon=$MSYSCON
-let term=$TERM
+"""""""""""""""" Spaces & Tabs """""""""""""""""
 
-if (has("windows"))
-  set listchars=
-  set listchars+=trail:¬
-  set listchars+=precedes:«
-  set listchars+=extends:»
-elseif (has("multi_byte")) && (msyscon == 'mintty.exe')
-  " disable unsupported listchars in mintty on Windows
-  set listchars=
-  set listchars+=trail:¬
-  set listchars+=precedes:«
-  set listchars+=extends:»
-elseif (has("multi_byte")) && (term == 'cygwin')
-  " we are probably running in powershell
-  set listchars=
+function TwoSpacesSoftTabs()
+  set tabstop=2
+  set shiftwidth=2
+  set softtabstop=2
+  set expandtab
+endfunction
 
-" multi byte support causes some weirdness on FreeBSD
-elseif (has("multi_byte")) && (g:uname != "FreeBSD")
-  " if we have multi byte support, enable pretty characters
-  set listchars=tab:▸\
-  set listchars+=trail:¬
-  set listchars+=precedes:«
-  set listchars+=extends:»
-  set listchars+=eol:↲
-elseif (g:uname != "FreeBSD")
-  set listchars=tab:>-
-  set listchars+=trail:_
-endif
+function EightSpacesHardTabs()
+  set tabstop=8
+  set shiftwidth=8
+  set softtabstop=8
+  set noexpandtab
+endfunction
 
-set backspace=indent,eol,start " fix dumbass default backspace behavior
+function FourSpacesSoftTabs()
+  set tabstop=4
+  set shiftwidth=4
+  set softtabstop=4
+  set expandtab
+endfunction
 
-set nowrap " disable line wrapping
+" use "normal" tabs n spaces by default
+call EightSpacesHardTabs()
 
-" enable a nice interactive menu for tab-completing buffers and such
-set wildmenu
-set wildmode=longest:full,full
+"""""""""""""" FileType Specific Configuration """"""""""""
 
-" enable mouse support
-set mouse=a
+" forcibly use the c filetype for all header files
+autocmd BufNewFile,BufRead *.h,*.c set filetype=c
 
-" spaces instead of tabs
-set tabstop=2
-set shiftwidth=2
-set expandtab
-set softtabstop=2
+" fix broken behaviour for CHANGELOG files
+autocmd BufEnter CHANGELOG setlocal filetype=text
+
+" because net.cdaniels.toolchest uses .lib as an extension for shell
+" libraries, we shall force them to be treated as .sh
+autocmd BufEnter *.lib setlocal filetype=sh
+
+" set up tab & space behaviour sensibly
+autocmd FileType c call EightSpacesHardTabs()
+autocmd FileType java call FourSpacesSoftTabs()
+autocmd FileType python call FourSpacesSoftTabs()
+
+"""""""""""""" Pathogen """""""""""""""""""
 
 " hook into pathogen
 execute pathogen#infect()
+
+"""""""""""""" Text re-wrapping (gq) """"""""""""""""""""
 
 " configure indenting to work gqap correctly - not working quite right at the
 " moment
@@ -130,62 +195,22 @@ set formatoptions+=q  " allow gqq to wrap comments
 " disable hard wrapping
 set wrap linebreak textwidth=0
 
-" enable spell checking
-set spell spelllang=en_us
-set complete+=kspell " allow words as completions
-" render misspelled words with underlines, rather than highlights
-highlight clear SpellBad
-highlight clear SpellCap
-highlight clear SpellRare
-highlight clear SpellLocal
-highlight SpellBad cterm=underline
-highlight SpellLocal cterm=underline
+""""""""""""""""" Spell-Checking """"""""""""""""""
 
-" enable content continuation on enter
-set formatoptions+=cro
-
-" colorscheme handling
-set background=light
-if has('gui_running')
-  " if the GUI is running, we don't need to do anything special
-
-  "set background=dark
-  "colorscheme solarized
-elseif (&term == 'screen-256color')
-  " we are running inside of tmux, so we also need to fix the background
-  "set background=dark
-  "let g:solarized_termcolors=256
-  "set t_ut=   " fixes background refresh problem in tmux
-  "colorscheme solarized
-elseif (&t_Co == 256)
-  " if we are using a terminal which supports 256 colors, use degrated 256
-  " color mode for solarized
-
-  "set background=dark
-  "let g:solarized_termcolors=256
-  "colorscheme solarized
-elseif (&t_Co == 88)
-  " likewise for 88 colors
-
-  "set background=dark
-  "let g:solarized_termcolors=88
-  "colorscheme solarized
-else
-  " give up and assume this is a 16-color terminal
-  " do nothing
+if has("spell")
+  " enable spell checking
+  set spell spelllang=en_us
+  set complete+=kspell " allow words as completions
+  " render misspelled words with underlines, rather than highlights
+  highlight clear SpellBad
+  highlight clear SpellCap
+  highlight clear SpellRare
+  highlight clear SpellLocal
+  highlight SpellBad cterm=underline
+  highlight SpellLocal cterm=underline
 endif
 
-" correct handling of tabs and spaces in python files
-autocmd FileType python setlocal tabstop=4
-autocmd FileType python setlocal shiftwidth=4
-autocmd FileType python setlocal softtabstop=4
-autocmd FileType python setlocal expandtab
+""""""""""""""""""" Enable project-specific Configuration """"""""""""""""""""
 
-" fix broken behaviour for CHANGELOG files
-autocmd BufEnter CHANGELOG setlocal filetype=text
-
-" because net.cdaniels.toolchest uses .lib as an extension for shell
-" libraries, we shall force them to be treated as .sh
-autocmd BufEnter *.lib setlocal filetype=sh
-
-
+set exrc
+set secure

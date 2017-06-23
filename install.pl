@@ -17,30 +17,30 @@
 # Copyright (c) 2017, Charles Daniels
 # All rights reserved.
 #
-# Redistribution and use in source and binary forms, with or without 
+# Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
 #
-# 1. Redistributions of source code must retain the above copyright notice, 
+# 1. Redistributions of source code must retain the above copyright notice,
 # this list of conditions and the following disclaimer.
-# 
-# 2. Redistributions in binary form must reproduce the above copyright notice, 
-# this list of conditions and the following disclaimer in the documentation 
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
 # and/or other materials provided with the distribution.
 #
-# 3. Neither the name of the copyright holder nor the names of its 
-# contributors may be used to endorse or promote products derived from this 
+# 3. Neither the name of the copyright holder nor the names of its
+# contributors may be used to endorse or promote products derived from this
 # software without specific prior written permission.
 #
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
-# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
-# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
-# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
-# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 ########10########20########30########40########50########60########70########80
 
@@ -65,7 +65,7 @@ if ( ! -e "dotfiles-sigil" ) {
   die;
 }
 my @now = localtime();
-my $TIMESTAMP = sprintf("%04d%02d%02d%02d%02d%02d", 
+my $TIMESTAMP = sprintf("%04d%02d%02d%02d%02d%02d",
                         $now[5]+1900, $now[4]+1, $now[3],
                         $now[2],      $now[1],   $now[0]);
 my $BACKUP_NAME = "dotfiles_backup-$TIMESTAMP";
@@ -128,7 +128,7 @@ my $thedate = localtime();
 
 print VIMRC <<VIMMSG;
 
-"""""""" begin auto-generated .vimrc configuration """""""" 
+"""""""" begin auto-generated .vimrc configuration """"""""
 " Generated on $thedate
 
 VIMMSG
@@ -201,12 +201,12 @@ print VIMRC <<OCTAVEVIM;
 " Auto-generated octave.vim configuration
 " This is required for octave.vim to work correctly, not entirely sure why
 
-if has("autocmd") && exists("+omnifunc") 
-  autocmd Filetype octave 
-    \\ if &omnifunc == "" | 
-    \\ setlocal omnifunc=syntaxcomplete#Complete | 
-    \\ endif 
-endif 
+if has("autocmd") && exists("+omnifunc")
+  autocmd Filetype octave
+    \\ if &omnifunc == "" |
+    \\ setlocal omnifunc=syntaxcomplete#Complete |
+    \\ endif
+endif
 
 " set octave syntax highlighting for .m
 if has("autocmd")
@@ -216,8 +216,8 @@ endif
 
 " we will force .m file to be treated as octave, which to my knowledge is the
 " default extension for MATLAB/octave files. The default behavior is to tread
-" *.m as some kind of objective-c header type thing. 
-autocmd BufEnter *.m setlocal filetype=octave 
+" *.m as some kind of objective-c header type thing.
+autocmd BufEnter *.m setlocal filetype=octave
 
 " not 100\% sure why both of the above blocks are required
 
@@ -248,12 +248,6 @@ printf "DONE\n";
 printf "INFO: installing vim-ps1... ";
 my $vimps1 = File::Spec->catdir($VIMBUNDLE, "vim-ps1");
 printf `git clone --quiet https://github.com/PProvost/vim-ps1 "$vimps1"`;
-printf "DONE\n";
-
-# vimwiki
-printf "INFO: installing vimwiki... ";
-my $vimwiki = File::Spec->catdir($VIMBUNDLE, "vimwiki");
-`git clone --quiet https://github.com/vimwiki/vimwiki.git "$vimwiki"`;
 printf "DONE\n";
 
 # tagbar
@@ -381,6 +375,33 @@ if (-e get_cmd_path("ctags")) {
   printf "SKIP (no ctags)\n";
 }
 
+# ctrlp.vim
+printf "INFO: installing ctrlp... ";
+my $ctrlpvim = File::Spec->catdir($VIMBUNDLE, "ctrlp");
+`git clone --quiet "https://github.com/kien/ctrlp.vim" "$ctrlpvim"`;
+printf VIMRC <<CTRLPCONFIG;
+" configuration auto-generated for ctrlp.vim
+
+" show dotfiles
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_dotfiles = 1
+
+CTRLPCONFIG
+
+printf "DONE\n";
+
+# investigate.vim
+printf "INFO: installing investigate.vim... ";
+my $investigatevim = File::Spec->catdir($VIMBUNDLE, "investigate.vim");
+`git clone --quiet "https://github.com/keith/investigate.vim.git" "$investigatevim"`;
+printf VIMRC <<INVESTIGATEVIM;
+" configuration auto-generated for investigate.vim
+
+let g:investigate_use_dash=1  " use dash on OSX
+
+INVESTIGATEVIM
+printf "DONE\n";
+
 # this is the end of the vim section
 close(VIMRC);
 
@@ -470,7 +491,7 @@ my $zshdir = File::Spec->catdir($ENV{HOME}, ".zsh");
 mkdir($zshdir);
 printf "DONE\n";
 
-# zshrc 
+# zshrc
 printf "INFO: installing zshrc... ";
 backup_file ".zshrc";
 my $zshfile = File::Spec->catfile($ENV{HOME}, ".zshrc");
@@ -519,7 +540,7 @@ if (("$^O" ne "darwin") && ($OSTYPE eq "POSIX")) {
   if (-e `which xrdb 2>&1 | tr '\n' ' '`) {
     backup_file ".Xresources";
     copy("./.Xresources", "$ENV{HOME}/.Xresources");
-    `xrdb -merge ~/.Xresources`; 
+    `xrdb -merge ~/.Xresources`;
     printf "DONE\n";
   } else {
     printf "SKIPPED (no xrdb)\n";
@@ -545,7 +566,7 @@ printf "DONE\n";
 
 if ( $TOOLCHEST && ($OSTYPE eq "POSIX") ) {
   printf "INFO: installing net.cdaniels.toolchest... ";
-  if ( -e "$ENV{HOME}/.net.cdaniels.toolchest" ) { 
+  if ( -e "$ENV{HOME}/.net.cdaniels.toolchest" ) {
     # back up any existing install
     move "$ENV{HOME}/.net.cdaniels.toolchest", "$BACKUP_DIR/.net.cdaniels.toolchest";
   }
