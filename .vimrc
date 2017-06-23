@@ -210,7 +210,3 @@ if has("spell")
   highlight SpellLocal cterm=underline
 endif
 
-""""""""""""""""""" Enable project-specific Configuration """"""""""""""""""""
-
-set exrc
-set secure
