@@ -23,17 +23,17 @@ let mapleader=","         " use , as the leader
 
 " enable colorcolumns if available
 if exists("+colorcolumn")
-  set colorcolumn=80,160,240,320,400,480,660,740,820
+	set colorcolumn=80,160,240,320,400,480,660,740,820
 endif
 
 " enable relative line numbering if available
 if exists("+relativenumber")
-  set relativenumber " enable relative numbering too
+	set relativenumber " enable relative numbering too
 endif
 
 " enable mouse support if available
 if has("mouse")
-  set mouse=a
+	set mouse=a
 endif
 
 """"""""""""""" Key Mapping """"""""""""""""""
@@ -54,28 +54,28 @@ let g:platform = "UNKNOWN"
 let g:variant = "UNKNOWN"
 
 if (has("win32") || has("win64"))
-  let g:platform = "NT"
-  let g:variant = "NT"
+	let g:platform = "NT"
+	let g:variant = "NT"
 endif
 
 if g:uname =~ "FreeBSD"
-  let g:platform = "POSIX"
-  let g:variant = "BSD"
+	let g:platform = "POSIX"
+	let g:variant = "BSD"
 endif
 
 if g:uname =~ "Linux"
-  let g:platform = "POSIX"
-  let g:platform = "LINUX"
+	let g:platform = "POSIX"
+	let g:platform = "LINUX"
 endif
 
 if g:uname =~ "MINGW"
-  let g:platform = "POSIX"
-  let g:variant = "MINGW"
+	let g:platform = "POSIX"
+	let g:variant = "MINGW"
 endif
 
 if g:uname =~ "Darwin"
-  let g:platform = "POSIX"
-  let g:variant = "MACOS"
+	let g:platform = "POSIX"
+	let g:variant = "MACOS"
 endif
 
 """""""""""""""" Configure Shell """"""""""""""""'
@@ -83,7 +83,7 @@ endif
 set shell=/bin/sh
 
 if g:platform == "NT"
-  set shell=C:\Windows\system32\cmd.exe
+	set shell=C:\Windows\system32\cmd.exe
 endif
 
 """""""""""""""" Platform-Specific Workarounds """"""""""""""""'
@@ -91,7 +91,7 @@ endif
 " sometimes vim cannot write to /tmp in embedded configurations like
 " Windows's git bundled POSIX environment.
 if g:platform == "NT"
-  let $TMPDIR = $HOME."/tmp"
+	let $TMPDIR = $HOME."/tmp"
 endif
 
 
@@ -99,31 +99,31 @@ endif
 
 let g:multibytesupport = "NO"
 if has("multi_byte") || has ("multi_byte_ime/dyn")
-  let g:multibytesupport = "YES"
+	let g:multibytesupport = "YES"
 endif
 
 " this is a shot in the dark, and may break on very old systems
 if has('gui_running')
-  let g:multibytesupport = "YES"
+	let g:multibytesupport = "YES"
 endif
 
 if g:multibytesupport == "YES"
-  " we can only enable utf-8 if we have multi byte support compiled in
-  scriptencoding utf-8
-  set encoding=utf-8
-  set fileencoding=utf-8
-  set fileencodings=ucs-bom,utf8,prc
-  set langmenu=en_US.UTF-8
+	" we can only enable utf-8 if we have multi byte support compiled in
+	scriptencoding utf-8
+	set encoding=utf-8
+	set fileencoding=utf-8
+	set fileencodings=ucs-bom,utf8,prc
+	set langmenu=en_US.UTF-8
 endif
 
 """""""""""""""""" GUI Configuration """"""""""""""""""
 
 if has('gui_running')
-  " set the GUI font
-  set guifont=Andale_Mono:h8
+	" set the GUI font
+	set guifont=Andale_Mono:h8
 
-  " make the GUI be not stupid
-  set guioptions=Ace
+	" make the GUI be not stupid
+	set guioptions=Ace
 endif
 
 """"""""""""""""" listchars Configuration """""""""""""""""
@@ -140,24 +140,24 @@ set listchars+=tab:>-
 """""""""""""""" Spaces & Tabs """""""""""""""""
 
 function TwoSpacesSoftTabs()
-  set tabstop=2
-  set shiftwidth=2
-  set softtabstop=2
-  set expandtab
+	set tabstop=2
+	set shiftwidth=2
+	set softtabstop=2
+	set expandtab
 endfunction
 
 function EightSpacesHardTabs()
-  set tabstop=8
-  set shiftwidth=8
-  set softtabstop=8
-  set noexpandtab
+	set tabstop=8
+	set shiftwidth=8
+	set softtabstop=8
+	set noexpandtab
 endfunction
 
 function FourSpacesSoftTabs()
-  set tabstop=4
-  set shiftwidth=4
-  set softtabstop=4
-  set expandtab
+	set tabstop=4
+	set shiftwidth=4
+	set softtabstop=4
+	set expandtab
 endfunction
 
 " use "normal" tabs n spaces by default
@@ -191,11 +191,11 @@ execute pathogen#infect()
 " moment
 set showbreak=\ \\_
 if exists('+breakindent')  " breakindent was not merged until 2014
-  set breakindent
+	set breakindent
 else
-  " a more primative and hacky solution - does not work as well as breakindent
-  set formatoptions=l
-  set lbr
+	" a more primative and hacky solution - does not work as well as breakindent
+	set formatoptions=l
+	set lbr
 endif
 set formatoptions+=q  " allow gqq to wrap comments
 
@@ -205,15 +205,15 @@ set wrap linebreak textwidth=0
 """"""""""""""""" Spell-Checking """"""""""""""""""
 
 if has("spell")
-  " enable spell checking
-  set spell spelllang=en_us
-  set complete+=kspell " allow words as completions
-  " render misspelled words with underlines, rather than highlights
-  highlight clear SpellBad
-  highlight clear SpellCap
-  highlight clear SpellRare
-  highlight clear SpellLocal
-  highlight SpellBad cterm=underline
-  highlight SpellLocal cterm=underline
+	" enable spell checking
+	set spell spelllang=en_us
+	set complete+=kspell " allow words as completions
+	" render misspelled words with underlines, rather than highlights
+	highlight clear SpellBad
+	highlight clear SpellCap
+	highlight clear SpellRare
+	highlight clear SpellLocal
+	highlight SpellBad cterm=underline
+	highlight SpellLocal cterm=underline
 endif
 
