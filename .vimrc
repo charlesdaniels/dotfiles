@@ -51,6 +51,8 @@ let g:uname = substitute(system("uname"), '\n\+$', '', '')
 " variant refers to the flavor, such as POSIX/Linux, or POSIX/BSD
 
 let g:platform = "UNKNOWN"
+let g:variant = "UNKNOWN"
+
 if (has("win32") || has("win64"))
   let g:platform = "NT"
   let g:variant = "NT"
@@ -69,6 +71,11 @@ endif
 if g:uname =~ "MINGW"
   let g:platform = "POSIX"
   let g:variant = "MINGW"
+endif
+
+if g:uname =~ "Darwin"
+  let g:platform = "POSIX"
+  let g:variant = "MACOS"
 endif
 
 """""""""""""""" Configure Shell """"""""""""""""'
