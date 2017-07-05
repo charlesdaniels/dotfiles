@@ -174,10 +174,30 @@ my $vimnerdtree = File::Spec->catdir($VIMBUNDLE, "nerdtree");
 `git clone --quiet https://github.com/scrooloose/nerdtree.git $vimnerdtree`;
 printf VIMRC <<NERDTREE;
 " Auto-generated NERDtree config
-noremap <C-e> :NERDTreeToggle<Cr>
+
+" also map to C-Tab in GUI mode, since some platforms behave strangely with
+" C-e
 if has("gui_running")
   map <C-Tab> :NERDTreeToggle<Cr>
 endif
+
+" Open NERDTree in the directory of the current file 
+" (or /home if no file is open)
+" From here: https://superuser.com/a/868124
+
+nmap <silent> <C-e> :call NERDTreeToggleInCurDir()<cr>
+function! NERDTreeToggleInCurDir()
+	" If NERDTree is open in the current buffer
+	if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+		exe ":NERDTreeClose"
+	else
+		exe ":NERDTreeFind"
+		" refresh the view
+		call g:NERDTree.ForCurrentTab().getRoot().refresh() |
+		\\ call g:NERDTree.ForCurrentTab().render() |
+		\\ wincmd w
+	endif
+endfunction
 
 NERDTREE
 printf "DONE\n";
@@ -401,6 +421,39 @@ let g:investigate_use_dash=1  " use dash on OSX
 
 INVESTIGATEVIM
 printf "DONE\n";
+
+# vim-paste-easy
+printf "INFO: installing vim-paste-easy... ";
+`git clone --quiet "https://github.com/roxma/vim-paste-easy"`;
+my $pasteasy = File::Spec->catfile("vim-paste-easy", "plugin", "paste-easy.vim");
+move($pasteasy, File::Spec->catfile($VIMPLUGIN, "paste-easy.vim"));
+rmtree("vim-paste-easy");
+printf "DONE\n";
+
+# csv.vim
+printf "INFO: installing csv.vim... ";
+my $csvvim = File::Spec->catdir($VIMBUNDLE, "csv.vim");
+`git clone --quiet "https://github.com/chrisbra/csv.vim" "$csvvim"`;
+print VIMRC <<CSVVIM;
+" configuration generated for csv.vim
+
+" left-align all columns
+autocmd FileType csv let b:csv_arrange_align='l*'
+
+" always display CSV files as tables
+aug CSV_Editing
+  au!
+  au BufRead,BufWritePost *.csv :%ArrangeColumn!
+  au BufWritePre *.csv :%UnArrangeColumn
+aug end
+
+" don't render whitespace in CSV files
+autocmd FileType csv set nolist
+
+CSVVIM
+
+printf "DONE\n";
+
 
 # this is the end of the vim section
 close(VIMRC);

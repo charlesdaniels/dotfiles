@@ -1,8 +1,10 @@
-""""""""""""""" Platform Independent """"""""""""""""" 
+""""""""""""""" Platform Independent """""""""""""""""
 
 filetype plugin indent on      " guess indent based on file type
 syntax on                      " enable syntax highlighting
 set cursorline                 " highlight the active line
+hi clear CursorLine
+hi CursorLine gui=underline cterm=underline cterm=underline
 set number                     " use line numbering
 set laststatus=2               " always render the statusline
 set ignorecase                 " use case insensitive searching by default
@@ -38,9 +40,6 @@ endif
 
 """"""""""""""" Key Mapping """"""""""""""""""
 
-nnoremap n nzz      " center around next match
-nnoremap } }zz      " center around next par break
-nnoremap { {zz      " center around prev par break
 nnoremap <F1> <nop> " don't open help with F1
 
 """"""""""""""" Detect Platform """"""""""""""
@@ -76,7 +75,6 @@ endif
 if g:uname =~ "Darwin"
 	let g:platform = "POSIX"
 	let g:variant = "MACOS"
-endif
 
 """""""""""""""" Configure Shell """"""""""""""""'
 
@@ -85,15 +83,6 @@ set shell=/bin/sh
 if g:platform == "NT"
 	set shell=C:\Windows\system32\cmd.exe
 endif
-
-"""""""""""""""" Platform-Specific Workarounds """"""""""""""""'
-
-" sometimes vim cannot write to /tmp in embedded configurations like
-" Windows's git bundled POSIX environment.
-if g:platform == "NT"
-	let $TMPDIR = $HOME."/tmp"
-endif
-
 
 """""""""""""""" UTF-8 Detection & Setup """"""""""""""""
 
@@ -120,7 +109,9 @@ endif
 
 if has('gui_running')
 	" set the GUI font
-	set guifont=Andale_Mono:h8
+	let g:normalGUIFont="Andale_Mono:h8"
+	let g:largeGUIFont="Andale_Mono:h14"
+	let &guifont=g:normalGUIFont
 
 	" make the GUI be not stupid
 	set guioptions=Ace
@@ -137,7 +128,29 @@ set listchars+=precedes:«
 set listchars+=extends:»
 set listchars+=tab:>-
 
-"""""""""""""""" Spaces & Tabs """""""""""""""""
+"""""""""""""""" Presentation Mode """"""""""""""""
+
+function EnterPresentationMode()
+	if has('gui_running')
+		let &guifont=g:largeGUIFont
+	endif
+	set nolist
+	hi clear SpellBad
+	hi clear SpellLocal
+endfunction
+
+function ExitPresentationMode()
+	if has('gui_running')
+		let &guifont=g:normalGUIFont
+	endif
+	set list
+	highlight SpellBad cterm=underline gui=underline
+	highlight SpellLocal cterm=underline gui=underline
+	call ApplyWorkarounds()
+endfunction
+
+
+"""""""""""""""" Spaces & Tabs """"""""""""""""""""
 
 function TwoSpacesSoftTabs()
 	set tabstop=2
@@ -213,7 +226,30 @@ if has("spell")
 	highlight clear SpellCap
 	highlight clear SpellRare
 	highlight clear SpellLocal
-	highlight SpellBad cterm=underline
-	highlight SpellLocal cterm=underline
+	highlight SpellBad cterm=underline gui=underline
+	highlight SpellLocal cterm=underline gui=underline
 endif
 
+"""""""""""""""" Platform-Specific Workarounds """""""""""""""""
+
+function ApplyWorkarounds()
+
+	" sometimes vim cannot write to /tmp in embedded configurations like
+	" Windows's git bundled POSIX environment.
+	if g:platform == "NT"
+		let $TMPDIR = $HOME."\\tmp"
+	endif
+
+	" Windows terminal environments do not play nice with underlining, so we
+	" want to disable that on Windows, but only if the GUI is not running.
+	if g:platform == "NT" && !has('gui_running')
+		hi clear CursorLine
+		" sadly, this also affects misspellings
+		hi clear SpellBad
+		hi clear SpellCap
+		hi clear SpellRare
+		hi clear SpellLocal
+	endif
+endfunction
+
+call ApplyWorkarounds()
