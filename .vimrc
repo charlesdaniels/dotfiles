@@ -75,6 +75,7 @@ endif
 if g:uname =~ "Darwin"
 	let g:platform = "POSIX"
 	let g:variant = "MACOS"
+endif
 
 """""""""""""""" Configure Shell """"""""""""""""'
 
