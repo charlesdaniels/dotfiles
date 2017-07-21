@@ -1,3 +1,28 @@
+" Install plugins
+call plug#begin('~/.local/share/nvim/plugged')
+
+Plug 'scrooloose/nerdtree'
+Plug 'gi1242/vim-tex-syntax'
+Plug 'jvirtanen/vim-octave'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'heavenshell/vim-pydocstring'
+Plug 'PProvost/vim-ps1'
+Plug 'majutsushi/tagbar'
+Plug 'scrooloose/nerdcommenter'
+Plug 'godlygeek/tabular'
+Plug 'Rykka/riv.vim'
+Plug 'sukima/xmledit'
+Plug 'twmht/jcommenter.vim'
+Plug 'csexton/trailertrash.vim'
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-easytags'
+Plug 'kien/ctrlp.vim'
+Plug 'keith/investigate.vim'
+Plug 'roxma/vim-paste-easy'
+Plug 'chrisbra/csv.vim'
+
+call plug#end()
+
 """"""""""""""" Platform Independent """""""""""""""""
 
 filetype plugin indent on      " guess indent based on file type
@@ -194,11 +219,6 @@ autocmd FileType c call EightSpacesHardTabs()
 autocmd FileType java call FourSpacesSoftTabs()
 autocmd FileType python call FourSpacesSoftTabs()
 
-"""""""""""""" Pathogen """""""""""""""""""
-
-" hook into pathogen
-execute pathogen#infect()
-
 """""""""""""" Text re-wrapping (gq) """"""""""""""""""""
 
 " configure indenting to work gqap correctly - not working quite right at the
@@ -254,3 +274,120 @@ function ApplyWorkarounds()
 endfunction
 
 call ApplyWorkarounds()
+
+""""""""""" NERDTree """"""""""""""
+
+" also map to C-Tab in GUI mode, since some platforms behave strangely with
+" C-e
+if has("gui_running")
+	map <C-Tab> :NERDTreeToggle<Cr>
+endif
+
+" Open NERDTree in the directory of the current file¬
+" (or /home if no file is open)
+" From here: https://superuser.com/a/868124
+
+nmap <silent> <C-e> :call NERDTreeToggleInCurDir()<cr>
+function! NERDTreeToggleInCurDir()
+	" If NERDTree is open in the current buffer
+	if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+		exe ":NERDTreeClose"
+	else
+		exe ":NERDTreeFind"
+		" refresh the view
+		call g:NERDTree.ForCurrentTab().getRoot().refresh() |
+		call g:NERDTree.ForCurrentTab().render() |
+		wincmd w
+	endif
+endfunction
+
+
+"""""""""" vim-octave """""""""""
+
+" this is required for octave.vim to work correctly, not entirely sure why
+
+if has("autocmd") && exists("+omnifunc")
+	autocmd Filetype octave
+				\ if &omnifunc == "" |
+				\ setlocal omnifunc=syntaxcomplete#Complete |
+				\ endif
+endif
+
+" set octave syntax highlighting for .m
+if has("autocmd")
+	autocmd BufNewFile,BufRead *.m set syntax=octave
+	autocmd BufNewFile,BufRead *.m set filetype=octave
+endif
+
+" we will force .m file to be treated as octave, which to my knowledge is the
+" default extension for MATLAB/octave files. The default behavior is to treat
+" *.m as some kind of objective-c header type thing.
+autocmd BufEnter *.m setlocal filetype=octave
+
+""""""""""" vim-pydocstring """""""""""""""
+
+" C-g should generate docs in supported languages
+autocmd FileType python nmap <silent> <C-g> <Plug>(pydocstring)
+
+""""""""""""""""" tagbar """""""""""""""
+
+nmap <F8> :TagbarToggle<CR>  " map tagbar to F8
+let g:tagbar_type_ps1 = {
+			\ 'ctagstype' : 'powershell',
+			\ 'kinds'     : [
+			\ 'f:function',
+			\ 'i:filter',
+			\ 'a:alias'
+			\ ]
+			\ }
+
+""""""""""" NERDCommenter """""""""""""
+
+let g:NERDSpaceDelims = 1  " spaces after comment char
+let g:NERDDefaultAlign = 'left'  " align comments to left edge of file
+let g:NERDCommentEmptyLines = 1  " allow empty lines to be commented
+
+""""""""""""""" riv.vim """"""""""""""'
+
+let g:riv_global_leader = "<C-U>"
+let g:riv_fold_level = 1
+let g:riv_fold_blank = 1
+
+
+"""""""""""" jcommenter """""""""""""
+
+autocmd FileType java nmap <silent> <C-g> :call JCommentWriter()<CR>
+autocmd FileType java let b:jcommenter_class_author=system('git config user.name')
+autocmd FileType java let b:jcommenter_file_author=system('git config user.email')
+
+""""""""" TrailerTrash """"""""
+
+" note that I just want :TrailerTrim, so I disable hilighting like so
+autocmd BufEnter * TrailerHide
+autocmd InsertLeave * TrailerHide
+nnoremap <Leader>tt :TrailerTrim<CR>
+
+"""""""""" ctrlP """""""""""
+
+" show dotfiles
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_dotfiles = 1
+
+"""""""""" Investigate.vim """""""""
+
+let g:investigate_use_dash=1  " use dash on OSX
+
+""""""""""""""" csv.vim """""""""""""""
+
+" left-align all columns
+autocmd FileType csv let b:csv_arrange_align='l*'
+
+" always display CSV files as tables
+aug CSV_Editing
+	au!
+	au BufRead,BufWritePost *.csv :%ArrangeColumn!
+	au BufWritePre *.csv :%UnArrangeColumn
+aug end
+
+" don't render whitespace in CSV files
+autocmd FileType csv set nolist
