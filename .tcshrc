@@ -6,7 +6,8 @@ setenv GOPATH $HOME/.go-workspace
 setenv PATH $PATH\:$GOPATH/bin
 setenv PATH /opt/local/bin\:$PATH
 setenv PATH /opt/local/sbin\:$PATH
-setenv PATH $PATH\:/Library/TeX/texbin/
+setenv PATH /usr/local/sbin\:$PATH
+setenv PATH $PATH\:/Library/TeX/texbin
 setenv PATH $PATH\:/opt.net.cdaniels.toolchest/bin
 setenv PATH $PATH\:/opt/net.cdaniels.toolchest/local/bin
 setenv PATH $PATH\:$HOME/.net.cdaniels.toolchest/bin
