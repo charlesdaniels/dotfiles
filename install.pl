@@ -125,7 +125,7 @@ printf "DONE\n";
 
 # neovim init.vim
 printf "INFO: installing init.vim... ";
-my $NVIMRCDIR = File::Spec->catpath($ENV{HOME}, ".config", "nvim");
+my $NVIMRCDIR = File::Spec->catdir($ENV{HOME}, ".config", "nvim");
 mkpath($NVIMRCDIR);
 my $NVIMRCPATH = File::Spec->catfile($NVIMRCDIR, "init.vim");
 copy(".vimrc", $NVIMRCPATH);
