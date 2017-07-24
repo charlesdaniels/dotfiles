@@ -20,6 +20,8 @@ Plug 'kien/ctrlp.vim'
 Plug 'keith/investigate.vim'
 Plug 'roxma/vim-paste-easy'
 Plug 'chrisbra/csv.vim'
+Plug 'mzlogin/vim-markdown-toc'
+Plug 'dhruvasagar/vim-table-mode'
 
 call plug#end()
 
@@ -287,7 +289,7 @@ endif
 " (or /home if no file is open)
 " From here: https://superuser.com/a/868124
 
-nmap <silent> <C-e> :call NERDTreeToggleInCurDir()<cr>
+nmap <silent> <C-e> :silent! call NERDTreeToggleInCurDir()<cr>
 function! NERDTreeToggleInCurDir()
 	" If NERDTree is open in the current buffer
 	if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
@@ -367,6 +369,9 @@ autocmd BufEnter * TrailerHide
 autocmd InsertLeave * TrailerHide
 nnoremap <Leader>tt :TrailerTrim<CR>
 
+" prevent vim-table-mode from overriding <LeadeR>tt
+autocmd BufEnter * :silent! nnoremap <Leader>tt :TrailerTrim<CR>
+
 """""""""" ctrlP """""""""""
 
 " show dotfiles
@@ -391,3 +396,14 @@ aug end
 
 " don't render whitespace in CSV files
 autocmd FileType csv set nolist
+
+""""""""" vim-table-mode """""""""""""
+
+" Markdown
+autocmd FileType markdown let g:table_mode_corner='|'
+autocmd FileType markdown let g:table_mode_header_fillchar='-'
+
+" reST
+autocmd FileType rst let g:table_mode_corner='+'
+autocmd FileType rst let g:table_mode_header_fillchar='-'
+
