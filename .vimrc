@@ -407,3 +407,11 @@ autocmd FileType markdown let g:table_mode_header_fillchar='-'
 autocmd FileType rst let g:table_mode_corner='+'
 autocmd FileType rst let g:table_mode_header_fillchar='-'
 
+
+""""""""""""" vim-tmux-navigator """"""""""""
+
+" prevent keybindings from being overridden
+autocmd BufEnter noremap<silent> <C-h> :TmuxNavigateLeft<cr>
+autocmd BufEnter noremap<silent> <C-j> :TmuxNavigateDown<cr>
+autocmd BufEnter noremap<silent> <C-k> :TmuxNavigateUp<cr>
+autocmd BufEnter noremap<silent> <C-l> :TmuxNavigateRight<cr>
