@@ -410,8 +410,15 @@ autocmd FileType rst let g:table_mode_header_fillchar='-'
 
 """"""""""""" vim-tmux-navigator """"""""""""
 
-" prevent keybindings from being overridden
-autocmd BufEnter noremap<silent> <C-h> :TmuxNavigateLeft<cr>
-autocmd BufEnter noremap<silent> <C-j> :TmuxNavigateDown<cr>
-autocmd BufEnter noremap<silent> <C-k> :TmuxNavigateUp<cr>
-autocmd BufEnter noremap<silent> <C-l> :TmuxNavigateRight<cr>
+function MapTmuxNavigator ()
+	noremap<silent> <C-h> :TmuxNavigateLeft<cr>
+	noremap<silent> <C-j> :TmuxNavigateDown<cr>
+	noremap<silent> <C-k> :TmuxNavigateUp<cr>
+	noremap<silent> <C-l> :TmuxNavigateRight<cr>
+endfunction
+
+" other plugins insist on overriding vim-tmux-navigator's bindings
+autocmd BufEnter,BufWritePost * call MapTmuxNavigator()
+
+call MapTmuxNavigator()
+
