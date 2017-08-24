@@ -179,7 +179,7 @@ printf "DONE\n";
 
 # profile
 printf "INFO: installing profile... ";
-backup_file ".profile",
+backup_file ".profile";
 copy ".profile", File::Spec->catfile($ENV{HOME}, ".profile");
 printf "DONE\n";
 
