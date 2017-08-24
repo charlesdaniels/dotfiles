@@ -182,6 +182,7 @@ exec twmnd
 exec "numlockx on"
 exec "copyq"
 exec "mate-settings-daemon"
+exec "xmodmap ~/.Xmodmap"
 
 # media keys 
 bindsym XF86AudioPlay 		   exec "playerctl play-pause; deadbeef --play-pause"
