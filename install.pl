@@ -256,7 +256,7 @@ if (("$^O" ne "darwin") && ($OSTYPE eq "POSIX")) {
 
   # .Xresources
   printf "INFO: installing .Xresources... ";
-  if (-e `which xrdb 2>&1 | tr '\n' ' '`) {
+  if (-e `which xrdb 2>&1 | tr -d '\n'`) {
     backup_file ".Xresources";
     copy("./.Xresources", "$ENV{HOME}/.Xresources");
     `xrdb -merge ~/.Xresources`;
