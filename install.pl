@@ -183,6 +183,12 @@ backup_file ".profile";
 copy ".profile", File::Spec->catfile($ENV{HOME}, ".profile");
 printf "DONE\n";
 
+# .Xmodmap
+printf "INFO: installing .Xmodmap... ";
+backup_file ".Xmodmap";
+copy ".Xmodmap", File::Spec->catfile($ENV{HOME}, ".Xmodmap");
+printf "DONE\n";
+
 # tcsh
 printf "INFO: installing tshrc... ";
 backup_file ".tcsh";
