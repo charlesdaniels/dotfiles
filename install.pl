@@ -254,16 +254,17 @@ if (("$^O" ne "darwin") && ($OSTYPE eq "POSIX")) {
   copy("./i3statusconfig", "$ENV{HOME}/.config/i3status/config");
   printf "DONE\n";
 
-  # .Xresources
-  printf "INFO: installing .Xresources... ";
-  if (-e `which xrdb 2>&1 | tr -d '\n'`) {
-    backup_file ".Xresources";
-    copy("./.Xresources", "$ENV{HOME}/.Xresources");
-    `xrdb -merge ~/.Xresources`;
-    printf "DONE\n";
-  } else {
-    printf "SKIPPED (no xrdb)\n";
-  }
+}
+
+# .Xresources
+printf "INFO: installing .Xresources... ";
+if (-e `which xrdb 2>&1 | tr -d '\n'`) {
+  backup_file ".Xresources";
+  copy("./.Xresources", "$ENV{HOME}/.Xresources");
+  `xrdb -merge ~/.Xresources`;
+  printf "DONE\n";
+} else {
+  printf "SKIPPED (no xrdb)\n";
 }
 
 # powershell
