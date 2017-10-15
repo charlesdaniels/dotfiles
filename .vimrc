@@ -209,6 +209,12 @@ call EightSpacesHardTabs()
 " forcibly use the c filetype for all header files
 autocmd BufNewFile,BufRead *.h,*.c set filetype=c
 
+" use tex filetype for *.tex
+autocmd BufNewFile,BufRead *.tex,*.sty set filetype=tex
+
+" Handle YAML files correctly
+autocmd BufNewFile,BufRead *.yml,*.yaml,Sakefile set filetype=yaml
+
 " fix broken behaviour for CHANGELOG files
 autocmd BufEnter CHANGELOG setlocal filetype=text
 
@@ -220,6 +226,10 @@ autocmd BufEnter *.lib setlocal filetype=sh
 autocmd FileType c call EightSpacesHardTabs()
 autocmd FileType java call FourSpacesSoftTabs()
 autocmd FileType python call FourSpacesSoftTabs()
+autocmd FileType tex call EightSpacesHardTabs()
+autocmd FileType yaml call FourSpacesSoftTabs()
+autocmd FileType sh call EightSpacesHardTabs()
+autocmd FileType perl call EightSpacesHardTabs()
 
 """""""""""""" Text re-wrapping (gq) """"""""""""""""""""
 
