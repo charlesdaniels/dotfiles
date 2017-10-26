@@ -201,6 +201,13 @@ function FourSpacesSoftTabs()
 	set expandtab
 endfunction
 
+function FourSpacesHardTabs()
+	set tabstop=4
+	set shiftwidth=4
+	set softtabstop=4
+	set noexpandtab
+endfunction
+
 " use "normal" tabs n spaces by default
 call EightSpacesHardTabs()
 
@@ -208,6 +215,10 @@ call EightSpacesHardTabs()
 
 " forcibly use the c filetype for all header files
 autocmd BufNewFile,BufRead *.h,*.c set filetype=c
+
+" verilog-related
+autocmd BufNewFile,BufRead *.v set filetype=verilog
+autocmd BufNewFile,BufRead *.tv set filetype=text
 
 " use tex filetype for *.tex
 autocmd BufNewFile,BufRead *.tex,*.sty set filetype=tex
@@ -230,6 +241,7 @@ autocmd FileType tex call EightSpacesHardTabs()
 autocmd FileType yaml call FourSpacesSoftTabs()
 autocmd FileType sh call EightSpacesHardTabs()
 autocmd FileType perl call EightSpacesHardTabs()
+autocmd FileType verilog call EightSpacesHardTabs()
 
 """""""""""""" Text re-wrapping (gq) """"""""""""""""""""
 
