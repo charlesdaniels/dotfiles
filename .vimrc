@@ -63,6 +63,7 @@ endif
 " enable mouse support if available
 if has("mouse")
 	set mouse=a
+	set ttymouse=xterm2  " tmux compat
 endif
 
 """"""""""""""" Key Mapping """"""""""""""""""
