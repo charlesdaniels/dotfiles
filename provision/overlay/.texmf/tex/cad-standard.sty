@@ -360,6 +360,24 @@
 	\end{figure}
 }
 
+\newenvironment{clumpytext}  {
+
+	% Text enclosed in this environment will never be split over pages.
+	% Note that this can and will break if you enclosure too much stuff in
+	% it to fit on one page - TeX still wont generate
+	% the pagebreaks
+
+	\par\nobreak\vfil\penalty0\vfilneg
+	\vtop\bgroup
+} {
+	\par\xdef\tpd {
+		\the\prevdepth
+	}
+
+	\egroup
+	\prevdepth=\tpd
+}
+
 %%%%%%%%10%%%%%%%%20%%%%%%%%30 math mode macros 50%%%%%%%%60%%%%%%%%70%%%%%%%%80
 
 % a small horizontal space that works in math mode
