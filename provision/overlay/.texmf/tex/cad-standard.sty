@@ -28,45 +28,118 @@
 
 % general purpose LaTeX template, suitable for most documents
 
-% set marginparwidth to add space for margin notes
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%% packages %%%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+% set margins
 \usepackage[top=2.5cm, bottom=1.5cm, outer=2cm, inner=2cm]{geometry}
+
+% enable hyperlinks
 \usepackage{hyperref}
+
+% enable UTF-8 support
 \usepackage[utf8]{inputenc}
+
+% monospaced source code listings
 \usepackage{listings}
+
+% enable colored text
 \usepackage{color}
-\usepackage{marginnote}
+
+% multicolumn environment
 \usepackage{multicol}
+
+% enable floating figures
 \usepackage{float}
+
+% enable figure captions
 \usepackage{caption}
+
+% enable arrays in math mode
 \usepackage{array}
+
+% sometimes useful when tabular does not cut it - this is basically tabular
+% with some extra features
 \usepackage{tabularx}
+
+% circuitikz library for creating circuit diagrams
+%
+% american . . . . . use US-style components
+% cute inductors . . use pretty spiral-shaped inductors
 \usepackage[american, cute inductors]{circuitikz}
-% \ctikzset{bipoles/length=1cm}
+
+% enable the tikz drawing library
 \usepackage{tikz}
+
+% allow including EPS documents directly
 \usepackage{epstopdf}
+
+% required for certain types of plots
 \usepackage{pgf}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
+
+% required to include external graphics
 \usepackage{graphicx}
+
+% enable including PDF documents directly
 \usepackage{pdfpages}
-% \usepackage{dot2texi}
-\usepackage{datatool}
+
+% required to explicitly set single/double spacing
 \usepackage{setspace}
+
+% more control over headers and footers
 \usepackage{fancyhdr}
+
+% automatically generate filler text
 \usepackage{lipsum}
+
+% this is used by my header that shows the pages as 'page x of y'
 \usepackage[lastpage,user]{zref}
+
+% used for index generation
 \usepackage{makeidx}
+
+% more options for enumerate
 \usepackage{enumerate}
+
+% used by the \nth macro
 \usepackage{textcomp}
+
+% additional math symbols
 \usepackage{amssymb}
-\usepackage{esdiff} % better derivatives
+
+% better derivatives
+\usepackage{esdiff}
+
+% used for string manipulation
 \usepackage{xstring}
-\usepackage{changepage} % adjustwidth
-\usepackage{xifthen}% provides \isempty test
+
+ % adjustwidth
+\usepackage{changepage}
+
+% provides \isempty test
+\usepackage{xifthen}
+
+% used to typeset macros
 \usepackage[]{algorithm2e}
+
+% wrap text around figures
 \usepackage{wrapfig}
+
+% used to typeset theorems
 \usepackage{amsthm}
 
+% render key combinations nicely
+\usepackage[os=win]{menukeys}
+
+% these macros seem to break things when not included, but are not deliberately
+% used for their actual functionality.
+\usepackage{changepage}
+\usepackage{marginnote}
+\usepackage{datatool}
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%%% general %%%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
 
 % reduce spacing between list items
 %
@@ -96,21 +169,10 @@
 \lfoot{}
 \rfoot{}
 
-
-% \floatstyle{boxed}
 \restylefloat{figure}
 
 \usetikzlibrary{shapes, arrows}
 
-% \usepackage[backend=biber]{biblatex}
-% % this fixes a compile bug
-% % http://tex.stackexchange.com/questions/311426/bibliography-error-use-of-blxbblverbadi-doesnt-match-its-definition-ve
-% \makeatletter
-% \def\blx@maxline{77}
-% \makeatother
-
-\usepackage[os=win]{menukeys} % for some reason, this has to go after the biblatex
-                      % baskend is created (?!)
 
 \setcounter{tocdepth}{3}
 
@@ -131,8 +193,6 @@
 
 % allow pretty source listings with highlighting and numbers
 % see: https://www.sharelatex.com/learn/Code_listing
-
-
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
@@ -160,34 +220,19 @@
 
 \lstset{style=mystyle}
 
-% two columns with a divider, reset divider width to 0 after.
-\newcommand{\twocol}[1]{
-	\setlength{\columnseprule}{0.4pt}
-	\begin{multicols}{2}
-	#1
-	\end{multicols}
-	\setlength{\columnseprule}{0pt}
-}
+% generate index
+\makeindex
 
 % make figures work properly in multicols
 \newenvironment{Figure}
     {\par\medskip\noindent\minipage{\linewidth}}
     {\endminipage\par\medskip}
 
-% generate index
-\makeindex
+
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%% shortcuts %%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
 
 \newcommand{\pgh}[1]{\paragraph{#1}}
-
-% 1 - label, 2 - equation content
-\newcommand{\eqn}[2]{
-	\begin{equation} \label{#1}
-	#2
-	\end{equation}
-}
-
-% a small horizontal space that works in math mode
-\newcommand{\mathspc}{\hskip 1em}
 
 % centered horizontal separator
 \newcommand{\hsep}{
@@ -197,6 +242,36 @@
 }
 
 \newcommand{\point}{\paragraph{$\rightarrow$}}
+
+% a cdot character, useful for tikz node "labels"
+\newcommand{\gdot}{$\cdot$}
+
+% used to indicate different parts of a problem
+\newcommand{\prob}[1]{\paragraph{(#1)}}
+
+% scientific notation
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+
+% kOhms
+\newcommand{\kohm}{k\Omega}
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%%% macros %%%%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+% two columns with a divider, reset divider width to 0 after.
+\newcommand{\twocol}[1]{
+	\setlength{\columnseprule}{0.4pt}
+	\begin{multicols}{2}
+	#1
+	\end{multicols}
+	\setlength{\columnseprule}{0pt}
+}
+
+% 1 - label, 2 - equation content
+\newcommand{\eqn}[2]{
+	\begin{equation} \label{#1}
+	#2
+	\end{equation}
+}
 
 \newcommand{\indentone}[1]{
 	\begin{adjustwidth}{4em}{0cm}
@@ -213,7 +288,83 @@
 	$\text{#1}^{\text{th}}$}}}%
 }
 
-% general math macros
+% plot one function of x and y
+%
+% This is deliberately not in a figure, so that you can wrap it in your own if
+% you so desire.
+%
+% Note that to plot trig functions like sin(x), you need to put sin(deg(x)),
+% this will make your key look fugly, but it does work
+%
+% $1 . . . . the function, just the part to the right of y=
+\newcommand{\plotone}[1] {
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$x$, ylabel={$y = #1$}]
+			\addplot[line join=none, color=black, samples=500]{#1};
+			\addlegendentry{\tiny $#1$};
+		\end{axis}
+	\end{tikzpicture}
+}
+
+% plot two functions of x and y. Syntax as with plotone, just $2 is the
+% second plot.
+\newcommand{\plottwo}[2] {
+
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$x$, ylabel={$y$}]
+			\addplot[line join=none, color=black, samples=500]{#1};
+			\addlegendentry{\tiny $#1$};
+			\addplot[densely dotted, color=black, samples=500]{#2};
+			\addlegendentry{\tiny $#2$};
+		\end{axis}
+	\end{tikzpicture}
+}
+
+% as with plotone and plottwo, but with three.
+\newcommand{\plotthree}[3] {
+
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$x$, ylabel={$y$}]
+			\addplot[line join=none, color=black, samples=500]{#1};
+			\addlegendentry{\tiny $#1$};
+			\addplot[densely dotted, color=black, samples=500]{#2};
+			\addlegendentry{\tiny $#2$};
+			\addplot[dashed, color=black, samples=500]{#3};
+			\addlegendentry{\tiny $#3$};
+		\end{axis}
+	\end{tikzpicture}
+}
+
+% wrapfig macros
+\newcommand{\rfig}[1] {
+	\begin{wrapfigure}{R}{0.4\textwidth}
+		\centering
+		#1
+	\end{wrapfigure}
+
+}
+
+\newcommand{\lfig}[1] {
+	\begin{wrapfigure}{L}{0.4\textwidth}
+		\centering
+		#1
+	\end{wrapfigure}
+
+}
+
+\newcommand{\hfig}[1] {
+	\begin{figure}[H]
+		\centering
+		#1
+
+	\end{figure}
+}
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30 math mode macros 50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+% a small horizontal space that works in math mode
+\newcommand{\mathspc}{\hskip 1em}
+
 
 % the "stack" macros typeset their arguments vertically one over the other
 \newcommand{\stackone}[1] {
@@ -270,89 +421,3 @@
 \newcommand{\piecewisethree}[3]{\left\{\stackthree{#1}{#2}{#3}\right.}
 \newcommand{\piecewisefour}[4]{\left\{\stackfour{#1}{#2}{#3}{#4}\right.}
 \newcommand{\piecewisefive}[5]{\left\{\stackfive{#1}{#2}{#3}{#4}{#5}\right.}
-
-% EE macros
-
-% kOhms
-\newcommand{\kohm}{k\Omega}
-
-
-% plot one function of x and y
-%
-% This is deliberately not in a figure, so that you can wrap it in your own if
-% you so desire.
-%
-% Note that to plot trig functions like sin(x), you need to put sin(deg(x)),
-% this will make your key look fugly, but it does work
-%
-% $1 . . . . the function, just the part to the right of y=
-\newcommand{\plotone}[1] {
-	\begin{tikzpicture}
-		\begin{axis}[xlabel=$x$, ylabel={$y = #1$}]
-			\addplot[line join=none, color=black, samples=500]{#1};
-			\addlegendentry{\tiny $#1$};
-		\end{axis}
-	\end{tikzpicture}
-}
-
-% plot two functions of x and y. Syntax as with plotone, just $2 is the
-% second plot.
-\newcommand{\plottwo}[2] {
-
-	\begin{tikzpicture}
-		\begin{axis}[xlabel=$x$, ylabel={$y$}]
-			\addplot[line join=none, color=black, samples=500]{#1};
-			\addlegendentry{\tiny $#1$};
-			\addplot[densely dotted, color=black, samples=500]{#2};
-			\addlegendentry{\tiny $#2$};
-		\end{axis}
-	\end{tikzpicture}
-}
-
-% as with plotone and plottwo, but with three.
-\newcommand{\plotthree}[3] {
-
-	\begin{tikzpicture}
-		\begin{axis}[xlabel=$x$, ylabel={$y$}]
-			\addplot[line join=none, color=black, samples=500]{#1};
-			\addlegendentry{\tiny $#1$};
-			\addplot[densely dotted, color=black, samples=500]{#2};
-			\addlegendentry{\tiny $#2$};
-			\addplot[dashed, color=black, samples=500]{#3};
-			\addlegendentry{\tiny $#3$};
-		\end{axis}
-	\end{tikzpicture}
-}
-
-\newcommand{\gdot}{$\cdot$}
-
-% wrapfig macros
-\newcommand{\rfig}[1] {
-	\begin{wrapfigure}{R}{0.4\textwidth}
-		\centering
-		#1
-	\end{wrapfigure}
-
-}
-
-\newcommand{\lfig}[1] {
-	\begin{wrapfigure}{L}{0.4\textwidth}
-		\centering
-		#1
-	\end{wrapfigure}
-
-}
-
-\newcommand{\hfig}[1] {
-	\begin{figure}[H]
-		\centering
-		#1
-
-	\end{figure}
-}
-
-% % % % 
-\newcommand{\prob}[1]{\paragraph{(#1)}}
-
-% scientific notation
-\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
