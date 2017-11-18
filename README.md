@@ -75,7 +75,14 @@ to clone this repository with `--recursive`.
 
 #### Platform-Specific Configuration
 
-Platform specific configuration is handled by using platform-specific code in
-`provison-user.sh` to figure out which platform we are running on, then doing
-something specific based on that information. The usual convention is to run
-`provision/platformname/provision-user.platformname.include`.
+Bootstrapping is accomplished by searching
+`provision/platform/platformname/bootstrap-user.include`. If it exists, it is
+executed before anything else. This script should have the bare minimum amount
+of code required to get `git`, `curl`, and any other absolutely critical
+components setup.
+
+The `provision-user.sh` script has code to deect which platform it is running
+on.  If `provision/platform/platformname/provision-user.include` exists, it is
+executed after 3rdparty script installation and overlay installation.
+
+

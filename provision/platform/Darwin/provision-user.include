@@ -1,6 +1,6 @@
 # macOS-specific configuration
 
-printf "INFO: setting macOS configuration"
+printf "INFO: setting Darwin configuration"
 
 # lots of inspiration taken from here:
 # https://github.com/mathiasbynens/dotfiles
@@ -165,7 +165,7 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 defaults write -g com.apple.swipescrolldirection -bool FALSE
 
 # Skim always auto-reload without prompting
-defaults write -app Skim SKAutoReloadFileUpdate -boolean true
+defaults write -app Skim SKAutoReloadFileUpdate -boolean true > /dev/null 2>&1
 
 # use plain text mode in TextEdit by default
 defaults write com.apple.TextEdit RichText -int 0

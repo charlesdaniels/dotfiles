@@ -37,11 +37,18 @@ printf "."
 PLATFORM=$(uname)
 printf "."
 echo " DONE"
-echo "PARENT_DIR . . . . . $PARENT_DIR"
-echo "PROVISION_DIR  . . . $PROVISION_DIR"
-echo "OVERLAY_DIR  . . . . $OVERLAY_DIR"
-echo "THIRDPARTY_DIR . . . $THIRDPARTY_DIR"
-echo "PLATFORM . . . . . . $PLATFORM"
+echo "INFO: PARENT_DIR . . . . . $PARENT_DIR"
+echo "INFO: PROVISION_DIR  . . . $PROVISION_DIR"
+echo "INFO: OVERLAY_DIR  . . . . $OVERLAY_DIR"
+echo "INFO: THIRDPARTY_DIR . . . $THIRDPARTY_DIR"
+echo "INFO: PLATFORM . . . . . . $PLATFORM"
+
+# run bootstrapping script
+if [ -e "$PROVISION_DIR/platform/$PLATFORM/bootstrap.include" ] ; then
+	. "$PROVISION_DIR/platform/$PLATFORM/bootstrap.include"
+else
+	echo "INFO: no user bootstrapping script for platform '$PLATFORM'"
+fi
 
 # perform sanity check for binaries we need
 printf "INFO: performing sanity check"
@@ -60,6 +67,14 @@ if [ ! -d "$HOME" ] ; then
 fi
 printf "."
 echo " DONE"
+
+# make sure all of our submodules are cloned and up to date
+printf "INFO: updating submodules... "
+if ! git submodule update --rebase --remote --quiet ; then
+	echo "FAIL"
+	echo "PANIC: failed to update submodules"
+fi
+echo "DONE"
 
 # setup temp directory
 printf "INFO: setting up temp directory"
@@ -158,11 +173,12 @@ done
 
 ########10########20### platform-specific configuration ##60########70########80
 
-if [ "$PLATFORM" = "Darwin" ] ; then
-	. "$PROVISION_DIR/macos/provision-user.macos.include"
+if [ -e "$PROVISION_DIR/platform/$PLATFORM/provision-user.include" ] ; then
+	. "$PROVISION_DIR/platform/$PLATFORM/provision-user.include"
 else
-	echo "No platform specific configuration for '$PLATFORM'"
+	echo "INFO: no platform-specific configuration for '$PLATFORM'"
 fi
+
 
 ########10########20########30##### cleanup ####50########60########70########80
 

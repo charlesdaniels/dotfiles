@@ -1,6 +1,16 @@
 # symlink zsh fast syntax highlighting into the right place
 
-printf "INFO: installing zsh fas syntax highlighting..."
+printf "INFO: installing zsh fast syntax highlighting..."
+
+if [ ! -d "$HOME/.zsh" ] ; then
+	mkdir -p  "$HOME/.zsh"
+fi
+
+if [ ! -d "$HOME/.zsh" ] ; then
+	echo " FAIL"
+	echo "PANIC: $HOME/.zsh does not exist and could not be created"
+	exit 1
+fi
 
 ZSH_SYNTAX_DIR="$HOME/.zsh/fast-syntax-highlighting"
 if [ -d "$ZSH_SYNTAX_DIR" ] ; then

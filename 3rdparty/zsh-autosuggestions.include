@@ -2,6 +2,16 @@
 
 printf "INFO: installing zsh autosuggestions..."
 
+if [ ! -d "$HOME/.zsh" ] ; then
+	mkdir -p  "$HOME/.zsh"
+fi
+
+if [ ! -d "$HOME/.zsh" ] ; then
+	echo " FAIL"
+	echo "PANIC: $HOME/.zsh does not exist and could not be created"
+	exit 1
+fi
+
 ZSH_AUTOSUGGEST_DIR="$HOME/.zsh/zsh-autosuggestions"
 if [ -d "$ZSH_AUTOSUGGEST_DIR" ] ; then
 	rm -r "$ZSH_AUTOSUGGEST_DIR"
