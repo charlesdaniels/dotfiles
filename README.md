@@ -6,6 +6,8 @@
 * [General Documentation](#general-documentation)
 	* [`provision-user.sh`](#provision-usersh)
 		* [Overlay](#overlay)
+		* [Third-Party Software](#third-party-software)
+		* [Platform-Specific Configuration](#platform-specific-configuration)
 
 <!-- vim-markdown-toc -->
 
@@ -56,4 +58,24 @@ The overlay system does not symlink directories to handle cases such as
 other locations might be mixed - deleting `$HOME/bin` and symlinking the
 overlay version would make this impossible.
 
-The end result is somewhat similar to GNU stow, but requires no dependancies.
+The end result is somewhat similar to GNU stow, but requires no dependencies.
+
+#### Third-Party Software
+
+A number of scripts and utilities are installed as part of the un-privileged
+provisioning process. They are located in the `3rdparty/` directory. These
+software packackages are installed by simply iterating over
+`3rdparty/*.include` and running each such script in sequence. These `.include`
+files are written by me and are part of this repo. Pretty much everything else
+in this directory is arbitrary code written by other people, structured in
+arbitrary ways.
+
+The `3rdparty` directory contains a number of git submodules, so be sure
+to clone this repository with `--recursive`.
+
+#### Platform-Specific Configuration
+
+Platform specific configuration is handled by using platform-specific code in
+`provison-user.sh` to figure out which platform we are running on, then doing
+something specific based on that information. The usual convention is to run
+`provision/platformname/provision-user.platformname.include`.

@@ -1,0 +1,188 @@
+# macOS-specific configuration
+
+printf "INFO: setting macOS configuration"
+
+# lots of inspiration taken from here:
+# https://github.com/mathiasbynens/dotfiles
+
+########10########20##### Mail, Contacts, & Calendar #####60########70########80
+
+# debug menu in contacts
+defaults write com.apple.addressbook ABShowDebugMenu -bool true
+
+# show mail attachments as icons
+defaults write com.apple.mail DisableInlineAttachmentViewing -bool true
+
+# copy mail addresses without mangling
+defaults write com.apple.mail AddressesIncludeNameOnPasteboard -bool false
+
+printf "."
+
+
+########10########20########30##### Safari #####50########60########70########80
+
+# enable debug and developer tools in Safari
+defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
+defaults write com.apple.Safari IncludeDevelopMenu -bool true
+defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+defaults write -g WebKitDeveloperExtras -bool true
+
+# show the full URL in Safari
+defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+
+# prevent Safari from automatically opening files after download
+defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+
+# show Safari bookmarks bar by default
+defaults write com.apple.Safari ShowFavoritesBar -bool false
+
+printf "."
+
+########10########20########30###### Dock ######50########60########70########80
+
+# only show active applications in the Dock
+defaults write com.apple.dock static-only -bool true
+
+# enable autohide for the dock
+defaults write com.apple.dock autohide -bool true
+
+# put the dock on the left
+defaults write com.apple.dock orientation left
+
+# set the dock icon size to 36 px
+defaults write com.apple.dock tilesize -int 36
+
+# Show indicator lights for open applications in the Dock
+defaults write com.apple.dock show-process-indicators -bool true
+
+# put the dock on the left
+defaults write com.apple.dock orientation left
+
+# set the dock icon size to 36 px
+defaults write com.apple.dock tilesize -int 36
+
+# Show indicator lights for open applications in the Dock
+defaults write com.apple.dock show-process-indicators -bool true
+
+printf "."
+
+########10########20########30##### Finder #####50########60########70########80
+
+# always show file extensions in Finder
+defaults write -g AppleShowAllExtensions -bool true
+
+# show POSIX path in finder title
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+# keep folder on top when sorting by name in Finder
+defaults write com.apple.finder _FXSortFoldersFirst -bool true
+
+# disable warning when changing file extensions in Finder
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+# use list view by default in Finder
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+
+# allow quitting finder
+defaults write com.apple.finder QuitMenuItem -bool true
+
+# show path bar in finder
+defaults write com.apple.finder ShowPathbar -bool true
+
+# show status bar in finder
+defaults write com.apple.finder ShowStatusBar -bool true
+
+# don't default to saving in iCloud
+defaults write -g NSDocumentSaveNewDocumentsToCloud -bool false
+
+# finder use ./ as default search scope
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+
+# launch Finder on ~ by default
+defaults write com.apple.finder NewWindowTarget -string "PfLo"
+defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}"
+
+# don't write metadata to flash drives or network storage
+defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
+defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+
+
+# set sidebar icon size to medium
+defaults write NSGlobalDomain NSTableViewDefaultSizeMode -int 2
+
+printf "."
+
+########10########20########30 Activity Monitor 50########60########70########80
+
+# Show the main window when launching Activity Monitor
+defaults write com.apple.ActivityMonitor OpenMainWindow -bool true
+
+# Visualize CPU usage in the Activity Monitor Dock icon
+defaults write com.apple.ActivityMonitor IconType -int 5
+
+# Show all processes in Activity Monitor
+defaults write com.apple.ActivityMonitor ShowCategory -int 0
+
+# Sort Activity Monitor results by CPU usage
+defaults write com.apple.ActivityMonitor SortColumn -string "CPUUsage"
+defaults write com.apple.ActivityMonitor SortDirection -int 0
+printf "."
+
+########10########20########30###### Misc ######50########60########70########80
+
+# Enable the debug menu in Disk Utility
+defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
+defaults write com.apple.DiskUtility advanced-image-options -bool true
+
+# increase keyboard repeate speed
+defaults write NSGlobalDomain KeyRepeat -int 5
+defaults write NSGlobalDomain InitialKeyRepeat -int 25
+
+# use USA language and currency, but metric units
+defaults write NSGlobalDomain AppleLanguages -array "en" "nl"
+defaults write NSGlobalDomain AppleLocale -string "en_US@currency=USD"
+defaults write NSGlobalDomain AppleMeasurementUnits -string "Centimeters"
+defaults write NSGlobalDomain AppleMetricUnits -bool true
+
+# use PNG for screenshots
+defaults write com.apple.screencapture type -string "png"
+
+# Disable Dashboard
+defaults write com.apple.dashboard mcx-disabled -bool true
+defaults write com.apple.dock dashboard-in-overlay -bool true
+
+# don't re-arrange spaces
+defaults write com.apple.dock mru-spaces -bool false
+
+# disable autocorrect
+defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
+
+# enable tabbing through all modal dialog componants
+defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+
+# set scroll direction to "classic"
+defaults write -g com.apple.swipescrolldirection -bool FALSE
+
+# Skim always auto-reload without prompting
+defaults write -app Skim SKAutoReloadFileUpdate -boolean true
+
+# use plain text mode in TextEdit by default
+defaults write com.apple.TextEdit RichText -int 0
+
+# Prevent Photos from opening automatically when devices are plugged in
+defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true
+
+printf "."
+
+
+echo " DONE"
+
+printf "INFO: Restarting componants"
+for c in "Dock" "Finder" "Address Book" "Calendar" "cfprefsd" "Contacts" "Mail" "Messages" ; do
+	killall -u "$(whoami)" "$c" > /dev/null 2>&1
+	printf "."
+done
+echo " DONE"
+
+echo "INFO: finished macOS configuration"

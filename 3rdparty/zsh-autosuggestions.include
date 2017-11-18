@@ -1,0 +1,21 @@
+# symlink zsh autosuggestions into the right place
+
+printf "INFO: installing zsh autosuggestions..."
+
+ZSH_AUTOSUGGEST_DIR="$HOME/.zsh/zsh-autosuggestions"
+if [ -d "$ZSH_AUTOSUGGEST_DIR" ] ; then
+	rm -r "$ZSH_AUTOSUGGEST_DIR"
+fi
+if [ -L "$ZSH_AUTOSUGGEST_DIR" ] ; then
+	rm "$ZSH_AUTOSUGGEST_DIR"
+fi
+
+if [ ! -e "$THIRDPARTY_DIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" ] ; then
+	echo " FAIL"
+	echo "PANIC: '$THIRDPARTY_DIR/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh' does not exist, did you remember to use git clone --recursive?"
+	exit 1
+fi
+
+ln -s "$THIRDPARTY_DIR/zsh-autosuggestions" "$ZSH_AUTOSUGGEST_DIR"
+
+echo " DONE"

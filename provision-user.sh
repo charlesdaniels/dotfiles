@@ -34,11 +34,14 @@ OVERLAY_DIR=$(realpath "$PROVISION_DIR/overlay")
 printf "."
 THIRDPARTY_DIR="$(realpath "$PARENT_DIR/3rdparty")"
 printf "."
+PLATFORM=$(uname)
+printf "."
 echo " DONE"
 echo "PARENT_DIR . . . . . $PARENT_DIR"
 echo "PROVISION_DIR  . . . $PROVISION_DIR"
 echo "OVERLAY_DIR  . . . . $OVERLAY_DIR"
 echo "THIRDPARTY_DIR . . . $THIRDPARTY_DIR"
+echo "PLATFORM . . . . . . $PLATFORM"
 
 # perform sanity check for binaries we need
 printf "INFO: performing sanity check"
@@ -115,10 +118,6 @@ while read -r f ; do
 	DESTDIR="$(dirname "$DESTPATH")"
 	SRCPATH="$(realpath "$OVERLAY_DIR/$f")"
 
-	# echo "DESTPATH: $DESTPATH"
-	# echo "DESTDIR: $DESTDIR"
-	# echo "SRCPATH: $SRCPATH"
-
 	if [ ! -f "$SRCPATH" ] ; then
 		echo " FAIL"
 		echo "PANIC: '$SRCPATH' does not exist"
@@ -153,6 +152,17 @@ echo " DONE"
 
 ########10########20### third-party script installation ##60########70########80
 
+for f in "$THIRDPARTY_DIR"/*.include ; do
+	. "$f"
+done
+
+########10########20### platform-specific configuration ##60########70########80
+
+if [ "$PLATFORM" = "Darwin" ] ; then
+	. "$PROVISION_DIR/macos/provision-user.macos.include"
+else
+	echo "No platform specific configuration for '$PLATFORM'"
+fi
 
 ########10########20########30##### cleanup ####50########60########70########80
 
