@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+# Accepts one or more MAC addresses on standard input, formats them to be
+# lower case and colon-delimited. Characters which are not valid hexadecimal
+# characters will be discarded. Each converted input is displayed on it's own
+# line on standard out. Error checking is not done - if you put invalid MACs
+# in, you will get invalid MACs back out.
+
+import sys
+import re
+
+stderr = sys.stderr.write
+stdout = sys.stdout.write
+
+def format_mac(mac):
+  mac = mac.lower()
+  mac = re.sub(r"[^0-9a-f]","", mac)
+
+  # http://stackoverflow.com/a/3258596
+  #
+  # This inserts the colons
+  mac = ":".join(a+b for a,b in zip(mac[::2], mac[1::2]))
+
+  return mac
+
+
+for line in sys.stdin.readlines():
+  print(format_mac(line))
+

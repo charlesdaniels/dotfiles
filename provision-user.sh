@@ -39,7 +39,6 @@ echo "PARENT_DIR . . . . . $PARENT_DIR"
 echo "PROVISION_DIR  . . . $PROVISION_DIR"
 echo "OVERLAY_DIR  . . . . $OVERLAY_DIR"
 echo "THIRDPARTY_DIR . . . $THIRDPARTY_DIR"
-echo "MISC_DIR . . . . . . $MISC_DIR"
 
 # perform sanity check for binaries we need
 printf "INFO: performing sanity check"

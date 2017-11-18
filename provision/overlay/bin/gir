@@ -1,5 +1,5 @@
 #!/bin/sh
 
-# an overlay for git
+# an alias for git
 
 git $@

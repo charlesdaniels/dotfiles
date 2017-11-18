@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# lock the screen using i3lock
+
+i3lock -i ~/.wallpapers/current

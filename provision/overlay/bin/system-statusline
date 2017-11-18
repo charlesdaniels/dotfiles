@@ -1,0 +1,227 @@
+#!/usr/bin/env python3
+
+# My statusline for use with i3 and similar, created because I was displeased
+# with i3status. This uses mostly psutil, but also has some uname-specific
+# os.subprocess() calls to account for missing functionality.
+
+import psutil
+import datetime
+import os
+import math
+import subprocess
+import datetime
+import platform
+import time
+import sys
+import socket
+
+cpufreq_history = []
+
+# always run with nice 20
+os.nice(20)
+
+# format bytes to human-readable
+def format_bytes(n):
+    n = int(n)
+    syms=['B', 'K', 'M', 'G', 'T']
+    s = "{}B".format(str(n))
+    for i in range(1, len(syms)):
+        sym_val = math.pow(1024, i)
+        if (n*0.01) > sym_val:
+            s = "{}{}".format(int(n / sym_val), syms[i])
+
+    return s
+
+# format seconds to hours ,from the psutil documentation
+def format_seconds(seconds):
+    mm, ss = divmod(seconds, 60)
+    hh, mm = divmod(mm, 60)
+    return "%d:%02d:%02d" % (hh, mm, ss)
+
+
+def get_batt():
+    try:
+        battery = psutil.sensors_battery()
+    except Exception:
+        return "batt unsupported"
+
+    batt_str=""
+    pct = battery.percent
+    remaining = format_seconds(battery.secsleft)
+    state = "AC"
+    if battery.power_plugged == False:
+        state = "BAT"
+
+    # detect discharge rate if on supported platform
+    discharge_rate = None
+    if platform.system() == "FreeBSD":
+        acpiconfraw = subprocess.check_output(["acpiconf", "-i", "0"])
+        for line in acpiconfraw.split("\n"):
+            if 'Present rate' in line:
+                discharge_rate = line.split(':')[1].rstrip().lstrip()
+                break
+
+    if state == "AC":
+        batt_str = "AC"
+
+    elif discharge_rate is not None:
+        batt_str = "{} {}% ({} @ {})".format(state,
+                                             pct,
+                                             remaining,
+                                             discharge_rate)
+
+    else:
+        batt_str = "{} {}% ({})".format(state, pct, remaining)
+    return batt_str
+
+
+def get_load():
+
+    global cpufreq_history
+
+    s = ""
+    for l in os.getloadavg():
+        s += " {}".format(round(l, 2))
+    s = s[1:]  # drop leading space
+
+    # on FreeBSD, show the average cpu frequency over the last 10 cycles
+    if platform.system() == "FreeBSD":
+
+        cpufreq = subprocess.check_output(["sysctl", "dev.cpu.0.freq"])
+        #  try:
+        if True:
+            cpufreq = cpufreq.split(':')[1].lstrip().rstrip()
+            cpufreq_history.append(float(cpufreq) / 1000)
+            # the / 1000 converts to ghz
+
+            if len(cpufreq_history) > 3:
+                cpufreq_history.pop(0)
+
+            freq_avg = sum(cpufreq_history) / len(cpufreq_history)
+            freq_avg = round(freq_avg, 3)
+
+            s = "{} @ {}".format(s, freq_avg)
+        #  except Exception:
+            #  pass
+
+    return s[1:]
+
+def get_mem():
+    mem_total = psutil.virtual_memory().total
+    mem_avail = psutil.virtual_memory().available
+
+    mem_total = format_bytes(mem_total)
+    mem_avail = format_bytes(mem_avail)
+
+    s = "mem: {}".format(mem_avail)
+    return s
+
+def get_swp():
+    swp_total = psutil.swap_memory().total
+    swp_avail = psutil.swap_memory().free
+
+    swp_total = format_bytes(swp_total)
+    swp_avail = format_bytes(swp_avail)
+
+    s = "swp: {} / {}".format(swp_avail, swp_total)
+    return s
+
+def get_disk():
+    disk_total = psutil.disk_usage("/").total
+    disk_avail = psutil.disk_usage("/").free
+
+    disk_total = format_bytes(disk_total)
+    disk_avail = format_bytes(disk_avail)
+
+    s = "dsk: {}".format(disk_avail)
+    return s
+
+def get_temp():
+    # required for now, because psutil does not support getting temperature
+    # on FreeBSD
+    temp = subprocess.check_output(
+        ["sysctl", "hw.acpi.thermal.tz0.temperature"])
+    temp = temp.split(":")[1]
+    temp = temp.rstrip()
+    return temp
+
+def get_time():
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return time
+
+def get_vol():
+    vol = "vol: unsupported"
+    if platform.system() == "FreeBSD":
+        vol = subprocess.check_output(["mixer", "vol"])
+        vol = vol.split(":")[1].rstrip()
+        vol = "vol {}".format(vol)
+
+    return vol
+
+def get_wifi():
+    key_mgmt = "unknown"
+    ssid = "unknown"
+    wpa_state = "unknown"
+    wifi = ""
+    wparaw = subprocess.check_output(["wpa_cli", "status"])
+    wpastats = {}
+    for line in wparaw.split("\n"):
+        if "=" not in line:
+            continue
+        wpastats[line.split("=")[0]] = line.split("=")[1].rstrip()
+
+    if "key_mgmt" in wpastats:
+        key_mgmt = wpastats["key_mgmt"]
+
+    if "ssid" in wpastats:
+        ssid = wpastats["ssid"]
+
+    if "wpa_state" in wpastats:
+        wpa_state = wpastats["wpa_state"]
+
+    if wpa_state == "COMPLETED":
+        wifi = "wlan: {}/{}".format(ssid, key_mgmt)
+    else:
+        wifi = "wlan: {}".format(wpa_state)
+
+    return wifi
+
+# from here: https://stackoverflow.com/a/28950776
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
+def main():
+    batt = get_batt()
+    load = get_load()
+    mem = get_mem()
+    swp = get_swp()
+    disk = get_disk()
+    temp = get_temp()
+    time = get_time()
+    vol= get_vol()
+    wifi = get_wifi()
+    ip = get_ip()
+
+    show = [temp, mem, disk ,load, ip, wifi, batt, vol, time]
+    bar = ""
+    sep = " | "
+    for item in show:
+        bar = bar + item + sep
+    bar = bar[:-len(sep)]
+
+    print(bar)
+
+    sys.stdout.flush()
+
+while True:
+    main()
+    time.sleep(5)
