@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# This script is a wrapper around wget that is useful for downloading large
+# volumes of content from open HTTP and FTP directories. It attempts to avoid
+# getting HTML pages, focusing mostly on media and other types of documents
+
+wget -e robots=off -r --level=0 -nc -np --reject html,htm,css $@

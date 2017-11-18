@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# an overlay for git
+
+git $@

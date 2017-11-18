@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# This script rips a video from the given URL via ``youtube-dl``, then
+# extracts the audio.
+
+youtube-dl -i -x --audio-quality 0 "$1" 
