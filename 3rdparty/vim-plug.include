@@ -1,0 +1,17 @@
+# this script installs vim-plug
+#
+# this is one of the few scripts that writes things that are not symlinks
+# outside of the dotfiles repo - this is because vim-plug will keep itself
+# up to date once installed.
+
+printf 'installing vim-plug'
+
+curl -fLso ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+printf "."
+
+curl -fLso ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+printf "."
+
+echo " DONE"
