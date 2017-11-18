@@ -8,6 +8,8 @@
 		* [Overlay](#overlay)
 		* [Third-Party Software](#third-party-software)
 		* [Platform-Specific Configuration](#platform-specific-configuration)
+	* [`provision-system.sh`](#provision-systemsh)
+		* [Darwin/macOS Provisioning](#darwinmacos-provisioning)
 
 <!-- vim-markdown-toc -->
 
@@ -81,8 +83,23 @@ executed before anything else. This script should have the bare minimum amount
 of code required to get `git`, `curl`, and any other absolutely critical
 components setup.
 
-The `provision-user.sh` script has code to deect which platform it is running
+The `provision-user.sh` script has code to detect which platform it is running
 on.  If `provision/platform/platformname/provision-user.include` exists, it is
 executed after 3rdparty script installation and overlay installation.
 
+### `provision-system.sh`
 
+The system provisioning script searches
+`provision/platform/platformname/provision-system.include` and runs that.  It
+also does a small amount of configuration that is suitably cross-platform, but
+this isn't much sadly.
+
+#### Darwin/macOS Provisioning
+
+This mostly consists of installing homebrew, and the large number of homebrew
+packages I like to have installed.
+
+In the `packagelists` directory, there are a number of `.list` files. Each line
+of each file contains a `brew` command, which is executed as `brew $line`. This
+makes it easy to install things from casks, or to provide package-specific
+options as needed.

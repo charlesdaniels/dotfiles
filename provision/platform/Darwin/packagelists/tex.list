@@ -1,0 +1,4 @@
+tap homebrew/science
+install r --env=std
+install caskroom/cask/mactex
+install caskroom/cask/rstudio

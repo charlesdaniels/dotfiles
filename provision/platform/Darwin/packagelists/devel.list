@@ -1,0 +1,13 @@
+install automake
+install coreutils
+install gnu-sed
+install ctags
+install dos2unix
+install icarus-verilog
+install make
+install maven
+install r
+install shellcheck
+install python
+install python3
+install octave

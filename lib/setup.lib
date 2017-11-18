@@ -1,0 +1,83 @@
+# this script is injected into the beginning of both provision-system and
+# provision-user.
+
+set -u
+
+printf "INFO: detecting system information"
+
+# make sure we have access to the realpath command
+if [ ! -x "$(which realpath)" ] ; then
+	if [ ! -e "./lib/realpath.lib" ] ; then
+		echo "PANIC: no 'realpath', and failed to load ./lib/realpath.lib"
+		exit 1
+	fi
+	. ./lib/realpath.lib
+fi
+printf "."
+
+PARENT_DIR="$(realpath "$(dirname "$0")")"
+printf "."
+PROVISION_DIR=$(realpath "$PARENT_DIR/provision")
+printf "."
+OVERLAY_DIR=$(realpath "$PROVISION_DIR/overlay")
+printf "."
+THIRDPARTY_DIR="$(realpath "$PARENT_DIR/3rdparty")"
+printf "."
+PLATFORM=$(uname)
+printf "."
+PLATFORM_DIR="$PROVISION_DIR/platform/$PLATFORM"
+printf "."
+LOG_DIR="$PARENT_DIR/log/$(date "+%Y.%m.%d-%H.%M.%S")"
+printf "."
+echo " DONE"
+echo "INFO: PARENT_DIR . . . . . $PARENT_DIR"
+echo "INFO: PROVISION_DIR  . . . $PROVISION_DIR"
+echo "INFO: OVERLAY_DIR  . . . . $OVERLAY_DIR"
+echo "INFO: THIRDPARTY_DIR . . . $THIRDPARTY_DIR"
+echo "INFO: PLATFORM . . . . . . $PLATFORM"
+echo "INFO: PLATFORM_DIR . . . . $PLATFORM_DIR"
+echo "INFO: LOG_DIR  . . . . . . $LOG_DIR"
+
+# run bootstrapping script
+if [ -e "$PROVISION_DIR/platform/$PLATFORM/bootstrap.include" ] ; then
+	. "$PROVISION_DIR/platform/$PLATFORM/bootstrap.include"
+else
+	echo "INFO: no user bootstrapping script for platform '$PLATFORM'"
+fi
+
+# perform sanity check for binaries we need
+printf "INFO: performing sanity check"
+for bin in yes uuidgen curl git ln; do
+	if [ ! -x "$(which "$bin")" ] ; then
+		echo " FAIL"
+		echo "PANIC: missing dependency: $bin"
+		exit 1
+	fi
+	printf "."
+done
+if [ ! -d "$HOME" ] ; then
+	echo " FAIL"
+	echo "PANIC: home directory '$HOME' does not exist"
+	exit 1
+fi
+printf "."
+echo " DONE"
+
+# make sure all of our submodules are cloned and up to date
+printf "INFO: updating submodules... "
+if ! git submodule update --rebase --remote --quiet ; then
+	echo "FAIL"
+	echo "PANIC: failed to update submodules"
+fi
+echo "DONE"
+
+# make sure the log dir exists
+printf "INFO: making sure the log dir exists..."
+if [ ! -d "$LOG_DIR" ] ; then
+	mkdir -p "$LOG_DIR"
+fi
+if [ ! -d "$LOG_DIR" ] ; then
+	echo " FAIL"
+	echo "PANIC: '$LOG_DIR' does not exist and could not be created"
+fi
+echo " DONE"

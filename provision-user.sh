@@ -12,69 +12,12 @@
 
 ########10########20########30###### setup #####50########60########70########80
 
-set -u
-
-printf "INFO: detecting system information"
-
-# make sure we have access to the realpath command
-if [ ! -x "$(which realpath)" ] ; then
-	if [ ! -e "./lib/realpath.lib" ] ; then
-		echo "PANIC: no 'realpath', and failed to load ./lib/realpath.lib"
-		exit 1
-	fi
-	. ./lib/realpath.lib
-fi
-printf "."
-
-PARENT_DIR="$(realpath "$(dirname "$0")")"
-printf "."
-PROVISION_DIR=$(realpath "$PARENT_DIR/provision")
-printf "."
-OVERLAY_DIR=$(realpath "$PROVISION_DIR/overlay")
-printf "."
-THIRDPARTY_DIR="$(realpath "$PARENT_DIR/3rdparty")"
-printf "."
-PLATFORM=$(uname)
-printf "."
-echo " DONE"
-echo "INFO: PARENT_DIR . . . . . $PARENT_DIR"
-echo "INFO: PROVISION_DIR  . . . $PROVISION_DIR"
-echo "INFO: OVERLAY_DIR  . . . . $OVERLAY_DIR"
-echo "INFO: THIRDPARTY_DIR . . . $THIRDPARTY_DIR"
-echo "INFO: PLATFORM . . . . . . $PLATFORM"
-
-# run bootstrapping script
-if [ -e "$PROVISION_DIR/platform/$PLATFORM/bootstrap.include" ] ; then
-	. "$PROVISION_DIR/platform/$PLATFORM/bootstrap.include"
-else
-	echo "INFO: no user bootstrapping script for platform '$PLATFORM'"
-fi
-
-# perform sanity check for binaries we need
-printf "INFO: performing sanity check"
-for bin in uuidgen curl git ln; do
-	if [ ! -x "$(which "$bin")" ] ; then
-		echo " FAIL"
-		echo "PANIC: missing dependency: $bin"
-		exit 1
-	fi
-	printf "."
-done
-if [ ! -d "$HOME" ] ; then
-	echo " FAIL"
-	echo "PANIC: home directory '$HOME' does not exist"
+if [ ! -e "lib/setup.lib" ] ; then
+	echo "PANIC: could not find setup.lib, did you run this script from it's parent directory?"
 	exit 1
 fi
-printf "."
-echo " DONE"
 
-# make sure all of our submodules are cloned and up to date
-printf "INFO: updating submodules... "
-if ! git submodule update --rebase --remote --quiet ; then
-	echo "FAIL"
-	echo "PANIC: failed to update submodules"
-fi
-echo "DONE"
+. "lib/setup.lib"
 
 # setup temp directory
 printf "INFO: setting up temp directory"
@@ -179,6 +122,25 @@ else
 	echo "INFO: no platform-specific configuration for '$PLATFORM'"
 fi
 
+
+########10########20######## platform independent ########60########70########80
+
+# install R packages
+printf "INFO: installing R packages"
+if [ -e "$(which R)" ] ; then
+	printf "."
+	for f in "$PROVISION_DIR/R"/*.R ; do
+		if ! R --no-save < "$f" > "$LOG_DIR/$(basename "$f").log" 2>&1 ; then
+			echo " FAIL"
+			echo "PANIC: failed to execute R script '$f', see '$LOG_DIR/$(basename "$f").log'"
+			exit 1
+		fi
+		printf "."
+	done
+	echo " DONE"
+else
+	echo "... SKIP (R not installed)"
+fi
 
 ########10########20########30##### cleanup ####50########60########70########80
 
