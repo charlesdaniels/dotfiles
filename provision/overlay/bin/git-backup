@@ -1,10 +1,15 @@
 #!/bin/sh
 
-# Back up a git repository to a local file (git bundle format).
+# Back up a git repository to a local file. The file produced will be a tarfile
+# containing the git repository as a git .bundle file, as well as an xz
+# compressed tarball of the current HEAD for the master branch of the repo. The
+# latter is included so the archive produced is still useful if it needs to be
+# unpacked on a system without git, or if the git bundle format is ever
+# depricated.
 #
 # $1 . . . URL of repository to back up
 #
-# $2 . . . Path to backup file (.bundle extension will be added automatically)
+# $2 . . . Path to backup file (.tar extension will be added automatically)
 
 set -o nounset
 set -o errexit
@@ -36,14 +41,28 @@ REPO_NAME="$(basename "$(find . -type d -iname "*.git" -print | head -n 1)" .git
 echo "INFO: inferred repo name is '$REPO_NAME'"
 
 printf "INFO: creating bundle... " > /dev/stderr
+mkdir "$TMP_DIR/$REPO_NAME"
 cd "$REPO_NAME.git"
-if ! git bundle create "$TMP_DIR/$REPO_NAME.bundle" --all > "$TMP_DIR/bundle.log" 2>&1 ; then
+if ! git bundle create "$TMP_DIR/$REPO_NAME/$REPO_NAME.bundle" --all > "$TMP_DIR/bundle.log" 2>&1 ; then
 	echo "FAIL" > /dev/stderr
 	echo "ERROR: git bundle failed, logfile follows..."
 	cat "$TMP_DUR/bundle.log" > /dev/stderr
 	exit 1
 fi
-mv "$TMP_DIR/$REPO_NAME.bundle" "$BACKUP_FILE.bundle"
+echo "DONE" > /dev/stderr
+
+printf "INFO: arching master... " > /dev/stderr
+cd "$TMP_DIR/$REPO_NAME"
+git clone --quiet ./$REPO_NAME.bundle ./master
+rm -rf ./master/.git
+tar cfJ master.tar.xz master/
+rm -rf ./master/
+echo "DONE" > /dev/stderr
+
+printf "INFO: generating backup file... " > /dev/stderr
+cd "$TMP_DIR"
+tar cf "$REPO_NAME.tar" "$REPO_NAME"
+mv "$REPO_NAME.tar" "$BACKUP_FILE.tar"
 echo "DONE" > /dev/stderr
 
 printf "INFO: cleaning up... " > /dev/stderr
