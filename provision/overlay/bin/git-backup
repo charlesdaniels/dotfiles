@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Back up a git repository to a local file (git bundle format).
+#
+# $1 . . . URL of repository to back up
+#
+# $2 . . . Path to backup file (.bundle extension will be added automatically)
+
+set -o nounset
+set -o errexit
+set -o pipefail
+
+if [ $# -ne 2 ] ; then
+	echo "ERROR: incorrect usage" > /dev/stderr
+	echo "$0 [URL] [local file]" > /dev/stderr
+	exit 1
+fi
+
+REPO_URL="$1"
+BACKUP_FILE="$(realpath "$2")"
+TMP_DIR="/tmp/$(uuidgen)"
+
+if [ -e "$BACKUP_FILE" ] ; then
+	echo "ERROR: backup file '$BACKUP_FILE' already exists." > /dev/stderr
+	exit 1
+fi
+
+mkdir "$TMP_DIR"
+cd "$TMP_DIR"
+
+printf "INFO: cloning repository... " > /dev/stderr
+git clone --quiet --mirror --bare "$REPO_URL"
+echo "DONE" > /dev/stderr
+
+REPO_NAME="$(basename "$(find . -type d -iname "*.git" -print | head -n 1)" .git)"
+echo "INFO: inferred repo name is '$REPO_NAME'"
+
+printf "INFO: creating bundle... " > /dev/stderr
+cd "$REPO_NAME.git"
+if ! git bundle create "$TMP_DIR/$REPO_NAME.bundle" --all > "$TMP_DIR/bundle.log" 2>&1 ; then
+	echo "FAIL" > /dev/stderr
+	echo "ERROR: git bundle failed, logfile follows..."
+	cat "$TMP_DUR/bundle.log" > /dev/stderr
+	exit 1
+fi
+mv "$TMP_DIR/$REPO_NAME.bundle" "$BACKUP_FILE.bundle"
+echo "DONE" > /dev/stderr
+
+printf "INFO: cleaning up... " > /dev/stderr
+cd
+rm -rf "$TMP_DIR"
+echo "DONE" > /dev/stderr
+
