@@ -18,3 +18,4 @@ install caskroom/cask/keyboard-maestro
 install caskroom/cask/the-unarchiver
 install transmission
 install caskroom/cask/dash
+install caskroom/cask/mountain

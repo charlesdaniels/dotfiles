@@ -5,6 +5,7 @@ install ctags
 install dos2unix
 install icarus-verilog
 install make
+cask install java
 install maven
 install r
 install shellcheck

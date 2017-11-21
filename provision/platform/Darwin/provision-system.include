@@ -2,7 +2,7 @@
 
 printf "INFO: ensuring brew is installed..."
 if [ ! -e "$(which brew)" ] ; then
-	yes '' | ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+	yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > "$LOG_DIR/homebrew_install.log" 2>&1
 fi
 
 if [ ! -e "$(which brew)" ] ; then
