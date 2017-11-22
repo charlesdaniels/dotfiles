@@ -64,12 +64,19 @@ printf "."
 echo " DONE"
 
 # make sure all of our submodules are cloned and up to date
-printf "INFO: updating submodules... "
+printf "INFO: updating submodules."
+if ! git submodule init --quiet ; then
+	echo "FAIL"
+	echo "PANIC: failed to initilize submodules"
+	exit 1
+fi
+printf "."
+
 if ! git submodule update --rebase --remote --quiet ; then
 	echo "FAIL"
 	echo "PANIC: failed to update submodules"
 fi
-echo "DONE"
+echo ". DONE"
 
 # make sure the log dir exists
 printf "INFO: making sure the log dir exists..."
