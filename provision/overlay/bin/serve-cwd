@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Serve the CWD this script is run in over HTTP on localhost:8000. Requires
+# Python.
+
+python -m SimpleHTTPServer
