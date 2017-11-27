@@ -7,3 +7,6 @@
 [submodule "3rdparty/fast-syntax-highlighting"]
 	path = 3rdparty/fast-syntax-highlighting
 	url = https://github.com/zdharma/fast-syntax-highlighting
+[submodule "3rdparty/shelldoc"]
+	path = 3rdparty/shelldoc
+	url = https://github.com/charlesdaniels/shelldoc.git
