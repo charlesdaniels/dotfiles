@@ -63,21 +63,6 @@ fi
 printf "."
 echo " DONE"
 
-# make sure all of our submodules are cloned and up to date
-printf "INFO: updating submodules."
-if ! git submodule init --quiet ; then
-	echo "FAIL"
-	echo "PANIC: failed to initilize submodules"
-	exit 1
-fi
-printf "."
-
-if ! git submodule update --rebase --remote --quiet ; then
-	echo "FAIL"
-	echo "PANIC: failed to update submodules"
-fi
-echo ". DONE"
-
 # make sure the log dir exists
 printf "INFO: making sure the log dir exists..."
 if [ ! -d "$LOG_DIR" ] ; then
@@ -88,3 +73,19 @@ if [ ! -d "$LOG_DIR" ] ; then
 	echo "PANIC: '$LOG_DIR' does not exist and could not be created"
 fi
 echo " DONE"
+
+# make sure all of our submodules are cloned and up to date
+printf "INFO: updating submodules."
+if ! git submodule init > "$LOG_DIR/submodule_init.log" 2>&1 ; then
+	echo "FAIL"
+	echo "PANIC: failed to initilize submodules, see '$LOG_DIR/submodule_init.log'"
+	exit 1
+fi
+printf "."
+
+if ! git submodule update --rebase --remote > "$LOG_DIR/submodule_update.log" 2>&1; then
+	echo "FAIL"
+	echo "PANIC: failed to update submodules, see '$LOG_DIR/submodule_update.log'"
+fi
+echo ". DONE"
+
