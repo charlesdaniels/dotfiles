@@ -34,4 +34,20 @@ fi
 # Turn on pwfeedback for sudo
 sudo sh -c 'if ! cat /etc/sudoers | grep pwfeedback > /dev/null ; then echo "Defaults	pwfeedback" >> /etc/sudoers ; fi'
 
+# install R packages
+printf "INFO: installing R packages"
+if [ -e "$(which R)" ] ; then
+	printf "."
+	for f in "$PROVISION_DIR/R"/*.R ; do
+		if ! sudo R --no-save < "$f" > "$LOG_DIR/$(basename "$f").log" 2>&1 ; then
+			echo " FAIL"
+			echo "PANIC: failed to execute R script '$f', see '$LOG_DIR/$(basename "$f").log'"
+			exit 1
+		fi
+		printf "."
+	done
+	echo " DONE"
+else
+	echo "... SKIP (R not installed)"
+fi
 

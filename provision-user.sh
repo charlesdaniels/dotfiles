@@ -125,23 +125,6 @@ fi
 
 ########10########20######## platform independent ########60########70########80
 
-# install R packages
-printf "INFO: installing R packages"
-if [ -e "$(which R)" ] ; then
-	printf "."
-	for f in "$PROVISION_DIR/R"/*.R ; do
-		if ! R --no-save < "$f" > "$LOG_DIR/$(basename "$f").log" 2>&1 ; then
-			echo " FAIL"
-			echo "PANIC: failed to execute R script '$f', see '$LOG_DIR/$(basename "$f").log'"
-			exit 1
-		fi
-		printf "."
-	done
-	echo " DONE"
-else
-	echo "... SKIP (R not installed)"
-fi
-
 ########10########20########30##### cleanup ####50########60########70########80
 
 # remove temp directory
