@@ -3,6 +3,7 @@
 printf "INFO: installing shelldoc..."
 
 # this assumes ~/bin is where binaries go
+rm -f "$HOME/bin/shelldoc"
 ln -s "$THIRDPARTY_DIR/shelldoc/shelldoc" "$HOME/bin/shelldoc"
 
 echo " DONE"
