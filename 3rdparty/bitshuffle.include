@@ -1,0 +1,9 @@
+# symlink bitshuffle in place
+
+printf "INFO: installing bitshuffle..."
+
+# this assumes ~/bin is where binaries go
+rm -f "$HOME/bin/bitshuffle"
+ln -s "$THIRDPARTY_DIR/bitshuffle/bitshuffle.py" "$HOME/bin/bitshuffle"
+
+echo " DONE"

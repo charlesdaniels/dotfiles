@@ -10,3 +10,6 @@
 [submodule "3rdparty/shelldoc"]
 	path = 3rdparty/shelldoc
 	url = https://github.com/charlesdaniels/shelldoc.git
+[submodule "3rdparty/bitshuffle"]
+	path = 3rdparty/bitshuffle
+	url = https://github.com/charlesdaniels/bitshuffle.git
