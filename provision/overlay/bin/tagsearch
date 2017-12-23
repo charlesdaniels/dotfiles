@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+import os
+import argparse
+import sys
+import io
+import taglib
+import re
+
+parser = argparse.ArgumentParser(description="Search for media files by" +
+                                 "their tags using pytaglib.")
+parser.add_argument("--directory", "-d", default=os.getcwd(),
+                    help="Root directory for search. (default: ./)")
+parser.add_argument("--param", "-p", default=".*",
+                    help="Tag parameter to search (i.e. artist). This " +
+                    "takes a Python regex, so complex queries are possible" +
+                    ". (default: .*)")
+parser.add_argument("search_terms", nargs="*", help="Space-delimited" +
+                    " search terms. Each is a Python regex. Output is" +
+                    " all files where ANY search term matches.")
+parser.add_argument("--case_sensitive", "-c", default=False,
+                    action="store_true",
+                    help="Assetert for case sensitive search in all regexes.")
+
+args = parser.parse_args()
+
+file_list = []
+for root, directories, filenames in os.walk(args.directory):
+    for filename in filenames:
+        file_list.append(os.path.join(root, filename))
+
+search_regex = '|'.join('({})'.format(x) for x in args.search_terms)
+param_regex = args.param
+if args.case_sensitive:
+    search_regex = re.compile(search_regex)
+    param_regex = re.compile(param_regex)
+else:
+    search_regex = re.compile(search_regex, re.IGNORECASE)
+    param_regex = re.compile(param_regex, re.IGNORECASE)
+
+for f in file_list:
+    song = None
+    try:
+        song = taglib.File(f)
+    except OSError:
+        continue
+    for key in song.tags:
+        if re.match(param_regex, key):
+            for val in song.tags[key]:
+                if re.match(search_regex, val):
+                    print(f)
+                    break
