@@ -23,14 +23,28 @@ parser.add_argument("--easy", "-e", default=None,
                     "This argument replaces search_terms")
 parser.add_argument("--case_sensitive", "-c", default=False,
                     action="store_true",
-                    help="Assetert for case sensitive search in all regexes.")
+                    help="Asserted for case sensitive search in all regexes.")
+parser.add_argument("--file_list_stdin", "-l", default=False,
+                    action="store_true", help="The list of files to search" +
+                    "is read from standard in, rather than from a recursive " +
+                    "search of --directory. This argument is implied if " +
+                    "standard in is not a tty. This is useful for use in " +
+                    "pipelines, and can be used to create complex queries " +
+                    "by chaining tagsearch instances together.")
 
 args = parser.parse_args()
 
+if not sys.stdin.isatty():
+    args.file_list_stdin = True
+
 file_list = []
-for root, directories, filenames in os.walk(args.directory):
-    for filename in filenames:
-        file_list.append(os.path.join(root, filename))
+if not args.file_list_stdin:
+    for root, directories, filenames in os.walk(args.directory):
+        for filename in filenames:
+            file_list.append(os.path.join(root, filename))
+else:
+    for line in sys.stdin:
+        file_list.append(line.strip())
 
 search_regex = '|'.join('({})'.format(x) for x in args.search_terms)
 if args.easy is not None:
@@ -44,6 +58,8 @@ else:
     search_regex = re.compile(search_regex, re.IGNORECASE)
     param_regex = re.compile(param_regex, re.IGNORECASE)
 
+seen = []
+
 for f in file_list:
     song = None
     try:
@@ -54,5 +70,8 @@ for f in file_list:
         if re.match(param_regex, key):
             for val in song.tags[key]:
                 if re.match(search_regex, val):
-                    print(f)
+                    if f not in seen:
+                        # this prevents duplicate outputs
+                        print(f)
+                        seen.append(f)
                     break
