@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+
+import argparse
+import taglib
+import yaml
+import sys
+
+parser = argparse.ArgumentParser(description="Dump tag information from " +
+                                 "pytaglib for the specified (files). Data " +
+                                 "is dumped in YAML format. Note that " +
+                                 "if stdin is not a tty, each line of input" +
+                                 " on it will be treated as a file to dump " +
+                                 "tags for. This is useful for pipes.")
+
+parser.add_argument("files", nargs="*", help="List of files to dump tags for",
+                    default=[])
+parser.add_argument("--input", "-i", default=None, help="A file to read " +
+                    "where each line is a file to dump tags for.")
+
+args = parser.parse_args()
+
+file_list = args.files
+if args.input is not None:
+    with open(args.input, 'r') as f:
+        for line in f:
+            file_list.append(line.strip())
+
+if not sys.stdin.isatty():
+    for line in sys.stdin:
+        file_list.append(line.strip())
+
+data_list = []
+for f in file_list:
+    song = None
+    try:
+        song = taglib.File(f)
+    except OSError:
+        continue
+    data_list.append(song.tags)
+
+print(yaml.dump(data_list))
