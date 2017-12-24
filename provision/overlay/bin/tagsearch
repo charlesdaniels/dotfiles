@@ -18,6 +18,9 @@ parser.add_argument("--param", "-p", default=".*",
 parser.add_argument("search_terms", nargs="*", help="Space-delimited" +
                     " search terms. Each is a Python regex. Output is" +
                     " all files where ANY search term matches.")
+parser.add_argument("--easy", "-e", default=None,
+                    help="Search for this argument with .* on either side. " +
+                    "This argument replaces search_terms")
 parser.add_argument("--case_sensitive", "-c", default=False,
                     action="store_true",
                     help="Assetert for case sensitive search in all regexes.")
@@ -30,6 +33,9 @@ for root, directories, filenames in os.walk(args.directory):
         file_list.append(os.path.join(root, filename))
 
 search_regex = '|'.join('({})'.format(x) for x in args.search_terms)
+if args.easy is not None:
+    search_regex = ".*{}.*".format(args.easy)
+
 param_regex = args.param
 if args.case_sensitive:
     search_regex = re.compile(search_regex)
