@@ -36,6 +36,10 @@ for f in file_list:
         song = taglib.File(f)
     except OSError:
         continue
+    data = song.tags
+    for key in data:
+        if len(data[key]) is 1:
+            data[key] = data[key][0]
     data_list.append(song.tags)
 
-print(yaml.dump(data_list))
+print(yaml.dump(data_list, default_flow_style=False))
