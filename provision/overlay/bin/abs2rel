@@ -49,7 +49,7 @@ else:
     iterate_over = ifhandle
 
 for ipath in iterate_over:
-    opath = os.path.relpath(ipath, args.relative_to)
+    opath = os.path.relpath(ipath, args.relative_to).strip()
     sys.stdout.write("{}\n".format(opath))
 
 # cleanup
