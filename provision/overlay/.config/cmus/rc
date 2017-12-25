@@ -1,5 +1,9 @@
 set mouse=true
 cd ~/Music
+clear -p
+clear -q
+clear -l
+add ~/Music
 
 # looks good with xterm using default settings (white bg)
 set color_cmdline_bg=default
