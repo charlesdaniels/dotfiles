@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Get the current status of Dropbox, if it is installed. Mostly for use with
+# system-statusline.
+
+# .ENDOC
+
+if [ ! -x "$(which dropbox)" ] ; then
+	echo "dropbox not installed"
+else
+	echo "dropbox: $(dropbox status | head -n 1)"
+fi

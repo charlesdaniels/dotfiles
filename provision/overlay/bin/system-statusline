@@ -201,7 +201,7 @@ def get_wifi():
         wparaw = subprocess.check_output(["wpa_cli", "status"], stderr=subprocess.STDOUT)
     except Exception:
         try:
-            return "wlan: {}".format(subprocess.check_output(["get-ssid"]))
+            return "wlan: {}".format(subprocess.check_output(["get-ssid"]).strip())
         except Exception:
             return "wlan: unknown"
 
@@ -240,6 +240,16 @@ def get_ip():
         s.close()
     return IP
 
+def get_dropbox():
+    dropbox_status = "dropbox: unknown"
+    try:
+        dropbox_status = subprocess.check_output(["dropbox-status"])
+    except Exception as e:
+        pass
+
+    dropbox_status = dropbox_status.strip()
+    return dropbox_status
+
 def main():
     batt = get_batt()
     load = get_load()
@@ -251,8 +261,9 @@ def main():
     vol= get_vol()
     wifi = get_wifi()
     ip = get_ip()
+    dbox = get_dropbox()
 
-    show = [temp, mem, disk ,load, ip, wifi, batt, vol, time]
+    show = [dbox, temp, mem, disk ,load, ip, wifi, batt, vol, time]
     bar = ""
     sep = " | "
     for item in show:
