@@ -1,0 +1,59 @@
+echo "INFO: running variant-specific provisioning for $PLATFORM/$VARIANT"
+
+APT_GET_COMMAND="sudo DEBIAN_FRONTEND=noninteractive apt-get -yq"
+echo "APT_GET_COMMAND . . . . $APT_GET_COMMAND"
+
+printf "INFO: updating system."
+if ! $APT_GET_COMMAND update > "$LOG_DIR/apt_get_update.log" 2>&1 ; then
+	echo " FAIL"
+	echo "PANIC: apt-get update failed, see $LOG_DIR/apt_get_update.log"
+	exit 1
+fi
+printf "."
+if ! $APT_GET_COMMAND upgrade > "$LOG_DIR/apt_get_upgrade.log" 2>&1 ; then
+	echo " FAIL"
+	echo "PANIC: apt-get upgrade failed, see $LOG_DIR/apt_get_upgrade.log"
+	exit 1
+fi
+printf "."
+if ! $APT_GET_COMMAND autoremove > "$LOG_DIR/apt_get_autoremove.log" 2>&1 ; then
+	echo " FAIL"
+	echo "PANIC: apt-get autoremove failed, see $LOG_DIR/apt_get_autoremove.log"
+	exit 1
+fi
+echo ". DONE"
+
+for list in "$VARIANT_DIR/packagelists"/*.list ; do
+	printf "INFO: installing packageset $(basename $list)... "
+	if ! $APT_GET_COMMAND install $(grep -vE "^\s*#" "$list" | tr "\n" " ")  > "$LOG_DIR/$(basename $list).log" 2>&1 ; then
+		echo " FAIL"
+		echo "PANIC: apt-get install failed, see $LOG_DIR/$(basename $list).log"
+		exit 1
+	fi
+
+	echo " DONE"
+done
+
+printf "INFO: installing Dropbox"
+if ! sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 1C61A2656FB57B7E4DE0F4C1FC918B335044912E > "$LOG_DIR/dropbox_keys.log" 2>&1 ; then
+	echo " FAIL"
+	echo "PANIC: failed to add dropbox PGP key, see $LOG_DIR/dropbox_keys.log"
+	exit 1
+fi
+
+printf "."
+sudo sh -c 'echo "deb http://linux.dropbox.com/ubuntu/ xenial main" >> /etc/apt/sources.list.d/dropbox.list'
+printf "."
+if ! $APT_GET_COMMAND update > "$LOG_DIR/apt_get_update_2.log" 2>&1 ; then
+	echo " FAIL"
+	echo "PANIC: apt-get update failed, see $LOG_DIR/apt_get_update.log"
+	exit 1
+fi
+printf "."
+if ! $APT_GET_COMMAND install dropbox > "$LOG_DIR/install_dropbox.log" 2>&1 ; then
+	echo " FAIL"
+	echo "PANIC: failed to apt-get install dropbox, see $LOG_DIR/install_dropbox.log"
+	exit 1
+fi
+echo ". DONE"
+

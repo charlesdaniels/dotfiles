@@ -29,6 +29,12 @@ else
 	echo "INFO: no system-specific provisioning file for platform '$PLATFORM'"
 fi
 
+if [ -e "$VARIANT_DIR/provision-system.include" ] ; then
+	. "$VARIANT_DIR/provision-system.include"
+else
+	echo "INFO: no variant-specific provision file for platform '$PLATFORM/$VARIANT'"
+fi
+
 ########10########20######## platform independent ########60########70########80
 
 # Turn on pwfeedback for sudo

@@ -122,6 +122,12 @@ else
 	echo "INFO: no platform-specific configuration for '$PLATFORM'"
 fi
 
+if [ -e "$VARIANT_DIR/provision-user.include" ] ; then
+	. "$VARIANT_DIR/provision-user.include"
+else
+	echo "INFO: no variant-specific provision file for platform '$PLATFORM/$VARIANT'"
+fi
+
 
 ########10########20######## platform independent ########60########70########80
 

@@ -24,8 +24,23 @@ printf "."
 THIRDPARTY_DIR="$(realpath "$PARENT_DIR/3rdparty")"
 printf "."
 PLATFORM=$(uname)
+VARIANT="UNSET"
+# infer platform variant
+if [ "$PLATFORM" = "Linux" ] ; then
+	VARIANT="UNKNOWN"
+	if [ -e "/etc/lsb-release" ] ; then
+		. "/etc/lsb-release"
+		if [ "$DISTRIB_ID" = "Ubuntu" ] ; then
+			VARIANT="$DISTRIB_CODENAME"
+		else
+			VARIANT="$DISTRIB_ID"
+		fi
+	fi
+fi
 printf "."
 PLATFORM_DIR="$PROVISION_DIR/platform/$PLATFORM"
+printf "."
+VARIANT_DIR="$PLATFORM_DIR/$VARIANT"
 printf "."
 LOG_DIR="$PARENT_DIR/log/$(date "+%Y.%m.%d-%H.%M.%S")"
 printf "."
@@ -34,8 +49,9 @@ echo "INFO: PARENT_DIR . . . . . $PARENT_DIR"
 echo "INFO: PROVISION_DIR  . . . $PROVISION_DIR"
 echo "INFO: OVERLAY_DIR  . . . . $OVERLAY_DIR"
 echo "INFO: THIRDPARTY_DIR . . . $THIRDPARTY_DIR"
-echo "INFO: PLATFORM . . . . . . $PLATFORM"
+echo "INFO: PLATFORM . . . . . . $PLATFORM/$VARIANT"
 echo "INFO: PLATFORM_DIR . . . . $PLATFORM_DIR"
+echo "INFO: VARIANT_DIR  . . . . $VARIANT_DIR"
 echo "INFO: LOG_DIR  . . . . . . $LOG_DIR"
 
 # run bootstrapping script
