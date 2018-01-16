@@ -57,3 +57,23 @@ else
 	echo "... SKIP (R not installed)"
 fi
 
+# install Python packages
+printf "INFO: installing Python 2 packages"
+if [ -e "$(which pip)" ] ; then
+	while read -r line ; do
+		run_step "$LOG_DIR/pip2.log" sudo pip install "$line"
+	done < "$PROVISION_DIR/python2.list"
+else
+	echo "... SKIP (pip not installed)"
+fi
+echo ". DONE"
+
+printf "INFO: installing Python 3 packages"
+if [ -e "$(which pip3)" ] ; then
+	while read -r line ; do
+		run_step "$LOG_DIR/pip3.log" sudo pip3 install "$line"
+	done < "$PROVISION_DIR/python3.list"
+else
+	echo "... SKIP (pip3 not installed)"
+fi
+echo ". DONE"
