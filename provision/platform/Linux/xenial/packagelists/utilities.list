@@ -10,3 +10,4 @@ curl
 wget
 git
 youtube-dl
+lm-sensors

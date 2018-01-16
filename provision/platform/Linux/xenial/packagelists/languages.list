@@ -5,3 +5,5 @@ binutils
 make
 texlive-full
 perl
+python-pip
+python3-pip
