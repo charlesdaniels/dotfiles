@@ -45,6 +45,7 @@ def get_batt():
 
     batt_str=""
     pct = battery.percent
+    pct = round(pct, 2)
     remaining = format_seconds(battery.secsleft)
     state = "AC"
     if battery.power_plugged == False:
