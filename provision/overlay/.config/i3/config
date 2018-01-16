@@ -20,6 +20,7 @@ bindsym $mod+Shift+q kill
 # bindsym $mod+d exec dmenu_run
 # bindsym $mod+d exec "rofi -opacity 80 -width 80 -lines 30 -show run"
 bindsym $mod+d exec "synapse"
+bindsym $mod+space exec "synapse"
 
 # change focus (vim/hjkl bindings)
 bindsym $mod+h focus left
@@ -63,7 +64,7 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+bindsym $mod+o focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
@@ -150,6 +151,7 @@ exec "xautolock -time 5 -locker ~/.net.cdaniels.toolchest/local/bin/system-lock 
 
 # borders
 for_window [class="^.*"] border pixel 2
+for_window [class="synapse"] floating enable, border normal 0 px
 
 # Auto Start
 exec "source $HOME/.profile"
