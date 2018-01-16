@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# This script will attempt to retrieve the SSID which the computer is currently
+# connected to via wireless.
+
+# .ENDOC
+
+if [ -x "$(which nmcli)" ] ; then
+	nmcli -t -f active,ssid dev wifi | egrep '^yes' | cut -d\: -f2
+else
+	echo "ERROR: nmcli not found" > /dev/stderr
+	exit 1
+fi

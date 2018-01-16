@@ -200,7 +200,10 @@ def get_wifi():
     try:
         wparaw = subprocess.check_output(["wpa_cli", "status"], stderr=subprocess.STDOUT)
     except Exception:
-        return "wlan: unknown"
+        try:
+            return "wlan: {}".format(subprocess.check_output(["get-ssid"]))
+        except Exception:
+            return "wlan: unknown"
 
     wpastats = {}
     for line in wparaw.split("\n"):
