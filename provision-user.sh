@@ -131,6 +131,12 @@ fi
 
 ########10########20######## platform independent ########60########70########80
 
+printf "INFO: applying .Xresources.."
+if [ -x "$(which xrdb)" ] ; then
+	run_step "$LOG_DIR/xrdb.log" xrdb -merge ~/.Xresources
+fi
+echo " DONE"
+
 ########10########20########30##### cleanup ####50########60########70########80
 
 # remove temp directory

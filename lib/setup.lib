@@ -105,3 +105,23 @@ if ! git submodule update --rebase --remote > "$LOG_DIR/submodule_update.log" 2>
 fi
 echo ". DONE"
 
+run_safe () {
+	# $1 is the log file
+	# $2 is the command to run
+	run_safe_log_file="$1"
+	shift
+	if ! $@ >> "$run_safe_log_file" 2>&1 ; then
+		echo " FAIL"
+		echo "PANIC: command failed '$@', see '$run_safe_log_file'"
+		echo "INFO: last 10 lines of '$run_safe_log_file'"
+		tail "$run_safe_log_file"
+		exit 1
+	fi
+}
+
+run_step () {
+	# $1 is the log file
+	# $2 is the command to run
+	run_safe $@
+	printf '.'
+}

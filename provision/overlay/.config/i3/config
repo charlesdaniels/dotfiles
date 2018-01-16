@@ -10,8 +10,8 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-#bindsym $mod+Return exec "urxvt"
-bindsym $mod+Return exec mate-terminal
+bindsym $mod+Return exec "urxvt"
+# bindsym $mod+Return exec mate-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -172,26 +172,26 @@ exec "xset dpms 300 300 300"
 exec "xset b off"
 
 # media keys
-bindsym XF86AudioPlay 		   exec "playerctl play-pause; deadbeef --play-pause"
-bindsym XF86AudioNext 		   exec "playerctl next; deadbeef --next"
-bindsym XF86AudioPrev 		   exec "playerctl previous; deadbeef --previous"
+# bindsym XF86AudioPlay 		   exec "playerctl play-pause; deadbeef --play-pause"
+# bindsym XF86AudioNext 		   exec "playerctl next; deadbeef --next"
+# bindsym XF86AudioPrev 		   exec "playerctl previous; deadbeef --previous"
 #bindsym XF86AudioLowerVolume exec --no-startup-id pamixer -d 3
 #bindsym XF86AudioRaiseVolume exec --no-startup-id pamixer -i 3
 # bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +2%
 # bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -- -2%
-bindsym XF86AudioRaiseVolume exec --no-startup-id mixer vol +2
-bindsym XF86AudioLowerVolume exec --no-startup-id mixer vol -2
-bindsym XF86AudioMute exec --no-startup-id mixer vol -100
+# bindsym XF86AudioRaiseVolume exec --no-startup-id mixer vol +2
+# bindsym XF86AudioLowerVolume exec --no-startup-id mixer vol -2
+# bindsym XF86AudioMute exec --no-startup-id mixer vol -100
 #bindsym XF86AudioMute 		   exec "pamixer -t"
 # bindsym XF86AudioMute	exec --no-startup-id pactl set-sink-mute 0 toggle
-bindsym XF86KbdBrightnessDown exec "kbdlight down 10"
-bindsym XF86KbdBrightnessUp   exec "kbdlight up 10"
-bindsym XF86MonBrightnessUp   exec xbacklight -inc 5 # increase screen brightness
-bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
-
-bindsym Control+Right exec "playerctl next; deadbeef --next"
-bindsym Control+Left  exec "playerctl previous; deadbeef --previous"
-bindsym Control+End   exec "playerctl play-pause; deadbeef --play-pause"
+# bindsym XF86KbdBrightnessDown exec "kbdlight down 10"
+# bindsym XF86KbdBrightnessUp   exec "kbdlight up 10"
+# bindsym XF86MonBrightnessUp   exec xbacklight -inc 5 # increase screen brightness
+# bindsym XF86MonBrightnessDown exec xbacklight -dec 5 # decrease screen brightness
+# 
+# bindsym Control+Right exec "playerctl next; deadbeef --next"
+# bindsym Control+Left  exec "playerctl previous; deadbeef --previous"
+# bindsym Control+End   exec "playerctl play-pause; deadbeef --play-pause"
 
 bar {
 	# status_command i3status
