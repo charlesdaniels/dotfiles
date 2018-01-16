@@ -133,9 +133,13 @@ fi
 
 printf "INFO: applying .Xresources.."
 if [ -x "$(which xrdb)" ] ; then
-	run_step "$LOG_DIR/xrdb.log" xrdb -merge ~/.Xresources
+	if [ "$PLATFORM" = "Darwin" ] ; then
+		echo ". SKIP (disabled on $PLATFORM)"
+	else
+		run_step "$LOG_DIR/xrdb.log" xrdb -merge ~/.Xresources
+		echo " DONE"
+	fi
 fi
-echo " DONE"
 
 ########10########20########30##### cleanup ####50########60########70########80
 
