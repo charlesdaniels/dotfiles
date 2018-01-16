@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
-# My statusline for use with i3 and similar, created because I was displeased
-# with i3status. This uses mostly psutil, but also has some uname-specific
-# os.subprocess() calls to account for missing functionality.
+# psutil-based i3bar alternative
 
 import psutil
 import datetime
@@ -43,7 +41,7 @@ def get_batt():
     try:
         battery = psutil.sensors_battery()
     except Exception:
-        return "batt unsupported"
+        return "batt: unsupported"
 
     batt_str=""
     pct = battery.percent
@@ -137,12 +135,36 @@ def get_disk():
     return s
 
 def get_temp():
-    # required for now, because psutil does not support getting temperature
-    # on FreeBSD
-    temp = subprocess.check_output(
-        ["sysctl", "hw.acpi.thermal.tz0.temperature"])
-    temp = temp.split(":")[1]
-    temp = temp.rstrip()
+    temp = None
+    if platform.system() == "FreeBSD":
+        # required for now, because psutil does not support getting temperature
+        # on FreeBSD
+        temp = subprocess.check_output(
+            ["sysctl", "hw.acpi.thermal.tz0.temperature"])
+        temp = temp.split(":")[1]
+        temp = temp.rstrip()
+
+    elif platform.system() == "Linux":
+        temp = 0
+        sensors_raw = subprocess.check_output(["sensors"])
+        temps = []
+        for line in sensors_raw.split("\n"):
+            if "C" in line:
+                try:
+                    temps.append(line.split(":")[1].split()[0])
+                except Exception:
+                    pass
+        for t in temps:
+            t = t.replace("+", "")
+            t = t[:-3]
+            try:
+                t = float(t)
+                if t > temp:
+                    temp = t
+            except Exception:
+                pass
+        temp = "{} C".format(temp)
+
     return temp
 
 def get_time():
@@ -156,6 +178,17 @@ def get_vol():
         vol = vol.split(":")[1].rstrip()
         vol = "vol {}".format(vol)
 
+    if platform.system() == "Linux":
+        try:
+            amixer_raw = subprocess.check_output(["amixer", "sget", "Master"])
+            for ln in amixer_raw.split("\n"):
+                if "%" in ln:
+                    vol = "vol: {}".format(ln.split()[3].replace("[", "").replace("]", ""))
+        except Exception:
+            pass
+            # TODO: add support for volume mixers other than amixer
+
+
     return vol
 
 def get_wifi():
@@ -163,7 +196,11 @@ def get_wifi():
     ssid = "unknown"
     wpa_state = "unknown"
     wifi = ""
-    wparaw = subprocess.check_output(["wpa_cli", "status"])
+    try:
+        wparaw = subprocess.check_output(["wpa_cli", "status"], stderr=subprocess.STDOUT)
+    except Exception:
+        return "wlan: unknown"
+
     wpastats = {}
     for line in wparaw.split("\n"):
         if "=" not in line:
