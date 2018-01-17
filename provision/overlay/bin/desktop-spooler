@@ -1,0 +1,65 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# This script is used to hook other scripts that need to run under various
+# conditions, and which I have not found better hooks for. This is highly
+# specific to my setup, and probably will be of minimal use to anyone else.
+
+# This script runs a loop every $DESKTOP_SPOOLER_INTERVAL. When this loop runs,
+# it polls lsusb to see if $DOCK_DEVICE exists, using this information to
+# populate $DOCK_STATE. If $DOCK_STATE changes, the script restore-sanity is
+# executed, and the file $DOCK_SPOOLER_DIR/dock_status is updated.
+
+# .ENDOC
+
+set -e
+set -u
+
+log_msg () {
+	echo $@ > /dev/stderr 2>&1
+	echo $@ >> "$LOG_FILE" 2>&1
+}
+
+DESKTOP_SPOOLER_DIR="$HOME/.dspool"
+DESKTOP_SPOOLER_INTERVAL=10
+DOCK_DEVICE="17ef:1005"
+LOG_FILE="$DESKTOP_SPOOLER_DIR/log"
+
+if [ ! -d "$DESKTOP_SPOOLER_DIR" ] ; then
+	log_msg "INFO: Spooler directory '$DESKTOP_SPOOLER_DIR' does not exist, creating it..."
+	mkdir -p "$DESKTOP_SPOOLER_DIR"
+fi
+
+if [ ! -d "$DESKTOP_SPOOLER_DIR" ] ; then
+	log_msg "ERROR: spooler dir '$DESKTOP_SPOOLER_DIR' does not exist and creating it failed."
+	exit 1
+fi
+
+PREV_DOCK_STATE=""
+DOCK_STATE=""
+
+# keep the log file from overflowing
+mv "$LOG_FILE" "$LOG_FILE.prev"
+
+while true ; do
+	if lsusb | grep "$DOCK_DEVICE" > /dev/null 2>&1 ; then
+		DOCK_STATE="DOCKED"
+	else
+		DOCK_STATE="UNDOCKED"
+	fi
+
+	if [ "$DOCK_STATE" = "$PREV_DOCK_STATE" ] ; then
+		# do nothing
+		printf ""
+	else
+		log_msg "INFO: at $(date) dock state $PREV_DOCK_STATE -> $DOCK_STATE"
+		restore-sanity # reset wallpaper and reload xmodmap
+		# write new dock state to status file for i3bar
+		printf "$DOCK_STATE" > "$DESKTOP_SPOOLER_DIR/dock_status"
+	fi
+
+	PREV_DOCK_STATE="$DOCK_STATE"
+
+	sleep $DESKTOP_SPOOLER_INTERVAL
+done
