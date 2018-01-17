@@ -38,6 +38,8 @@ fi
 
 PREV_DOCK_STATE=""
 DOCK_STATE=""
+PREV_MONITOR_STATE=""
+MONITOR_STATE=""
 
 # keep the log file from overflowing
 mv "$LOG_FILE" "$LOG_FILE.prev"
@@ -65,6 +67,16 @@ while true ; do
 	fi
 
 	PREV_DOCK_STATE="$DOCK_STATE"
+
+	MONITOR_STATE="$(xrandr | shasum)"
+	if [ "$MONITOR_STATE" != "$PREV_MONITOR_STATE" ] ; then
+		log_msg "INFO: at $(date) monitor state changed"
+		restore-sanity
+	fi
+
+	PREV_MONITOR_STATE="$MONITOR_STATE"
+
+
 
 	sleep $DESKTOP_SPOOLER_INTERVAL
 done
