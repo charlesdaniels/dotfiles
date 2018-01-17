@@ -169,6 +169,7 @@ exec "mate-power-manager"
 exec "/usr/local/libexec/mate-settings-daemon"
 exec "xmodmap ~/.Xmodmap"
 exec "feh --bg-fill ~/.wallpapers/current"
+exec "redshift"
 
 # turn the display off after 5 minutes of inactivity
 exec "xset dpms 300 300 300"
