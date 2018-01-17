@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Linux-specific script to fix desktop environment after sleep / monitor
+# re-configuration and so on. 
+
+# .ENDOC
+
+feh --bg-fill ~/.wallpapers/current
+xmodmap ~/.Xmodmap
