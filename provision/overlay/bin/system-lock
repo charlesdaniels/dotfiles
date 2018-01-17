@@ -2,4 +2,17 @@
 
 # lock the screen using i3lock
 
-i3lock -i ~/.wallpapers/current
+for pn in convert scrot uuidgen ; do
+	if [ ! -x "$(which $pn)" ] ; then
+		echo "$pn not found, failing over to wallpaper lock"
+		i3lock -i ~/.wallpapers/current
+		exit
+	fi
+done
+
+TMPFILE="/tmp/$(uuidgen).png"
+scrot "$TMPFILE"
+convert "$TMPFILE" -blur "8x8" "$TMPFILE"
+i3lock -i "$TMPFILE"
+rm "$TMPFILE"
+
