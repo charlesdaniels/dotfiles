@@ -23,6 +23,12 @@ if ! $APT_GET_COMMAND autoremove > "$LOG_DIR/apt_get_autoremove.log" 2>&1 ; then
 fi
 echo ". DONE"
 
+printf "INFO: adding PPAs"
+while read -r ppa ; do
+	run_step "$LOG_DIR/ppa.log" sudo add-apt-repository "$ppa" -y
+done < "$VARIANT_DIR/ppa.list"
+echo " DONE"
+
 for list in "$VARIANT_DIR/packagelists"/*.list ; do
 	printf "INFO: installing packageset $(basename $list)... "
 	if ! $APT_GET_COMMAND install $(grep -vE "^\s*#" "$list" | tr "\n" " ")  > "$LOG_DIR/$(basename $list).log" 2>&1 ; then
