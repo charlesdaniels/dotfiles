@@ -57,6 +57,11 @@ while true ; do
 		restore-sanity # reset wallpaper and reload xmodmap
 		# write new dock state to status file for i3bar
 		printf "$DOCK_STATE" > "$DESKTOP_SPOOLER_DIR/dock_status"
+		sleep 10
+		# run it again in case any USB devices have been enumerated
+		# since we docked
+		restore-sanity
+		sleep 10
 	fi
 
 	PREV_DOCK_STATE="$DOCK_STATE"
