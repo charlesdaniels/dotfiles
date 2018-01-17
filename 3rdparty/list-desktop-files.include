@@ -1,0 +1,5 @@
+printf "INFO: installing lsdesktopf... "
+rm -f "$HOME/bin/lsdesktopf"
+chmod +x "$THIRDPARTY_DIR/list-desktop-files/lsdesktopf"
+ln -s "$THIRDPARTY_DIR/list-desktop-files/lsdesktopf" "$HOME/bin/lsdesktopf"
+echo "DONE"

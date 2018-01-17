@@ -13,3 +13,6 @@
 [submodule "3rdparty/bitshuffle"]
 	path = 3rdparty/bitshuffle
 	url = https://github.com/charlesdaniels/bitshuffle.git
+[submodule "3rdparty/list-desktop-files"]
+	path = 3rdparty/list-desktop-files
+	url = https://github.com/AndyCrowd/list-desktop-files
