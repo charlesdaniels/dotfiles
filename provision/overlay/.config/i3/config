@@ -2,23 +2,16 @@
 
 set $mod Mod1
 
-font Noto Mono Regular 10
-# font gohufont 7
-
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-#bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec "urxvt"
-# bindsym $mod+Return exec mate-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-# bindsym $mod+d exec dmenu_run
-# bindsym $mod+d exec "rofi -opacity 80 -width 80 -lines 30 -show run"
 bindsym $mod+d exec "synapse"
 bindsym $mod+space exec "synapse"
 
@@ -151,7 +144,14 @@ exec "xautolock -time 5 -locker ~/bin/system-lock &"
 
 # borders
 for_window [class="^.*"] border pixel 2
-for_window [class="synapse"] floating enable, border normal 0 px
+
+# media keys
+bindsym XF86AudioRaiseVolume exec ~/bin/audioctl up
+bindsym XF86AudioLowerVolume exec ~/bin/audioctl down
+bindsym XF86AudioMute exec ~/bin/audioctl mute
+bindsym XF86AudioPlay exec ~/bin/audioctl toggle
+bindsym XF86AudioNext exec ~/bin/audioctl next
+bindsym XF86AudioPrev exec ~/bin/audioctl prev
 
 # Auto Start
 exec "source $HOME/.profile"
@@ -164,9 +164,6 @@ exec "pulseaudio --start"
 exec "compton --shadow-opacity=0 -i 1 -e 1 -m 1 --vsync drm"
 exec "numlockx on"
 exec "copyq"
-# exec "mate-settings-daemon"
-# exec "mate-power-manager"
-# exec "/usr/local/libexec/mate-settings-daemon"
 exec "xmodmap ~/.Xmodmap"
 exec "feh --bg-fill ~/.wallpapers/current"
 exec "redshift"
