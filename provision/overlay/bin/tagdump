@@ -43,7 +43,9 @@ for f in file_list:
     for key in data:
         if len(data[key]) is 1:
             data[key] = data[key][0]
-    drop_keys = [key for key in data if key not in args.tag_filter]
+    drop_keys = []
+    if args.tag_filter is not None:
+        drop_keys = [key for key in data if key not in args.tag_filter]
     for key in drop_keys:
         data.pop(key)
     data_list.append(song.tags)
