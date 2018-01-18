@@ -16,6 +16,9 @@ parser.add_argument("files", nargs="*", help="List of files to dump tags for",
                     default=[])
 parser.add_argument("--input", "-i", default=None, help="A file to read " +
                     "where each line is a file to dump tags for.")
+parser.add_argument("--tag_filter", "-t", default=None, help="Only tags" +
+                    " listed here are sent to output. If unspecified, all" +
+                    " tags are shown.", nargs="*")
 
 args = parser.parse_args()
 
@@ -40,6 +43,9 @@ for f in file_list:
     for key in data:
         if len(data[key]) is 1:
             data[key] = data[key][0]
+    drop_keys = [key for key in data if key not in args.tag_filter]
+    for key in drop_keys:
+        data.pop(key)
     data_list.append(song.tags)
 
 print(yaml.dump(data_list, default_flow_style=False))
