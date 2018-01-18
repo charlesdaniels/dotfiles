@@ -1,0 +1,12 @@
+[Unit]
+Description=screen_lock
+Before=sleep.target
+
+[Service]
+User=cad
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/home/cad/bin/system-lock
+
+[Install]
+WantedBy=sleep.target

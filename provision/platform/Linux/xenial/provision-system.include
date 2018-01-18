@@ -63,3 +63,8 @@ if ! $APT_GET_COMMAND install dropbox > "$LOG_DIR/install_dropbox.log" 2>&1 ; th
 fi
 echo ". DONE"
 
+printf "INFO: installing lockscreen.service."
+run_step "$LOG_DIR/lockscreen.service.log" sudo cp "$VARIANT_DIR/lockscreen.service" "/etc/systemd/system/lockscreen.service"
+run_step "$LOG_DIR/lockscreen.service.log" sudo systemctl enable lockscreen.service
+echo " DONE"
+
