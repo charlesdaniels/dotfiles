@@ -273,7 +273,7 @@ def main():
     dbox = get_dropbox()
     dock = get_dock()
 
-    show = [dock, dbox, temp, mem, disk ,load, ip, wifi, batt, vol, time]
+    show = [dock, temp, mem, disk ,load, ip, wifi, batt, vol, time]
     bar = ""
     sep = " | "
     for item in show:
