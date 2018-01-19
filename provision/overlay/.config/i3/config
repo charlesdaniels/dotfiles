@@ -170,7 +170,7 @@ exec "redshift"
 exec "desktop-spooler"
 
 # turn the display off after 5 minutes of inactivity
-exec "xset dpms 300 300 300"
+exec "xset dpms 300 600 900"
 exec "xset b off"
 
 # media keys should be handled by mate-settings-daemon
