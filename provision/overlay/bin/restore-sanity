@@ -9,3 +9,5 @@
 
 feh --bg-fill ~/.wallpapers/current
 xmodmap ~/.Xmodmap
+killall mate-settings-daemon > /dev/null 2>&1
+killall mate-screensaver > /dev/null 2>&1
