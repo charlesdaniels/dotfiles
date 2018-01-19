@@ -166,7 +166,7 @@ exec "numlockx on"
 exec "copyq"
 exec "xmodmap ~/.Xmodmap"
 exec "feh --bg-fill ~/.wallpapers/current"
-exec "redshift"
+exec --no-startup-id redshift-gtk
 exec "desktop-spooler"
 
 # turn the display off after 5 minutes of inactivity
