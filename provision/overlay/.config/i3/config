@@ -167,7 +167,7 @@ exec "copyq"
 exec "xmodmap ~/.Xmodmap"
 exec "feh --bg-fill ~/.wallpapers/current"
 exec --no-startup-id redshift-gtk
-exec "desktop-spooler"
+exec "/home/bin/desktop-spooler"
 
 # turn the display off after 5 minutes of inactivity
 exec "xset dpms 300 600 900"

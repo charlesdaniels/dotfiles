@@ -22,7 +22,7 @@ log_msg () {
 }
 
 DESKTOP_SPOOLER_DIR="$HOME/.dspool"
-DESKTOP_SPOOLER_INTERVAL=10
+DESKTOP_SPOOLER_INTERVAL=5
 DOCK_DEVICE="17ef:1005"
 LOG_FILE="$DESKTOP_SPOOLER_DIR/log"
 
@@ -40,6 +40,12 @@ PREV_DOCK_STATE=""
 DOCK_STATE=""
 PREV_MONITOR_STATE=""
 MONITOR_STATE=""
+
+DOCKED_SCREENLAYOUT="$HOME/.screenlayout/$(hostname).docked.screenlayout.sh"
+UNDOCKED_SCREENLAYOUT="$HOME/.screenlayout/$(hostname).undocked.screenlayout.sh"
+
+log_msg "DOCKED_SCREENLAYOUT: $DOCKED_SCREENLAYOUT"
+log_msg "UNDOCKED_SCREENLAYOUT: $UNDOCKED_SCREENLAYOUT"
 
 # keep the log file from overflowing
 mv "$LOG_FILE" "$LOG_FILE.prev"
@@ -59,11 +65,31 @@ while true ; do
 		restore-sanity # reset wallpaper and reload xmodmap
 		# write new dock state to status file for i3bar
 		printf "$DOCK_STATE" > "$DESKTOP_SPOOLER_DIR/dock_status"
-		sleep 10
+		sleep 2
 		# run it again in case any USB devices have been enumerated
 		# since we docked
 		restore-sanity
-		sleep 10
+		sleep 1
+
+		if [ "$DOCK_STATE" = "DOCKED" ] ; then
+			# this implies we have gone from undocked to docked
+			if [ -e "$DOCKED_SCREENLAYOUT"  ] ; then
+				log_msg "INFO: executing screenlayout file '$DOCKED_SCREENLAYOUT'"
+				if ! sh "$DOCKED_SCREENLAYOUT" ; then
+					log_msg "WARN: executing screenlayout file failed"
+				fi
+			fi
+		fi
+
+		if [ "$DOCK_STATE" = "DOCKED" ] ; then
+			# this implies we have gone from docked to undocked
+			if [ -e "$UNDOCKED_SCREENLAYOUT"  ] ; then
+				log_msg "INFO: executing screenlayout file '$UNDOCKED_SCREENLAYOUT'"
+				if ! sh "$UNDOCKED_SCREENLAYOUT" ; then
+					log_msg "WARN: executing screenlayout file failed"
+				fi
+			fi
+		fi
 	fi
 
 	PREV_DOCK_STATE="$DOCK_STATE"
@@ -75,8 +101,6 @@ while true ; do
 	fi
 
 	PREV_MONITOR_STATE="$MONITOR_STATE"
-
-
 
 	sleep $DESKTOP_SPOOLER_INTERVAL
 done
