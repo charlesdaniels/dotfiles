@@ -13,7 +13,6 @@
 
 # .ENDOC
 
-set -e
 set -u
 
 log_msg () {
