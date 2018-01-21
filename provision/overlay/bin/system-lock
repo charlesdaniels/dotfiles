@@ -1,6 +1,19 @@
 #!/bin/sh
 
-# lock the screen using i3lock
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .SCRIPTDOC
+
+# Lock the screen using i3lock. The i3lock background is set to a screenshot
+# of the screen at the time the script is run, blurred via an 8x8 filter.
+#
+# Note that the dpms settings are re-configured automatically each time this
+# script is run.
+
+# .ENDOC
 
 for pn in convert scrot uuidgen ; do
 	if [ ! -x "$(which $pn)" ] ; then

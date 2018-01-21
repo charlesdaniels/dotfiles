@@ -1,7 +1,11 @@
 #!/bin/sh
 
-# OVERVIEW
-# ========
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .SCRIPTDOC
 # Tool for interacting with clipboards on various platforms. Currently,
 # support is implemented, although not fully tested for pbcopy (OSX), xsel
 # and xclip (generic UNIX), and copyQ (cross platform).
@@ -14,14 +18,6 @@
 # Note that if no supported clipboard manager is found, cliptool will
 # failover to keeping clipboard contents in /tmp/cliptool_clipboard.txt.
 #
-# USAGE
-# =====
-#
-#  $1 . . . . if `copy` - copy standard input to the system clipboard
-#             if `get`  - output the system clipboard contents to stdout
-#
-# CLIPBOARD MANAGER PRIORITY
-# ==========================
 # The clipboard manager which is used is selected by testing for the presence
 # of a given binary in $PATH. If multiple clipboard managers are present, one
 # will be chosen base on the following order:
@@ -30,14 +26,21 @@
 # * pbcopy/pbpaste
 # * xsel
 # * xclip
+
+# .SYNTAX
 #
-# EVIRONMENT VARIABLES
-# ====================
+#  $1 . . . . if `copy` - copy standard input to the system clipboard
+#             if `get`  - output the system clipboard contents to stdout
+#
+# The following environment variables are checked to configure behaviour:
+#
 # CLIPTOOL_CLIPBOARD_MANAGER . . . if set, the specified clipboard manager
 #                                  will be used instead of following the
 #                                  above hierarchy. Note that the specified
 #                                  clipboard manager must be one of the
 #                                  supported ones, or the program will crash.
+
+# .ENDOC
 
 ACTION="$1"
 

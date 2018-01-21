@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# .SCRIPTDOC
 # This script will extract the file specified in it's first argument using an
 # appropriate extraction program. It supports the following formats...
 #
@@ -19,10 +20,11 @@
 #  * .7z
 #  * .xz
 #  * .exe
-#
-# USAGE
-# =====
+
+# .SYNTAX
 #   $1 . . . . absolute or relative path to the file to be extracted
+#
+# .ENDOC
 
 if [ -z "$1" ]; then
    # display usage if no parameters given

@@ -1,6 +1,17 @@
 #!/usr/bin/env python2
 
-# psutil-based i3bar alternative
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .SCRIPTDOC
+
+# A simple, (relatively) portable, ultra minimalist alternative to i3bstatus.
+# The information displayed can be modified in the main() function at the end
+# of the file.
+
+# .ENDOC
 
 import psutil
 import datetime

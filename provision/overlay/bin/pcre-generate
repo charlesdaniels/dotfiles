@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+#
+
+# .SCRIPTDOC
 # This script reads in 1 or more PCRE compliant regular expressions, newline
 # delimited from standard in.
 #
@@ -22,14 +29,14 @@
 #   * for each element in v, the regex (input line) and the generated string,
 #     separated by a tab character, terminated with a newline
 #
-# USAGE
-# =====
-#
+#.SYNTAX
 # $1 . . . . keep rate n (0 < n <= 100)
 #
 # $2 . . . . padding factor m (0 < m < 2^32-1)
 #
 # stdin  . . newline delimited, PCRE compliant regular expressions
+#
+# .ENDOC
 
 import exrex
 import sys

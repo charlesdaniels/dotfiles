@@ -1,6 +1,9 @@
 #!/bin/sh
 
+# .SCRIPTDOC
 # Serve the CWD this script is run in over HTTP on localhost:8000. Requires
 # Python.
+#
+# .ENDOC
 
 python -m SimpleHTTPServer
