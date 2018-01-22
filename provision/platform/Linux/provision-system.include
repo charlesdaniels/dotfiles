@@ -38,7 +38,7 @@ done
 # add crontab entries
 SANOID_CRON_TMP="/tmp/$(uuidgen)"
 grep -vi "sanoid" < /etc/crontab > "$SANOID_CRON_TMP"
-echo '*  *    * * *   root    /opt/net.cdaniels/bin/sanoid --cron >> /var/log/sanoid.log' >> "$SANOID_CRON_TMP"
+echo '*  *    * * *   root    /opt/net.cdaniels/bin/sanoid --verbose --cron >> /var/log/sanoid.log' >> "$SANOID_CRON_TMP"
 echo '0  0    * * *   root    mv /var/log/sanoid.log /var/log/sanoid.log.prev' >> "$SANOID_CRON_TMP"
 sudo mv "$SANOID_CRON_TMP" /etc/crontab
 printf "."
