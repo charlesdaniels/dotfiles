@@ -10,7 +10,7 @@
 # Set appropriet DPMS settings for the current dock state given by
 # ~/.dspool/dock_status, or by a user-provided override.
 
-# .SYNAX
+# .SYNTAX
 
 # $1 . . . (optional) specify DPMS configuration, one of [docked, undocked,
 #          nosleep]
