@@ -55,7 +55,7 @@ if [ -x "$(which shelldoc)" ] ; then
 	if grep -qI . "$TARGET_FILE" ; then
 		# this should prevent us from operating on a binary file with
 		# this approach.
-		SHELLDOC_DOC="$(shelldoc --input "$TARGET_FILE" 2>&1)"
+		SHELLDOC_DOC="$(shelldoc --notoc --input "$TARGET_FILE" 2>&1)"
 		if [ $? -ne 0 ] ; then
 			# shelldoc encountered an error
 			SHELLDOC_DOC=""
