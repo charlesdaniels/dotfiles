@@ -7,12 +7,10 @@
 
 # .SHELLDOC
 
-# Set appropriet DPMS settings for when the laptop is docked.
+# Set DPMS to never turn the monitor off. Useful when watching movies.
 
 # .ENDOC
 
-# 15 * 60 = 900
-# 30 * 60 = 1800
-# 45 * 60 = 2700
-xset dpms 900 1800 2700
+timestamp-message "INFO" "monitor will never sleep, remember to re-enable sleep when you are done"
+xset dpms 0 0 0
 xset b off
