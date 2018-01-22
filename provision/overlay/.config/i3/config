@@ -169,10 +169,6 @@ exec "feh --bg-fill ~/.wallpapers/current"
 exec --no-startup-id redshift-gtk
 exec "~/bin/desktop-spooler"
 
-# turn the display off after 5 minutes of inactivity
-exec "xset dpms 300 600 900"
-exec "xset b off"
-
 # media keys should be handled by mate-settings-daemon
 
 bar {

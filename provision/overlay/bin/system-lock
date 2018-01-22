@@ -27,10 +27,6 @@ TMPFILE="/tmp/$(uuidgen).png"
 scrot "$TMPFILE"
 convert "$TMPFILE" -blur "8x8" "$TMPFILE"
 
-# this should already happen in the i3 config, but just to be safe, we
-# re-enable display sleeping explicitly.
-xset dpms 300 600 900
-
 i3lock -i "$TMPFILE"
 rm "$TMPFILE"
 

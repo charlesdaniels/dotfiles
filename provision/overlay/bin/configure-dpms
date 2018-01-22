@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Set appropriet DPMS settings for the current dock state given by
+# ~/.dspool/dock_status
+
+# .ENDOC
+
+DOCK_STATUS="$(cat ~/.dspool/dock_status)"
+if [ "$DOCK_STATUS" = "DOCKED" ] ; then
+	timestamp-message "INFO" "Configuring DPMS for docked state" > /dev/stderr
+	configure-dpms-docked
+else
+	timestamp-message "INFO" "Configuring DPMS for undocked state" > /dev/stderr
+	configure-dpms-undocked
+fi
+
+killall mate-screensaver > /dev/null 2>&1 || true

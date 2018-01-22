@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# .SHELLDOC
+
+# Set appropriet DPMS settings for when the laptop is docked.
+
+# .ENDOC
+
+# 15 * 60 = 900
+# 30 * 60 = 1800
+# 45 * 60 = 2700
+xset dpms 900 1800 2700
+xset b off
