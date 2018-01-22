@@ -98,7 +98,8 @@ while true ; do
 
 		# configure-dpms will detect if the new state is docked or
 		# undocked.
-		configure-dpms
+		configure-dpms >> "$LOG_FILE"
+		tail -n 1 "$LOG_FILE"
 	fi
 
 	PREV_DOCK_STATE="$DOCK_STATE"
