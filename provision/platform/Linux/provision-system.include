@@ -44,3 +44,4 @@ sudo mv "$SANOID_CRON_TMP" /etc/crontab
 printf "."
 
 echo " DONE"
+

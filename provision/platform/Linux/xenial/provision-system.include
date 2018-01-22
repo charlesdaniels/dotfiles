@@ -48,7 +48,7 @@ if ! sudo apt-key adv --keyserver pgp.mit.edu --recv-keys 1C61A2656FB57B7E4DE0F4
 fi
 
 printf "."
-sudo sh -c 'echo "deb http://linux.dropbox.com/ubuntu/ xenial main" >> /etc/apt/sources.list.d/dropbox.list'
+sudo sh -c 'echo "deb http://linux.dropbox.com/ubuntu/ xenial main" > /etc/apt/sources.list.d/dropbox.list'
 printf "."
 if ! $APT_GET_COMMAND update > "$LOG_DIR/apt_get_update_2.log" 2>&1 ; then
 	echo " FAIL"
