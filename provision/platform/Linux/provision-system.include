@@ -1,0 +1,37 @@
+printf "INFO: installing sanoid"
+
+SANOID_CONFIG_DIR="/etc/sanoid"
+SANOID_SRC_DIR="$THIRDPARTY_DIR/sanoid"
+
+# make sure the config dir exists
+run_step "$LOG_DIR/sanoid.log" sudo mkdir -p "$SANOID_CONFIG_DIR"
+if [ ! -d "$SANOID_CONFIG_DIR" ] ; then
+	echo " FAIL"
+	echo "ERROR: '$SANOID_CONFIG_DIR' does not exist and could not be created"
+	exit 1
+fi
+
+# copy default config
+run_step "$LOG_DIR/sanoid.log" sudo cp "$SANOID_SRC_DIR/sanoid.defaults.conf" "$SANOID_CONFIG_DIR/sanoid.defaults.conf"
+
+# if it exists, copy any host-specific config
+SANOID_HOST_CONFIG="$PLATFORM_DIR/sanoid_config/$(hostname).sanoid.conf"
+if [ -e "$SANOID_HOST_CONFIG" ] ; then
+	run_step "$LOG_DIR/sanoid.log" sudo cp "$SANOID_HOST_CONFIG" "$SANOID_CONFIG_DIR/sanoid.conf"
+fi
+
+# make sure binary installation directories exist
+SANOID_BINARY_DIR="/opt/net.cdaniels/bin"
+run_step "$LOG_DIR/sanoid.log" sudo mkdir -p "$SANOID_BINARY_DIR"
+if [ ! -e "$SANOID_BINARY_DIR" ] ; then
+	echo " FAIL"
+	echo "ERROR: failed to create '$SANOID_BINARY_DIR'"
+	exit 1
+fi
+
+# install binaries
+for bn in sanoid syncoid findoid ; do
+	run_step "$LOG_DIR/sanoid.log" sudo rm -f "$SANOID_BINARY_DIR/$bn"
+	run_step "$LOG_DIR/sanoid.log" sudo cp "$SANOID_SRC_DIR/$bn" "$SANOID_BINARY_DIR/$bn"
+done
+echo " DONE"

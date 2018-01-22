@@ -20,3 +20,7 @@ ffmpeg
 links2
 html2text
 pv
+pandoc
+lzop
+mbuffer
+libconfig-inifiles-perl

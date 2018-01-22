@@ -16,3 +16,6 @@
 [submodule "3rdparty/list-desktop-files"]
 	path = 3rdparty/list-desktop-files
 	url = https://github.com/AndyCrowd/list-desktop-files
+[submodule "3rdparty/sanoid"]
+	path = 3rdparty/sanoid
+	url = https://github.com/jimsalterjrs/sanoid
