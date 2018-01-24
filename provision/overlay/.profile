@@ -1,16 +1,14 @@
 export EDITOR=vim
 export VISUAL=vim
-export PATH="$HOME"/bin:"$PATH"
 export GOPATH=$HOME/.go-workspace
+
+export PATH=$HOME/bin:$PATH
+export PATH=$HOME/.go-workspace/bin:$PATH
+export PATH=$HOME/.net.cdaniels.toolchest/bin:$PATH
+export PATH=$HOME/.net.cdaniels.toolchest/local/bin:$PATH
+export PATH=/opt/bin:$PATH
 export PATH=/opt/local/bin:$PATH
-export PATH=/opt/local/sbin:$PATH
-export PATH=/usr/local/sbin:$PATH
 export PATH=/opt/net.cdaniels/bin:$PATH
-export PATH=/Library/TeX/texbin:$PATH
-export PATH=$PATH:/opt.net.cdaniels.toolchest/bin
-export PATH=$PATH:/opt/net.cdaniels.toolchest/local/bin
-export PATH=$PATH:$HOME/.net.cdaniels.toolchest/bin
-export PATH=$PATH:$HOME/.net.cdaniels.toolchest/local/bin
 
 export TEXMFHOME="$HOME/.texmf"
 
