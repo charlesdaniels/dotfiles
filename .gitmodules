@@ -19,3 +19,6 @@
 [submodule "3rdparty/sanoid"]
 	path = 3rdparty/sanoid
 	url = https://github.com/jimsalterjrs/sanoid
+[submodule "3rdparty/minos-static"]
+	path = 3rdparty/minos-static
+	url = https://github.com/minos-org/minos-static.git
