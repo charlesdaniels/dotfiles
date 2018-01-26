@@ -2,3 +2,9 @@ inode/directory	pcmanfm.desktop
 application/pdf	okular.desktop
 text/plain	gedit.desktop
 image/png	eom.desktop
+image/jpeg	eom.desktop
+image/vnd.djvu	okular.desktop
+image/djvu	okular.desktop
+text/plain	gedit.desktop
+text/x-csrc	gedit.desktop
+text/x-chdr	gedit.desktop
