@@ -168,6 +168,7 @@ exec "xmodmap ~/.Xmodmap"
 exec "feh --bg-fill ~/.wallpapers/current"
 exec --no-startup-id redshift-gtk
 exec "~/bin/desktop-spooler"
+exec autocutsel -fork
 
 # media keys should be handled by mate-settings-daemon
 
