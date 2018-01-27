@@ -7,7 +7,6 @@ remmina-common
 remmina-plugin-rdp
 remmina-plugin-vnc
 remmina-plugin-xdmcp
-pcmanfm
 filezilla
 libreoffice-gtk3
 arandr
@@ -24,6 +23,8 @@ nixnote2
 scrot
 calibre
 easytag
-fotoxx
 rofi
 xclip
+spacefm
+digikam
+okular
