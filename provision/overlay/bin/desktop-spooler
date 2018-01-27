@@ -66,6 +66,8 @@ while true ; do
 		# do nothing
 		printf ""
 	else
+		# this else runs on any dock state change
+
 		log_msg "INFO" "dock state $PREV_DOCK_STATE -> $DOCK_STATE"
 		restore-sanity # reset wallpaper and reload xmodmap
 		# write new dock state to status file for i3bar
@@ -86,7 +88,7 @@ while true ; do
 			fi
 		fi
 
-		if [ "$DOCK_STATE" = "DOCKED" ] ; then
+		if [ "$DOCK_STATE" = "UNDOCKED" ] ; then
 			# this implies we have gone from docked to undocked
 			if [ -e "$UNDOCKED_SCREENLAYOUT"  ] ; then
 				log_msg "INFO" "executing screenlayout file '$UNDOCKED_SCREENLAYOUT'"
