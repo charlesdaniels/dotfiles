@@ -139,11 +139,20 @@ def get_swp():
 def get_disk():
     disk_total = psutil.disk_usage("/").total
     disk_avail = psutil.disk_usage("/").free
-
     disk_total = format_bytes(disk_total)
     disk_avail = format_bytes(disk_avail)
 
-    s = "dsk: {}".format(disk_avail)
+    home_total = psutil.disk_usage("/home").total
+    home_avail = psutil.disk_usage("/home").free
+    home_total = format_bytes(home_total)
+    home_avail = format_bytes(home_avail)
+
+    s = ""
+    if disk_avail != home_avail:
+        s = "root: {} / home: {}".format(disk_avail, home_avail)
+    else:
+        s = "dsk: {}".format(disk_avail)
+
     return s
 
 def get_temp():
