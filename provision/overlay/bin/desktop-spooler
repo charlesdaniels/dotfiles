@@ -45,6 +45,8 @@ PREV_DOCK_STATE=""
 DOCK_STATE=""
 PREV_MONITOR_STATE=""
 MONITOR_STATE=""
+HID_STATE=""
+PREV_HID_STATE=""
 
 DOCKED_SCREENLAYOUT="$HOME/.screenlayout/$(hostname).docked.screenlayout.sh"
 UNDOCKED_SCREENLAYOUT="$HOME/.screenlayout/$(hostname).undocked.screenlayout.sh"
@@ -108,11 +110,20 @@ while true ; do
 
 	MONITOR_STATE="$(xrandr | shasum)"
 	if [ "$MONITOR_STATE" != "$PREV_MONITOR_STATE" ] ; then
+		# fix wallpaper on monitor state change
 		log_msg "INFO" "monitor state changed"
 		restore-sanity
 	fi
-
 	PREV_MONITOR_STATE="$MONITOR_STATE"
+
+	HID_STATE="$(lsusb -t | grep -i 'human interface' | cut -d_ -f 3 | shasum)"
+	if [ "$HID_STATE" != "$PREV_HID_STATE" ] ; then
+		# fix xmodmap bindings on HID state change
+		log_msg "INFO" "HID state changed"
+		restore-sanity
+	fi
+	PREV_HID_STATE="$HID_STATE"
+
 
 	sleep $DESKTOP_SPOOLER_INTERVAL
 done

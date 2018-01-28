@@ -1,4 +1,4 @@
-#/bin/sh
+#!/bin/sh
 
 # WARNING: this script deletes things without asking; please read it!
 #
