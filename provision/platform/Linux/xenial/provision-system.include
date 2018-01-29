@@ -27,6 +27,7 @@ printf "INFO: adding PPAs"
 while read -r ppa ; do
 	run_step "$LOG_DIR/ppa.log" sudo add-apt-repository "$ppa" -y
 done < "$VARIANT_DIR/ppa.list"
+run_step "$LOG_DIR/ppa_update.log" $APT_GET_COMMAND update
 echo " DONE"
 
 for list in "$VARIANT_DIR/packagelists"/*.list ; do
