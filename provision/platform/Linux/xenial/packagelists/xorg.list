@@ -1,4 +1,5 @@
-mate-desktop
+xdm
+eom
 i3
 synapse
 firefox
@@ -16,7 +17,6 @@ xautolock
 evolution
 redshift
 redshift-gtk
-feh
 pavucontrol
 pasystray
 nixnote2
@@ -28,5 +28,4 @@ xclip
 digikam
 okular
 parcellite
-breeze
-gtk3-engines-breeze
+virt-manager
