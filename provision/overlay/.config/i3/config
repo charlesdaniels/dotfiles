@@ -1,5 +1,8 @@
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+# use gohufont
+font -*-gohufont-medium-r-normal-*-14-100-100-100-*-*-iso10646-1
+
 set $mod Mod1
 
 # Use Mouse+$mod to drag floating windows to their wanted position
