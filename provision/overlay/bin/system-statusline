@@ -55,7 +55,12 @@ def get_batt():
         return "UNKNOWN"
 
     batt_str=""
-    pct = battery.percent
+    try:
+        pct = battery.percent
+    except AttributeError
+        # no battery installed
+        return "AC"
+
     pct = round(pct, 2)
     remaining = format_seconds(battery.secsleft)
     state = "AC"
