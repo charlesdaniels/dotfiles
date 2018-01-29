@@ -5,3 +5,4 @@ gtk3-engines-breeze
 alsa-utils
 dbus
 compton
+network-manager

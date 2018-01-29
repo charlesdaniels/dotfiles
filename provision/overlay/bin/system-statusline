@@ -174,7 +174,7 @@ def get_temp():
             sensors_raw = subprocess.check_output(["sensors"])
         except Exception:
             # handle case where sensors fails to run
-            return "tmep: UNKNOWN"
+            return "temp: UNKNOWN"
         temps = []
         for line in sensors_raw.split("\n"):
             if "C" in line:
