@@ -7,7 +7,7 @@ run_step "$LOG_DIR/gohufont.log" wget -O "$GOHU_TMP/gohu.tar.gz" "font.gohu.org/
 run_step "$LOG_DIR/gohufont.log" tar xvf "$GOHU_TMP/gohu.tar.gz" -C "$GOHU_TMP"
 
 if [ ! -e "$HOME/.local/share/fonts" ] ; then
-	run_step mkdir -p "$HOME/.local/share/fonts"
+	run_step "$LOG_DIR/gohufont.log" mkdir -p "$HOME/.local/share/fonts"
 fi
 
 for f in "$GOHU_TMP"/gohufont-*/*.pcf.gz ; do
