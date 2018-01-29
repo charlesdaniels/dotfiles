@@ -57,7 +57,7 @@ def get_batt():
     batt_str=""
     try:
         pct = battery.percent
-    except AttributeError
+    except AttributeError:
         # no battery installed
         return "AC"
 
