@@ -22,3 +22,6 @@
 [submodule "3rdparty/minos-static"]
 	path = 3rdparty/minos-static
 	url = https://github.com/minos-org/minos-static.git
+[submodule "3rdparty/scientifica"]
+	path = 3rdparty/scientifica
+	url = https://github.com/nerdypepper/scientifica
