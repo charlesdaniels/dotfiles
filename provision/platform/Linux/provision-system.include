@@ -45,3 +45,10 @@ printf "."
 
 echo " DONE"
 
+printf "INFO: configuring lxdm.. "
+if [ ! -e "/etc/lxdm" ] ; then
+	run_step "$LOG_DIR/lxdm.conf.log" sudo mkdir -p /etc/lxdm
+fi
+run_step "$LOG_DIR/lxdm.conf.log" sudo cp "$PLATFORM_DIR/lxdm.conf" "/etc/lxdm/lxdm.conf"
+echo " DONE"
+

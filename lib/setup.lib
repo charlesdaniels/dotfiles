@@ -94,7 +94,14 @@ echo " DONE"
 printf "INFO: updating submodules."
 if ! git submodule init > "$LOG_DIR/submodule_init.log" 2>&1 ; then
 	echo "FAIL"
-	echo "PANIC: failed to initilize submodules, see '$LOG_DIR/submodule_init.log'"
+	echo "PANIC: failed to initialize submodules, see '$LOG_DIR/submodule_init.log'"
+	exit 1
+fi
+printf "."
+
+if ! git submodule foreach --recursive git reset --hard > "$LOG_DIR/submodule_reset.log" 2>&1 ; then
+	echo "FAIL"
+	echo "PANIC: failed to reset submodules, sett '$LOG_DIR/submodule_reset.log"
 	exit 1
 fi
 printf "."
@@ -102,6 +109,7 @@ printf "."
 if ! git submodule update --rebase --remote > "$LOG_DIR/submodule_update.log" 2>&1; then
 	echo "FAIL"
 	echo "PANIC: failed to update submodules, see '$LOG_DIR/submodule_update.log'"
+	exit 1
 fi
 echo ". DONE"
 

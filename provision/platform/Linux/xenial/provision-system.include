@@ -70,6 +70,7 @@ run_step "$LOG_DIR/lockscreen.service.log" sudo systemctl enable lockscreen.serv
 echo " DONE"
 
 printf "INFO: enabling bitmapped fonts... "
-sudo rm /etc/fonts/conf.d/70-no-bitmaps.conf
+sudo rm -f /etc/fonts/conf.d/70-no-bitmaps.conf
+sudo rm -f /etc/fonts/conf.d/70-yes-bitmaps.conf
 sudo ln -s /etc/fonts/conf.avail/70-yes-bitmaps.conf /etc/fonts/conf.d/70-yes-bitmaps.conf
 echo "DONE"
