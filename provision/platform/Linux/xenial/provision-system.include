@@ -27,6 +27,7 @@ printf "INFO: adding PPAs"
 while read -r ppa ; do
 	run_step "$LOG_DIR/ppa.log" sudo add-apt-repository "$ppa" -y
 done < "$VARIANT_DIR/ppa.list"
+run_step "$LOG_DIR/ppa_update.log" $APT_GET_COMMAND update
 echo " DONE"
 
 for list in "$VARIANT_DIR/packagelists"/*.list ; do
@@ -68,3 +69,7 @@ run_step "$LOG_DIR/lockscreen.service.log" sudo cp "$VARIANT_DIR/lockscreen.serv
 run_step "$LOG_DIR/lockscreen.service.log" sudo systemctl enable lockscreen.service
 echo " DONE"
 
+printf "INFO: enabling bitmapped fonts... "
+sudo rm /etc/fonts/conf.d/70-no-bitmaps.conf
+sudo ln -s /etc/fonts/conf.avail/70-yes-bitmaps.conf /etc/fonts/conf.d/70-yes-bitmaps.conf
+echo "DONE"

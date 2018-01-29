@@ -40,3 +40,7 @@
 
 ! red cursor
 URxvt*cursorColor:       #ad0808
+
+! use GohuFont
+urxvt*font: xft:gohufont:size=11:antialias=true
+urxvt*boldFont: xft:gohufont:size=11:antialias=true

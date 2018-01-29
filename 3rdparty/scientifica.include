@@ -1,0 +1,6 @@
+printf "INFO: installing scientifica"
+run_step "$LOG_DIR/scientifica.log" mkdir -p "$HOME/.local/share/fonts"
+run_step "$LOG_DIR/scientifica.log" rm -f "$HOME/.local/share/fonts/scientifica-11.bdf"
+run_step "$LOG_DIR/scientifica.log" ln -s "$THIRDPARTY_DIR/scientifica/scientifica-11.bdf" "$HOME/.local/share/fonts/scientifica-11.bdf"
+run_step "$LOG_DIR/scientifica.log" fc-cache
+echo " DONE"
