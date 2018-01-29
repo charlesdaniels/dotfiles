@@ -170,7 +170,11 @@ def get_temp():
 
     elif platform.system() == "Linux":
         temp = 0
-        sensors_raw = subprocess.check_output(["sensors"])
+        try:
+            sensors_raw = subprocess.check_output(["sensors"])
+        except Exception:
+            # handle case where sensors fails to run
+            return "tmep: UNKNOWN"
         temps = []
         for line in sensors_raw.split("\n"):
             if "C" in line:
