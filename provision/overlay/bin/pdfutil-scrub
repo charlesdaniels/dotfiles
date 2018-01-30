@@ -4,7 +4,7 @@
 # OVERVIEW
 # ========
 #
-# This script scripts a given PDF file using the following process:
+# This script scrubs a given PDF file using the following process:
 #
 # 1. Poppler's pdftocairo tool attempts to repair any corruption.
 # 2. mupdf-tools's mutool attempts to rpair any corruption.

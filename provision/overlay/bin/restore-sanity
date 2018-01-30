@@ -1,14 +1,16 @@
 #!/bin/sh
 
-# Copyright 2018, Charles A. Daniels
-# This software is distributed under the BSD 3-clause license. The full text
-# of this software's license may be retrieved from this URL:
-# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
-
 # .SCRIPTDOC
 
 # Linux-specific script to fix desktop environment after sleep / monitor
 # re-configuration and so on. 
+
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
 
 # .ENDOC
 

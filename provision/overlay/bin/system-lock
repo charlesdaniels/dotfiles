@@ -1,10 +1,5 @@
 #!/bin/sh
 
-# Copyright 2018, Charles A. Daniels
-# This software is distributed under the BSD 3-clause license. The full text
-# of this software's license may be retrieved from this URL:
-# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
-
 # .SCRIPTDOC
 
 # Lock the screen using i3lock. The i3lock background is set to a screenshot
@@ -12,6 +7,13 @@
 #
 # Note that the dpms settings are re-configured automatically each time this
 # script is run.
+
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
 
 # .ENDOC
 
