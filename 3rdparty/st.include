@@ -19,3 +19,7 @@ else
 	ln -s "$ST_SRC/st" "$HOME/bin/st"
 	echo "DONE"
 fi
+
+printf "INFO: Building st terminfo entries.. "
+run_step "$LOG_DIR/st.log" tic -c "$ST_SRC/st.info"
+echo "DONE"
