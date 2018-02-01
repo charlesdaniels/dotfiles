@@ -1,15 +1,16 @@
 # My Dotfiles & Provisioning Scripts
 
 <!-- vim-markdown-toc GFM -->
+
 * [How to Use It](#how-to-use-it)
 	* [Requirements](#requirements)
 * [General Documentation](#general-documentation)
 	* [`provision-user.sh`](#provision-usersh)
 		* [Overlay](#overlay)
 		* [Third-Party Software](#third-party-software)
+			* [`st`](#st)
 		* [Platform-Specific Configuration](#platform-specific-configuration)
 	* [`provision-system.sh`](#provision-systemsh)
-		* [Darwin/macOS Provisioning](#darwinmacos-provisioning)
 
 <!-- vim-markdown-toc -->
 
@@ -75,6 +76,18 @@ arbitrary ways.
 The `3rdparty` directory contains a number of git submodules, so be sure
 to clone this repository with `--recursive`.
 
+##### `st`
+
+The `3rdparty` directory also contains the entire source code for `st`, which
+has been slightly tweaked to my preferred configuration. In addition to the
+source code, static builds of this variant of `st` are included as well, for
+use on systems where a C compiler or the requisite libraries are not available.
+
+This tree is kept up to date manually as `st` is updated.
+
+The installation script for `st` attempts to build `st` from source. If this
+fails, then it will fail-over and symlink in one of the pre-built copies.
+
 #### Platform-Specific Configuration
 
 Bootstrapping is accomplished by searching
@@ -94,12 +107,3 @@ The system provisioning script searches
 also does a small amount of configuration that is suitably cross-platform, but
 this isn't much sadly.
 
-#### Darwin/macOS Provisioning
-
-This mostly consists of installing homebrew, and the large number of homebrew
-packages I like to have installed.
-
-In the `packagelists` directory, there are a number of `.list` files. Each line
-of each file contains a `brew` command, which is executed as `brew $line`. This
-makes it easy to install things from casks, or to provide package-specific
-options as needed.
