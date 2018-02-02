@@ -93,11 +93,6 @@ while true ; do
 			done
 		fi
 
-		# configure-dpms will detect if the new state is docked or
-		# undocked.
-		configure-dpms >> "$LOG_FILE"
-		tail -n 1 "$LOG_FILE" > /dev/stderr
-
 		# handle dock / undock events
 		log_msg "INFO" "dock state $PREV_DOCK_STATE -> $DOCK_STATE"
 		restore-sanity # reset wallpaper and reload xmodmap
@@ -108,6 +103,12 @@ while true ; do
 		# since we docked
 		restore-sanity
 		sleep 1
+
+		# configure-dpms will detect if the new state is docked or
+		# undocked.
+		configure-dpms >> "$LOG_FILE"
+		tail -n 1 "$LOG_FILE" > /dev/stderr
+
 
 	fi
 
