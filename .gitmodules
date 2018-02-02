@@ -25,6 +25,3 @@
 [submodule "3rdparty/scientifica"]
 	path = 3rdparty/scientifica
 	url = https://github.com/nerdypepper/scientifica
-[submodule "3rdparty/tmux-extra"]
-	path = 3rdparty/tmux-extra
-	url = https://github.com/brandur/tmux-extra

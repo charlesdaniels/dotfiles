@@ -50,11 +50,7 @@ MONITOR_STATE=""
 HID_STATE=""
 PREV_HID_STATE=""
 
-DOCKED_SCREENLAYOUT="$HOME/.screenlayout/$(hostname).docked.screenlayout.sh"
-UNDOCKED_SCREENLAYOUT="$HOME/.screenlayout/$(hostname).undocked.screenlayout.sh"
-
-log_msg "INFO" "DOCKED_SCREENLAYOUT: $DOCKED_SCREENLAYOUT"
-log_msg "INFO" "UNDOCKED_SCREENLAYOUT: $UNDOCKED_SCREENLAYOUT"
+SCREENLAYOUT_DIR=$HOME/.screenlayout
 
 # keep the log file from overflowing
 mv "$LOG_FILE" "$LOG_FILE.prev"
@@ -71,7 +67,38 @@ while true ; do
 		printf ""
 	else
 		# this else runs on any dock state change
+		if [ "$DOCK_STATE" = "DOCKED" ] ; then
+			# this implies we have gone from undocked to docked
+			for layout in "$SCREENLAYOUT_DIR"/$(hostname).docked.screenlayout.*.sh ; do
+				log_msg "INFO" "attempting to execute screenlayout file '$layout'"
+				if sh "$layout" > /dev/null 2>&1 ; then
+					log_msg "INFO" "layout configuration succeeded"
+					break
+				else
+					log_msg "INFO" "layout configuration failed"
+				fi
+			done
+		fi
 
+		if [ "$DOCK_STATE" = "UNDOCKED" ] ; then
+			# this implies we have gone from docked to undocked
+			for layout in "$SCREENLAYOUT_DIR"/$(hostname).undocked.screenlayout.*.sh ; do
+				log_msg "INFO" "attempting to execute screenlayout file '$layout'"
+				if sh "$layout" ; then
+					log_msg "INFO" "layout configuration succeeded"
+					break
+				else
+					log_msg "INFO" "layout configuration failed"
+				fi
+			done
+		fi
+
+		# configure-dpms will detect if the new state is docked or
+		# undocked.
+		configure-dpms >> "$LOG_FILE"
+		tail -n 1 "$LOG_FILE" > /dev/stderr
+
+		# handle dock / undock events
 		log_msg "INFO" "dock state $PREV_DOCK_STATE -> $DOCK_STATE"
 		restore-sanity # reset wallpaper and reload xmodmap
 		# write new dock state to status file for i3bar
@@ -82,30 +109,6 @@ while true ; do
 		restore-sanity
 		sleep 1
 
-		if [ "$DOCK_STATE" = "DOCKED" ] ; then
-			# this implies we have gone from undocked to docked
-			if [ -e "$DOCKED_SCREENLAYOUT"  ] ; then
-				log_msg "INFO" "executing screenlayout file '$DOCKED_SCREENLAYOUT'"
-				if ! sh "$DOCKED_SCREENLAYOUT" ; then
-					log_msg "WARN" "executing screenlayout file failed"
-				fi
-			fi
-		fi
-
-		if [ "$DOCK_STATE" = "UNDOCKED" ] ; then
-			# this implies we have gone from docked to undocked
-			if [ -e "$UNDOCKED_SCREENLAYOUT"  ] ; then
-				log_msg "INFO" "executing screenlayout file '$UNDOCKED_SCREENLAYOUT'"
-				if ! sh "$UNDOCKED_SCREENLAYOUT" ; then
-					log_msg "WARN" "executing screenlayout file failed"
-				fi
-			fi
-		fi
-
-		# configure-dpms will detect if the new state is docked or
-		# undocked.
-		configure-dpms >> "$LOG_FILE"
-		tail -n 1 "$LOG_FILE"
 	fi
 
 	PREV_DOCK_STATE="$DOCK_STATE"

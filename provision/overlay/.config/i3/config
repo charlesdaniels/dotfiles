@@ -9,7 +9,7 @@ set $mod Mod1
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec "urxvt -e sh -c 'tmx default'"
+bindsym $mod+Return exec "urxvt"
 
 # kill focused window
 bindsym $mod+Shift+q kill
