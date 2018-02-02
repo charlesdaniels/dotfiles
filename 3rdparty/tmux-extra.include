@@ -1,0 +1,5 @@
+printf "INFO: installing tmux-extra... "
+rm -f "$HOME/bin/tmx"
+chmod +x "$THIRDPARTY_DIR/tmux-extra/tmx"
+ln -s "$THIRDPARTY_DIR/tmux-extra/tmx" "$HOME/bin/tmx"
+echo "DONE"
