@@ -44,3 +44,10 @@ fi
 run_step "$LOG_DIR/lxdm.conf.log" sudo cp "$PLATFORM_DIR/lxdm.conf" "/etc/lxdm/lxdm.conf"
 echo " DONE"
 
+printf "INFO: configuring UDEV rules"
+# ensure rules.d exists
+run_step "$LOG_DIR/udev.log" mkdir -p /etc/udev/rules.d
+for rulef in "$PLATFORM_DIR/udev/rules.d/"*.rules ; do
+	run_step "$LOG_DIR/udev.log" sudo cp "$rulef" /etc/udev/rules.d/
+done
+echo " DONE"
