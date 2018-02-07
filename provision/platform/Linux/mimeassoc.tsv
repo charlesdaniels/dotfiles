@@ -1,10 +1,13 @@
 inode/directory	pcmanfm.desktop
-application/pdf	okular.desktop
+application/pdf	atril.desktop
 text/plain	gedit.desktop
 image/png	eom.desktop
 image/jpeg	eom.desktop
-image/vnd.djvu	okular.desktop
-image/djvu	okular.desktop
+image/vnd.djvu	atril.desktop
+image/djvu	atril.desktop
 text/plain	gedit.desktop
 text/x-csrc	gedit.desktop
 text/x-chdr	gedit.desktop
+application/zip	engrampa.desktop
+application/x-compressed-tar	engrampa.desktop
+application/x-tar	engrampa.desktop
