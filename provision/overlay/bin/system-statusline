@@ -316,7 +316,9 @@ def main():
         bar = bar + item + sep
     bar = bar[:-len(sep)]
 
-    print(bar)
+    # prevent an intermittent issue where the i3 system tray overlaps the
+    # right side of the bar.
+    print(bar + "  ")
 
     sys.stdout.flush()
 
