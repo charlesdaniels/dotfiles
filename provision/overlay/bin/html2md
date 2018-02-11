@@ -23,5 +23,4 @@
 INPUT_FILE="$1"
 OUTPUT_FILE="$2"
 
-tidy -utf8 < "$INPUT_FILE" | pandoc -f html -t commonmark  -i /dev/stdin -o /dev/stdout | grep -v '^<div>$' | grep -v '^</div>$' | grep -v '^\\$' > "$OUTPUT_FILE"
-
+pandoc -f html -t commonmark  -i "$INPUT_FILE" -o /dev/stdout | grep -v '^<div>$' | grep -v '^</div>$' | grep -v '^\\$' > "$OUTPUT_FILE"
