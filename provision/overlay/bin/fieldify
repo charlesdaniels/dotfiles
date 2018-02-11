@@ -27,5 +27,5 @@ exit $? # shellcode
 		printf $i
 		printf "\t"
 	}
-	print "\n"
+	printf "\n"
 }
