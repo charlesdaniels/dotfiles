@@ -1,0 +1,18 @@
+printf "INFO: installing moss..."
+
+if [ -e "$THIRDPARTY_DIR/moss" ] ; then
+	rm -f "$THIRDPARTY_DIR/moss"
+fi
+
+MOSS_URL='http://moss.stanford.edu/general/scripts/mossnet'
+
+curl -LSs "$MOSS_URL" -o "$THIRDPARTY_DIR/moss"
+
+if [ -e "$THIRDPARTY_DIR/moss" ] ; then
+	chmod +x "$THIRDPARTY_DIR/moss"
+	rm -f "$HOME/bin/moss"
+	cp "$THIRDPARTY_DIR/moss" "$HOME/bin/moss"
+	echo " DONE"
+else
+	echo " FAIL (could not download moss)"
+fi
