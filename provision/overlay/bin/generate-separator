@@ -27,14 +27,14 @@ parser.add_argument("--position", "-p", default=-1, type=int,
                     "the left) at which the header should be burned in." +
                     " (default: center)")
 parser.add_argument("--style", "-s", default="hash", help="Style of comment" +
-                    " to generate. Available choices are: hash, c, and " +
-                    "percent for languages with #-comments, " +
+                    " to generate. Available choices are: hash, stars, c, " +
+                    "and percent for languages with #-comments, " +
                     "c-style languages, and languages with percent-comments" +
                     "such as LaTeX." +
                     "You can also specify any of the following languages " +
                     "as the style, and the appropriate style will be " +
                     "selected automatically: python, sh, shell, c, java, " +
-                    "c++, cpp, latex, tex, ps. (default: hash)")
+                    "c++, cpp, latex, tex, ps, verilog. (default: hash)")
 
 args = parser.parse_args()
 
@@ -49,10 +49,11 @@ label_pitch = 10
 
 # keys are styles, values are list of aliases
 styles = {"hash":["python", "sh", "shell"],
-          "c":["c++", "java", "cpp", "star"],
+          "c":["c++", "java", "cpp", "verilog"],
+          "stars": ["star"],
           "percent":["latex", "tex", "ps"]}
 # comment characters
-comment_chars = {"hash": "#", "c": "*", "percent": "%"}
+comment_chars = {"hash": "#", "c": "/", "stars": "*", "percent": "%"}
 
 # resolve style aliases
 for key in styles:
@@ -90,7 +91,7 @@ for i in range(0, length + 1):
   run_length += 1
 
 
-if style == "c":
+if style == "stars":
   separator[0] = '/'
 
 # to have the heading centered, the leftmost character of the heading must lie
