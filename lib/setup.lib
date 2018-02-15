@@ -3,6 +3,12 @@
 
 set -u
 
+printf "INFO: loading libraries"
+. lib/download.lib
+printf "."
+echo " DONE"
+
+
 printf "INFO: detecting system information"
 
 # make sure we have access to the realpath command

@@ -1,0 +1,26 @@
+
+# .DOCUMENTS download_file
+
+# Attempt to download a file in a portable way using curl or wget, according to
+# which is available.
+
+# .SYNTAX
+#
+# $1 . . . URL to download
+# $2 . . . destination file
+
+# .ENDOC
+
+download_file () {
+
+	if [ -x "$(which curl)" ] ; then
+		curl -LSso "$2" "$1"
+		return $?
+	elif [ -x "$(which wget)" ] ; then
+		wget --quiet "$1" -O "$2"
+		return $?
+	else
+		return 1
+	fi
+
+}
