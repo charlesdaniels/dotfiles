@@ -1,5 +1,4 @@
 #!/usr/bin/env phantomjs
-
 /*
 
 # .SCRIPTDOC
@@ -11,7 +10,7 @@
 # * Rendered as a PDF document
 # * As raw HTML
 
-# Note that this script is not portable to platforms which use non-POSIX 
+# Note that this script is not portable to platforms which use non-POSIX
 # path separators.
 
 # This script will automatically create a page_meta.yaml file. This file
@@ -20,7 +19,7 @@
 # * ``title`` : page title as string
 # * ``date`` : page retrieval date in ISO8601 format
 # * ``url`` : page URL at time of retrieval
-# * ``tags`` : empty list to tage the page with from other programs
+# * ``tags`` : empty list to tag the page with from other programs
 
 # .SYNTAX
 
@@ -28,7 +27,7 @@
 
 # $2 . . . Wepage URL
 
-# $3 . . . Page title (used to name files, defaults to 'page if not specified)
+# $3 . . . Page title (used to name files, defaults to 'page' if not specified)
 
 # .AUTHOR
 
@@ -91,8 +90,10 @@ var process = require("child_process")
 var spawn = process.spawn
 
 if (argv.length < 3) {
-	console.log("FATAL: incorrect usage.");
-	phantom.exit(1);
+        var filename = argv[0];
+        console.log("FATAL: Usage: " + filename
+                  + " <output directory> <URL> [page title]");
+        phantom.exit(1);
 }
 
 console.log("INFO: got " + argv.length + " arguments.");
@@ -101,25 +102,25 @@ var output_dir = argv[1];
 var target_url = argv[2];
 var page_title = 'page';
 if (argv.length > 3) {
-	var page_title = argv[3];
-	console.log('INFO: page title set to: ' + page_title);
+        var page_title = argv[3];
+        console.log('INFO: page title set to: ' + page_title);
 }
 var html_dir = output_dir + "/" + page_title  +"_html";
 var yaml_file = output_dir + "/" +"page_meta.yaml";
 
 // create necessary output directories
 if (fs.makeTree(output_dir)) {
-	console.log('INFO: created directory: "' + output_dir + '"');
+        console.log('INFO: created directory: "' + output_dir + '"');
 } else {
-	console.log('FATAL: "' + output_dir + '" could not be created.');
-	phantom.exit(1);
+        console.log('FATAL: "' + output_dir + '" could not be created.');
+        phantom.exit(1);
 }
 
 if (fs.makeTree(html_dir)) {
-	console.log('INFO: created directory: "' + html_dir + '"');
+        console.log('INFO: created directory: "' + html_dir + '"');
 } else {
-	console.log('FATAL: "' + html_dir + '" could not be created.');
-	phantom.exit(1);
+        console.log('FATAL: "' + html_dir + '" could not be created.');
+        phantom.exit(1);
 }
 
 var page = require('webpage').create();
@@ -127,59 +128,58 @@ var page = require('webpage').create();
 // wait for the page to be ready, see here:
 // https://stackoverflow.com/a/27472788
 function onPageReady() {
-	page.viewportSize = { width: 1920, height: 1080 };
+        page.viewportSize = { width: 1920, height: 1080 };
 
-	console.log("INFO: saving page as PNG... ")
-	page.render(output_dir + "/" + page_title + ".png",
-			{format: 'png', quality: '85'});
+        console.log("INFO: saving page as PNG... ")
+        page.render(output_dir + "/" + page_title + ".png",
+                        {format: 'png', quality: '85'});
 
-	console.log("INFO: saving page as PDF... ")
-	page.render(output_dir + "/" + page_title + ".pdf",
-			{format: 'pdf'});
+        console.log("INFO: saving page as PDF... ")
+        page.render(output_dir + "/" + page_title + ".pdf",
+                        {format: 'pdf'});
 
-	console.log("INFO: writing metadata...");
-	try {
-		fs.write(yaml_file, "{", "w");
-		fs.write(yaml_file, '"title": "' + page.title + '",', 'a');
-		fs.write(yaml_file, '"date": "' + Date() + '",', 'a');
-		fs.write(yaml_file, '"url": "' + target_url + '",', 'a');
-		fs.write(yaml_file, '"tags": []', 'a');
-		fs.write(yaml_file, "}", "a");
+        console.log("INFO: writing metadata...");
+        try {
+                fs.write(yaml_file, "{", "w");
+                fs.write(yaml_file, '"title": "' + page.title + '",', 'a');
+                fs.write(yaml_file, '"date": "' + Date() + '",', 'a');
+                fs.write(yaml_file, '"url": "' + target_url + '",', 'a');
+                fs.write(yaml_file, '"tags": []', 'a');
+                fs.write(yaml_file, "}", "a");
 
-	} catch (e) {
-		console.log("ERROR: encountered error while writing YAML file...");
-		console.log(e);
-		phantom.exit(1);
-	}
+        } catch (e) {
+                console.log("ERROR: encountered error while writing YAML file...");
+                console.log(e);
+                phantom.exit(1);
+        }
 
-	console.log("INFO: saving page content... ");
-	var wget = spawn("wget", ["--convert-links",
-			 "--page-requisites", "--no-host-directories",
-			 "-P", html_dir, target_url]);
+        console.log("INFO: saving raw HTML... ");
+        var wget = spawn("wget", ["--convert-links",
+                         "--page-requisites", "--no-host-directories",
+                         "-P", html_dir, target_url]);
 
-	wget.on("exit", function (code) {
-		console.log("INFO: wget exited with: " + code);
-		console.log("INFO: all operations complete.");
-		phantom.exit();
-	});
+        wget.on("exit", function (code) {
+                console.log("INFO: wget exited with: " + code);
+                console.log("INFO: all operations complete.");
+                phantom.exit();
+        });
 }
 
 page.open(target_url, function (status) {
-	console.log("INFO: loading page...");
-	function checkReadyState() {
-		setTimeout(function () {
-			var readyState = page.evaluate(function () {
-				return document.readyState;
-			});
+        console.log("INFO: loading page...");
+        function checkReadyState() {
+                setTimeout(function () {
+                        var readyState = page.evaluate(function () {
+                                return document.readyState;
+                        });
 
-			if ("complete" === readyState) {
-				onPageReady();
-			} else {
-				checkReadyState();
-			}
-		});
-	}
+                        if ("complete" === readyState) {
+                                onPageReady();
+                        } else {
+                                checkReadyState();
+                        }
+                });
+        }
 
-	checkReadyState();
+        checkReadyState();
 });
-
