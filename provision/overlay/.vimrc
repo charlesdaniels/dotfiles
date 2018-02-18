@@ -22,6 +22,7 @@ Plug 'roxma/vim-paste-easy'
 Plug 'chrisbra/csv.vim'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'dhruvasagar/vim-table-mode'
+Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
