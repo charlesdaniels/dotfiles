@@ -26,7 +26,7 @@ Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
-""""""""10""""""""20"""""""" platform independant """"""""60""""""""70""""""""80
+""""""""10""""""""20"""""""" platform independent """"""""60""""""""70""""""""80
 
 filetype plugin indent on      " guess indent based on file type
 syntax on                      " enable syntax highlighting
@@ -448,4 +448,25 @@ call MapTmuxNavigator()
 """"""""10""""""""20""" vim-markdown-toc configuration """60""""""""70""""""""80
 " auto update TOC on save
 let g:vmt_auto_update_on_save = 1
+
+
+""""""""10""""""""20"""""""" vimwiki configuration """""""60""""""""70""""""""80
+
+let g:vimwiki_list = [{
+	\ 'path': '~/RCS/wiki/source',
+	\ 'path_html': '~/RCS/wiki/html',
+	\ 'nested_syntaxes': {
+		  \   'ruby': 'ruby',
+		  \   'elixir': 'elixir',
+		  \   'python': 'python',
+		  \   'c++': 'c',
+		  \   'c': 'c',
+		  \   'javascript': 'javascript',
+		  \   'bash': 'sh' },
+	\ 'syntax': 'default',
+	\ 'ext': '.wiki',
+	\ 'template_path': '~/RCS/wiki/templates',
+	\ 'template_ext': '.tpl',
+	\ 'template_default': 'default',
+	\ }]
 

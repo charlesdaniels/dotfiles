@@ -77,3 +77,14 @@ else
 	echo "... SKIP (pip3 not installed)"
 fi
 echo ". DONE"
+
+# install Ruby packages
+printf "INFO: installing Ruby packages"
+if [ -x "$(which gem)" ] ; then
+	while read -r line ; do
+		run_step "$LOG_DIR/gem.log" sudo gem install "$line"
+	done < "$PROVISION_DIR/ruby.list"
+else
+	echo "... SKIP (gem not installed)"
+fi
+echo ". DONE"
