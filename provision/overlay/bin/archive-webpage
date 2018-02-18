@@ -1,5 +1,4 @@
 #!/usr/bin/env phantomjs
-
 /*
 
 # .SCRIPTDOC
@@ -11,7 +10,7 @@
 # * Rendered as a PDF document
 # * As raw HTML
 
-# Note that this script is not portable to platforms which use non-POSIX 
+# Note that this script is not portable to platforms which use non-POSIX
 # path separators.
 
 # This script will automatically create a page_meta.yaml file. This file
@@ -20,7 +19,7 @@
 # * ``title`` : page title as string
 # * ``date`` : page retrieval date in ISO8601 format
 # * ``url`` : page URL at time of retrieval
-# * ``tags`` : empty list to tage the page with from other programs
+# * ``tags`` : empty list to tag the page with from other programs
 
 # .SYNTAX
 
@@ -28,7 +27,7 @@
 
 # $2 . . . Wepage URL
 
-# $3 . . . Page title (used to name files, defaults to 'page if not specified)
+# $3 . . . Page title (used to name files, defaults to 'page' if not specified)
 
 # .AUTHOR
 
@@ -91,7 +90,9 @@ var process = require("child_process")
 var spawn = process.spawn
 
 if (argv.length < 3) {
-	console.log("FATAL: incorrect usage.");
+	var filename = argv[0];
+	console.log("FATAL: Usage: " + filename
+		  + " <output directory> <URL> [page title]");
 	phantom.exit(1);
 }
 
@@ -152,7 +153,7 @@ function onPageReady() {
 		phantom.exit(1);
 	}
 
-	console.log("INFO: saving page content... ");
+	console.log("INFO: saving raw HTML... ");
 	var wget = spawn("wget", ["--convert-links",
 			 "--page-requisites", "--no-host-directories",
 			 "-P", html_dir, target_url]);
@@ -182,4 +183,5 @@ page.open(target_url, function (status) {
 
 	checkReadyState();
 });
+
 
