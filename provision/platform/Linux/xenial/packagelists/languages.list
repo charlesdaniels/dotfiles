@@ -1,5 +1,6 @@
 python
 python3
+python3-tk
 gcc
 binutils
 make
