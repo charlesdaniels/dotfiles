@@ -29,7 +29,17 @@
 #  POSSIBILITY OF SUCH DAMAGE.
 
 descr = """Script to download the contents of a webpage, then print the results
-of a specified xPath query and exit."""
+of a specified xPath query and exit. Use cases primarily include extracting
+bits of information readily located by xPath, such as counters or statuses.
+One specific use case this tool has proven useful for was getting the number of
+upvotes on a Reddit post. Disclaimer: this tool is intended for one off or very
+low-volume queries, and includes tools to facilitate that such as user-agent
+spoofing. Please be considerate of other people's servers and use a more
+sophisticated tool and proper authentication (i.e. OAuth) if you plan to make
+higher-volume queries against other peoples sites. If you use this tool to send
+hundreds of requests per minute while spoofing your use agent to googlebot, you
+will probably get IP banned from whatever you are doing, and are alsovery
+likely  a bad person. In short, please be nice when using this tool."""
 
 import argparse
 import urllib.request
