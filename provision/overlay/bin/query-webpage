@@ -109,7 +109,7 @@ parser.add_argument("--user_agent", "-a", default="Python-urllib/3.5",
 
 parser.add_argument("--common_user_agent", "-A", default=None,
                     help="Select a user agent from a list of common ones. " +
-                    "Valid options are:"  + common_user_agent_msg +
+                    "Valid options are: "  + common_user_agent_msg +
                     ". This overrides any value given via --user_agent")
 
 args = parser.parse_args()

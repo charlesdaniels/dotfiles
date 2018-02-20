@@ -141,6 +141,11 @@ if [ -x "$(which xrdb)" ] ; then
 	fi
 fi
 
+printf "INFO: installing vim plugins."
+run_step "$LOG_DIR/vim_update.log" vim +PlugInstall +qall < /dev/null
+run_step "$LOG_DIR/vim_update.log" vim +PlugUpdate +qall < /dev/null
+echo " DONE"
+
 ########10########20########30##### cleanup ####50########60########70########80
 
 # remove temp directory
