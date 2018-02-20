@@ -33,8 +33,8 @@ of a specified xPath query and exit."""
 
 import argparse
 import urllib.request
+import urllib
 import lxml.etree
-import pprint
 import sys
 
 parser = argparse.ArgumentParser(description=descr)
@@ -45,25 +45,93 @@ parser.add_argument("--query", "-q", help="Specify xPath query.",
                     required=True)
 
 parser.add_argument("--extract_content", "-e", default=False,
-                    action="store_true", help="Display content only as " + 
+                    action="store_true", help="Display content only as " +
                     "output, rather than HTML markup")
 
 parser.add_argument("--output_separator", "-s", default="\n",
                     help="Change string used to delimit matches to query in " +
                     "the output. (default: single newline)")
 
+parser.add_argument("--disable_separator_expansion", "-E", default=False,
+                    action="store_true", help="If asserted, escape " +
+                    "sequences such as \\n found within the string supplied" +
+                    " in --output_separator will not be expanded.")
+
+parser.add_argument("--encoding", "-n", default="utf-8",
+                    help="Specify string encoding to use where applicable." +
+                    " (default: utf-8)")
+
+parser.add_argument("--noexpand", "-x" , default=False, action="store_true",
+                    help="Assert to avoid expanding control characters " +
+                    "such as \\n wherever possible.")
+
+parser.add_argument("--quiet", "-t", default=False, action="store_true",
+                    help="Suppress all warning and error messagse")
+
 args = parser.parse_args()
 
-f = urllib.request.urlopen(args.url)
-tree = lxml.etree.HTML(f.read())
+# This allows the user to specify escape codes like \n within
+# --output_separator
+if not args.disable_separator_expansion:
+    args.output_separator = bytes(args.output_separator, "utf-8")
+    args.output_separator = args.output_separator.decode("unicode_escape")
 
-results = tree.xpath(args.query)
+
+def show_warning(msg):
+    if not args.quiet:
+        sys.stderr.write("WARNING: {}\n".format(msg))
+
+    sys.stderr.flush()
+
+def show_error(msg):
+    if not args.quiet:
+        sys.stderr.write("ERROR: {}\n".format(msg))
+
+    sys.stderr.flush()
+    sys.stdout.flush()
+    exit(1)
+
+try:
+    handle = urllib.request.urlopen(args.url)
+except urllib.error.URLError as e:
+    show_error("Failed to open URL. Exception was: '{}'.".format(e))
+
+try:
+    tree = lxml.etree.HTML(handle.read())
+except Exception as e:
+    show_error("Failed to parse webpage. Exception was: '{}'.".format(e))
+
+handle.close()
+
+try:
+    results = tree.xpath(args.query)
+except Exception as e:
+    show_error("Query failed. Exception was: '{}'.".format(e))
 
 for r in results:
+
     if args.extract_content:
+        if r.text is None:
+            # Sometimes we find an element with no visible text, in which case
+            # we can't really do much of anything.
+            show_warning("Ignored element '{}' because it had empty .text."
+                         .format(r))
+            continue
         sys.stdout.write(r.text)
+
     else:
-        sys.stdout.write(str(lxml.etree.tostring(r, pretty_print=True)))
+        text = lxml.etree.tostring(r, pretty_print=True)
+        try:
+            text = text.decode(args.encoding)
+        except Exception as e:
+            show_error("Failed to decode text. Exception was: '{}'.".format(e))
+
+        if args.noexpand:
+            text = "%r" % text
+            # this removes the leading and trailing single quotes introduced
+            # by the %r in the above statement.
+            text = text[1:-1]
+        sys.stdout.write(text)
 
     sys.stdout.write(args.output_separator)
 
