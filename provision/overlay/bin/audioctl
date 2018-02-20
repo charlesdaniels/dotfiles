@@ -67,10 +67,8 @@ case "$VERB" in
 	up)
 		case "$VOLUME_MANAGER" in
 			amixer)
-				amixer -q set Master 2dB+
+				amixer -q set Master 2+
 				amixer -q set Master unmute
-				amixer -q set Speaker unmute
-				amixer -q set Headphone unmute
 				send_notification "raised volume"
 				;;
 			*)
@@ -82,7 +80,7 @@ case "$VERB" in
 	down)
 		case "$VOLUME_MANAGER" in
 			amixer)
-				amixer -q set Master 2dB-
+				amixer -q set Master 2-
 				send_notification "decreased volume"
 				;;
 			*)
@@ -94,9 +92,20 @@ case "$VERB" in
 	mute)
 		case "$VOLUME_MANAGER" in
 			amixer)
-				amixer -q set Master 100%-
 				amixer -q set Master mute
 				send_notification "muted volume"
+				;;
+			*)
+				echo "ERROR: no known volume manager available"
+				exit 1
+				;;
+		esac
+		;;
+	unmute)
+		case "$VOLUME_MANAGER" in
+			amixer)
+				amixer -q set Master unmute
+				send_notification "unmuted volume"
 				;;
 			*)
 				echo "ERROR: no known volume manager available"
