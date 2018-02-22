@@ -23,6 +23,7 @@ Plug 'chrisbra/csv.vim'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'vimwiki/vimwiki'
+Plug 'vim-scripts/DoxygenToolkit.vim'
 
 call plug#end()
 
@@ -470,3 +471,7 @@ let g:vimwiki_list = [{
 	\ 'template_default': 'default',
 	\ }]
 
+
+""""""""10""""""""20""""""""30" DoxygenToolkit "50""""""""60""""""""70""""""""80
+
+autocmd FileType c nmap <silent> <C-g> :Dox <CR>
