@@ -6,4 +6,8 @@
 #
 # .ENDOC
 
+HOST_IP="$(get-ip)"
+echo "link: http://$HOST_IP:8000"
+
 python -m SimpleHTTPServer
+

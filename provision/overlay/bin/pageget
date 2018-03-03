@@ -37,7 +37,7 @@ wget \
   --convert-links \
   --domains "$2" \
   --no-parent \
-  --limit-rate=100k \
+  --limit-rate=750k \
   --wait=1 \
   -e robots=off \
   -U "Mozilla/5.0 (compatible; Konqueror/3.2; Linux)" \

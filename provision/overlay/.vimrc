@@ -469,6 +469,7 @@ let g:vimwiki_list = [{
 	\ 'template_path': '~/RCS/wiki/templates',
 	\ 'template_ext': '.tpl',
 	\ 'template_default': 'default',
+	\ 'auto_toc' : 1,
 	\ }]
 
 
