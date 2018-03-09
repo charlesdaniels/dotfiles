@@ -45,4 +45,3 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # zsh syntax highlighting
 # MUST BE THE LAST THING SOURCED
 source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-

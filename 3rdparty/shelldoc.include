@@ -1,9 +1,14 @@
-# symlink shelldoc in place
+if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
+	# we only want to do a non-privileged install
 
-printf "INFO: installing shelldoc..."
+	# symlink shelldoc in place
 
-# this assumes ~/bin is where binaries go
-rm -f "$HOME/bin/shelldoc"
-ln -s "$THIRDPARTY_DIR/shelldoc/shelldoc" "$HOME/bin/shelldoc"
+	printf "INFO: installing shelldoc..."
 
-echo " DONE"
+	# this assumes ~/bin is where binaries go
+	rm -f "$HOME/bin/shelldoc"
+	ln -s "$THIRDPARTY_DIR/shelldoc/shelldoc" "$HOME/bin/shelldoc"
+
+	echo " DONE"
+
+fi

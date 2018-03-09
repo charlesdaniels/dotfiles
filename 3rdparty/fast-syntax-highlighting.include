@@ -1,31 +1,35 @@
 # symlink zsh fast syntax highlighting into the right place
 
-printf "INFO: installing zsh fast syntax highlighting..."
+if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
+	# we only want to do a non-privileged install
 
-if [ ! -d "$HOME/.zsh" ] ; then
-	mkdir -p  "$HOME/.zsh"
+	printf "INFO: installing zsh fast syntax highlighting..."
+
+	if [ ! -d "$HOME/.zsh" ] ; then
+		mkdir -p  "$HOME/.zsh"
+	fi
+
+	if [ ! -d "$HOME/.zsh" ] ; then
+		echo " FAIL"
+		echo "PANIC: $HOME/.zsh does not exist and could not be created"
+		exit 1
+	fi
+
+	ZSH_SYNTAX_DIR="$HOME/.zsh/fast-syntax-highlighting"
+	if [ -d "$ZSH_SYNTAX_DIR" ] ; then
+		rm -r "$ZSH_SYNTAX_DIR"
+	fi
+	if [ -L "$ZSH_SYNTAX_DIR" ] ; then
+		rm "$ZSH_SYNTAX_DIR"
+	fi
+
+	if [ ! -e "$THIRDPARTY_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" ] ; then
+		echo " FAIL"
+		echo "PANIC: '$THIRDPARTY_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh' does not exist, did you remember to use git clone --recursive?"
+		exit 1
+	fi
+
+	ln -s "$THIRDPARTY_DIR/fast-syntax-highlighting" "$ZSH_SYNTAX_DIR"
+
+	echo " DONE"
 fi
-
-if [ ! -d "$HOME/.zsh" ] ; then
-	echo " FAIL"
-	echo "PANIC: $HOME/.zsh does not exist and could not be created"
-	exit 1
-fi
-
-ZSH_SYNTAX_DIR="$HOME/.zsh/fast-syntax-highlighting"
-if [ -d "$ZSH_SYNTAX_DIR" ] ; then
-	rm -r "$ZSH_SYNTAX_DIR"
-fi
-if [ -L "$ZSH_SYNTAX_DIR" ] ; then
-	rm "$ZSH_SYNTAX_DIR"
-fi
-
-if [ ! -e "$THIRDPARTY_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh" ] ; then
-	echo " FAIL"
-	echo "PANIC: '$THIRDPARTY_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh' does not exist, did you remember to use git clone --recursive?"
-	exit 1
-fi
-
-ln -s "$THIRDPARTY_DIR/fast-syntax-highlighting" "$ZSH_SYNTAX_DIR"
-
-echo " DONE"

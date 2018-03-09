@@ -38,6 +38,8 @@ if [ "$(realpath "$TMP_DIR")" = "$(realpath /tmp)" ] ; then
 fi
 echo " DONE"
 
+export PROVISION_HAVE_ROOT="NO"
+
 ########10########20########30#### overlay #####50########60########70########80
 
 # generate manifest of overlay files to link into ~

@@ -21,6 +21,8 @@ sudo -v
 # Keep-alive: update existing sudo time stamp if set, otherwise do nothing.
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
+export PROVISION_HAVE_ROOT="YES"
+
 ########10########20########30 platform specific 0########60########70########80
 
 if [ -e "$PLATFORM_DIR/provision-system.include" ] ; then
@@ -88,3 +90,9 @@ else
 	echo "... SKIP (gem not installed)"
 fi
 echo ". DONE"
+
+########10########20### third-party script installation ##60########70########80
+
+for f in "$THIRDPARTY_DIR"/*.include ; do
+	. "$f"
+done

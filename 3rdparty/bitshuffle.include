@@ -1,9 +1,13 @@
 # symlink bitshuffle in place
 
-printf "INFO: installing bitshuffle..."
+if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
+	# we only want to do a non-privileged install
 
-# this assumes ~/bin is where binaries go
-rm -f "$HOME/bin/bitshuffle"
-ln -s "$THIRDPARTY_DIR/bitshuffle/bitshuffle/bitshuffle.py" "$HOME/bin/bitshuffle"
+	printf "INFO: installing bitshuffle..."
 
-echo " DONE"
+	# this assumes ~/bin is where binaries go
+	rm -f "$HOME/bin/bitshuffle"
+	ln -s "$THIRDPARTY_DIR/bitshuffle/bitshuffle/bitshuffle.py" "$HOME/bin/bitshuffle"
+
+	echo " DONE"
+fi
