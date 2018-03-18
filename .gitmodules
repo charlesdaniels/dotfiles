@@ -28,3 +28,6 @@
 [submodule "3rdparty/herc-tools-public"]
 	path = 3rdparty/herc-tools-public
 	url = https://github.com/charlesdaniels/herc-tools-public.git
+[submodule "3rdparty/qstats"]
+	path = 3rdparty/qstats
+	url = https://github.com/tonyfischetti/qstats

@@ -454,8 +454,8 @@ let g:vmt_auto_update_on_save = 1
 """"""""10""""""""20"""""""" vimwiki configuration """""""60""""""""70""""""""80
 
 let g:vimwiki_list = [{
-	\ 'path': '~/RCS/wiki/source',
-	\ 'path_html': '~/RCS/wiki/html',
+	\ 'path': '~/src/git/wiki/source',
+	\ 'path_html': '~/src/git/wiki/html',
 	\ 'nested_syntaxes': {
 		  \   'ruby': 'ruby',
 		  \   'elixir': 'elixir',
@@ -466,7 +466,7 @@ let g:vimwiki_list = [{
 		  \   'bash': 'sh' },
 	\ 'syntax': 'default',
 	\ 'ext': '.wiki',
-	\ 'template_path': '~/RCS/wiki/templates',
+	\ 'template_path': '~/src/git/wiki/templates',
 	\ 'template_ext': '.tpl',
 	\ 'template_default': 'default',
 	\ 'auto_toc' : 1,

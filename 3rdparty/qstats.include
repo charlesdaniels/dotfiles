@@ -1,0 +1,10 @@
+if [ "$PROVISION_HAVE_ROOT" = "YES" ] ; then
+	# we only want to do a privileged install
+	printf "INFO: installing qstats"
+	run_step "$LOG_DIR/qstats.log" "make -C $THIRDPARTY_DIR/qstats clean"
+	run_step "$LOG_DIR/qstats.log" "make -C $THIRDPARTY_DIR/qstats"
+	run_step "$LOG_DIR/qstats.log" "sudo make -C $THIRDPARTY_DIR/qstats install"
+	echo " DONE"
+else
+	echo "INFO: installing qstats... SKIP (no root)"
+fi
