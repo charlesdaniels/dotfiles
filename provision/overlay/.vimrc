@@ -24,6 +24,7 @@ Plug 'mzlogin/vim-markdown-toc'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'vimwiki/vimwiki'
 Plug 'vim-scripts/DoxygenToolkit.vim'
+Plug 'mtth/scratch.vim'
 
 call plug#end()
 
