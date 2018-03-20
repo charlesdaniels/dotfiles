@@ -72,6 +72,9 @@ autoload -U edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd "^V" edit-command-line
 
+# make backspace work as expected in insert mode
+bindkey "^?" backward-delete-char
+
 export PROMPT='[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
 (zsh) $ '
 
