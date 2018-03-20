@@ -4,7 +4,13 @@ if [ "$TERM" = "xterm-termite" ] ; then
   export TERM="xterm"
 fi
 
-PS1='[%n@%M][%T][%~]
+# pull in path abbreviation
+source ~/.zsh/abbr_pwd.zsh
+
+# allow command expansion in the prompt
+setopt PROMPT_SUBST
+
+export PROMPT='[%n@%M][%T][$(felix_pwd_abbr)]
 (zsh) $ '
 
 # zsh specific settings

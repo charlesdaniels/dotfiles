@@ -31,3 +31,6 @@
 [submodule "3rdparty/qstats"]
 	path = 3rdparty/qstats
 	url = https://github.com/tonyfischetti/qstats
+[submodule "3rdparty/zsh-abbr-path"]
+	path = 3rdparty/zsh-abbr-path
+	url = https://github.com/felixgravila/zsh-abbr-path
