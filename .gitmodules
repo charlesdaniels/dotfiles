@@ -34,3 +34,6 @@
 [submodule "3rdparty/zsh-abbr-path"]
 	path = 3rdparty/zsh-abbr-path
 	url = https://github.com/felixgravila/zsh-abbr-path
+[submodule "3rdparty/k"]
+	path = 3rdparty/k
+	url = https://github.com/supercrabtree/k

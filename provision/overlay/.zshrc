@@ -48,6 +48,9 @@ zmodload -i zsh/complist
 # zsh autosuggestions
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
+# k
+source ~/.zsh/k.sh
+
 # zsh syntax highlighting
 # MUST BE THE LAST THING SOURCED
 source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh

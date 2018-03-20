@@ -1,0 +1,28 @@
+# symlink k into the right place
+
+if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
+	# we only want to do a non-privileged install
+
+	printf "INFO: installing k..."
+
+	if [ ! -d "$HOME/.zsh" ] ; then
+		mkdir -p  "$HOME/.zsh"
+	fi
+
+	if [ ! -d "$HOME/.zsh" ] ; then
+		echo " FAIL"
+		echo "PANIC: $HOME/.zsh does not exist and could not be created"
+		exit 1
+	fi
+
+	if [ ! -e "$THIRDPARTY_DIR/k/k.sh" ] ; then
+		echo " FAIL"
+		echo "PANIC: '$THIRDPARTY_DIR/k/k.sh' does not exist, did you remember to use git clone --recursive?"
+		exit 1
+	fi
+
+	rm -f "$HOME/.zsh/k.sh"
+	ln -s "$THIRDPARTY_DIR/k/k.sh" "$HOME/.zsh/k.sh"
+
+	echo " DONE"
+fi

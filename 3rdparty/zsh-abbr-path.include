@@ -3,7 +3,7 @@
 if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
 	# we only want to do a non-privileged install
 
-	printf "INFO: installing zsh fast syntax highlighting..."
+	printf "INFO: installing zsh abbr path..."
 
 	if [ ! -d "$HOME/.zsh" ] ; then
 		mkdir -p  "$HOME/.zsh"
@@ -17,10 +17,11 @@ if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
 
 	if [ ! -e "$THIRDPARTY_DIR/zsh-abbr-path/.abbr_pwd" ] ; then
 		echo " FAIL"
-		echo "PANIC: '$THIRDPARTY_DIR/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh' does not exist, did you remember to use git clone --recursive?"
+		echo "PANIC: '$THIRDPARTY_DIR/zsh-abbr-path/.abbr_pwd' does not exist, did you remember to use git clone --recursive?"
 		exit 1
 	fi
 
+	rm -f "$HOME/.zsh/abbr_pwd.zsh"
 	ln -s "$THIRDPARTY_DIR/zsh-abbr-path/.abbr_pwd" "$HOME/.zsh/abbr_pwd.zsh"
 
 	echo " DONE"
