@@ -56,11 +56,11 @@ setopt PROMPT_SUBST
 # entering or leaving vi editing modes
 function zle-line-init zle-keymap-select {
 	if [ "$KEYMAP" = "main" ] ; then
-		VISTATE="INSERT"
+		VISTATE="I"
 	elif [ "$KEYMAP" = "vicmd" ] ; then
-		VISTATE="NORMAL"
+		VISTATE="N"
 	else
-		VISTATE="UNKNOWN ($KEYMAP)"
+		VISTATE="$KEYMAP"
 	fi
 	zle reset-prompt
 }
