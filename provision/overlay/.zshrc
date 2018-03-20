@@ -4,15 +4,6 @@ if [ "$TERM" = "xterm-termite" ] ; then
   export TERM="xterm"
 fi
 
-# pull in path abbreviation
-source ~/.zsh/abbr_pwd.zsh
-
-# allow command expansion in the prompt
-setopt PROMPT_SUBST
-
-export PROMPT='[%n@%M][%T][$(felix_pwd_abbr)]
-(zsh) $ '
-
 # zsh specific settings
 # immediately show amgiguous completions
 set show-all-if-ambiguous on
@@ -51,6 +42,40 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # k
 source ~/.zsh/k.sh
 
+# vim keybindings
+bindkey -v
+export KEYTIMEOUT=1 # 0.1s
+
+# pull in path abbreviation
+source ~/.zsh/abbr_pwd.zsh
+
+# allow command expansion in the prompt
+setopt PROMPT_SUBST
+
+# Keep the VISTATE variable updated and force the prompt to redraw when
+# entering or leaving vi editing modes
+function zle-line-init zle-keymap-select {
+	if [ "$KEYMAP" = "main" ] ; then
+		VISTATE="INSERT"
+	elif [ "$KEYMAP" = "vicmd" ] ; then
+		VISTATE="NORMAL"
+	else
+		VISTATE="UNKNOWN ($KEYMAP)"
+	fi
+	zle reset-prompt
+}
+zle -N zle-keymap-select
+zle -N zle-line-init
+
+# edit the current line in vim with ^V
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd "^V" edit-command-line
+
+export PROMPT='[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
+(zsh) $ '
+
 # zsh syntax highlighting
 # MUST BE THE LAST THING SOURCED
 source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+
