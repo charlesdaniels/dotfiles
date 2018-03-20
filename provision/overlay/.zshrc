@@ -42,6 +42,10 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # k
 source ~/.zsh/k.sh
 
+# zcalc calculator
+autoload -U zcalc
+zle -N zcalc
+
 # vim keybindings
 bindkey -v
 export KEYTIMEOUT=1 # 0.1s
@@ -74,6 +78,24 @@ bindkey -M vicmd "^V" edit-command-line
 
 # make backspace work as expected in insert mode
 bindkey "^?" backward-delete-char
+
+# allow the text inside quotes motion to work
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+	for c in {a,i}{\',\",\`}; do
+		bindkey -M $m $c select-quoted
+	done
+done
+
+# and inside of brackets
+autoload -U select-bracketed
+zle -N select-bracketed
+for m in visual viopp; do
+	for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+		bindkey -M $m $c select-bracketed
+	done
+done
 
 export PROMPT='[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
 (zsh) $ '
