@@ -138,8 +138,11 @@ if [ -x "$(which xrdb)" ] ; then
 	if [ "$PLATFORM" = "Darwin" ] ; then
 		echo ". SKIP (disabled on $PLATFORM)"
 	else
-		run_step "$LOG_DIR/xrdb.log" xrdb -merge ~/.Xresources
-		echo " DONE"
+		if ! xrdb -merge ~/.Xresources > /dev/null 2>&1 ; then
+			echo ". FAIL"
+		else
+			echo ". DONE"
+		fi
 	fi
 fi
 
