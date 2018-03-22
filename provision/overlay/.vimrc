@@ -239,6 +239,7 @@ autocmd BufEnter *.lib setlocal filetype=sh
 " set up tab & space behaviour sensibly
 autocmd FileType c call EightSpacesHardTabs()
 autocmd FileType java call FourSpacesSoftTabs()
+autocmd FileType rst call FourSpacesSoftTabs()
 autocmd FileType python call FourSpacesSoftTabs()
 autocmd FileType tex call EightSpacesHardTabs()
 autocmd FileType yaml call FourSpacesSoftTabs()
@@ -381,6 +382,13 @@ let g:NERDCommentEmptyLines = 1  " allow empty lines to be commented
 let g:riv_global_leader = "<C-U>"
 let g:riv_fold_level = 1
 let g:riv_fold_blank = 1
+let g:riv_file_link_style = 2 " Sphinx cross reference syntax
+
+let project1 = {
+		\ 'Name': 'wiki',
+		\ 'path': '~/src/git/wiki-next/source',
+		\ 'scratch_path': 'Diary'}
+let g:riv_projects = [project1]
 
 """"""""10""""""""20"""""" jcommenter configuration """"""60""""""""70""""""""80
 
