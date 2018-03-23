@@ -66,7 +66,10 @@ endif
 " enable mouse support if available
 if has("mouse")
 	set mouse=a
-	set ttymouse=xterm2  " tmux compat
+	if !has('nvim')
+		" for tmux compatibility
+		set ttymouse=xterm2
+	endif
 endif
 
 """"""""10""""""""20""""""""30""" key mapping ""50""""""""60""""""""70""""""""80
