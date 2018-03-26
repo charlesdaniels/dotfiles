@@ -139,8 +139,7 @@ focus_follows_mouse no
 bindsym $mod+Tab exec "rofi -show window"
 
 # print screen
-bindsym Print exec teiler
-bindsym Shift+Print exec "teiler --cast"
+bindsym Print exec "~/bin/system-screenshot &"
 
 # i3lock
 exec "xautolock -time 5 -locker ~/bin/system-lock &"

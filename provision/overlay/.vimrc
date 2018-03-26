@@ -56,6 +56,7 @@ let mapleader=","         " use , as the leader
 " enable colorcolumns if available
 if exists("+colorcolumn")
 	set colorcolumn=80,160,240,320,400,480,660,740,820
+	hi ColorColumn ctermbg=red guibg=red
 endif
 
 " enable relative line numbering if available
