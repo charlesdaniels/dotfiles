@@ -91,6 +91,14 @@ else
 fi
 echo ". DONE"
 
+# desktop support
+printf "INFO: installing desktop support files... "
+sudo mkdir -p "/opt/net.cdaniels"
+sudo mkdir -p "/opt/net.cdaniels/bin"
+sudo mkdir -p "/opt/net.cdaniels/assets"
+sudo cp "$OVERLAY_DIR/bin/system-lock" "/opt/net.cdaniels/bin/system-lock"
+echo "DONE"
+
 ########10########20### third-party script installation ##60########70########80
 
 for f in "$THIRDPARTY_DIR"/*.include ; do

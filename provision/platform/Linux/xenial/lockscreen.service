@@ -6,7 +6,7 @@ Before=sleep.target
 User=cad
 Type=forking
 Environment=DISPLAY=:0
-ExecStart=/home/cad/bin/system-lock
+ExecStart=/opt/net.cdaniels/bin/system-lock
 
 [Install]
 WantedBy=sleep.target
