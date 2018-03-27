@@ -7,9 +7,10 @@
 # specific to my setup, and probably will be of minimal use to anyone else.
 
 # This script runs a loop every $DESKTOP_SPOOLER_INTERVAL. When this loop runs,
-# it polls lsusb to see if $DOCK_DEVICE exists, using this information to
-# populate $DOCK_STATE. If $DOCK_STATE changes, the script restore-sanity is
-# executed, and the file $DOCK_SPOOLER_DIR/dock_status is updated.
+# it polls lsusb to see if any of the USB device IDs specified in
+# ~/.dspool/dock_devices.txt exist, using this information to populate
+# $DOCK_STATE. If $DOCK_STATE changes, the script restore-sanity is executed,
+# and the file $DOCK_SPOOLER_DIR/dock_status is updated.
 
 # .LICENSE
 
@@ -30,7 +31,7 @@ log_msg () {
 
 DESKTOP_SPOOLER_DIR="$HOME/.dspool"
 DESKTOP_SPOOLER_INTERVAL=5
-DOCK_DEVICE="17ef:100a"
+DOCK_DEVICE_LIST="$DESKTOP_SPOOLER_DIR/dock_devices.txt"
 LOG_FILE="$DESKTOP_SPOOLER_DIR/log"
 
 if [ ! -d "$DESKTOP_SPOOLER_DIR" ] ; then
@@ -43,6 +44,7 @@ if [ ! -d "$DESKTOP_SPOOLER_DIR" ] ; then
 	exit 1
 fi
 
+		else
 PREV_DOCK_STATE=""
 DOCK_STATE=""
 PREV_MONITOR_STATE=""
@@ -56,11 +58,13 @@ SCREENLAYOUT_DIR=$HOME/.screenlayout
 mv "$LOG_FILE" "$LOG_FILE.prev"
 
 while true ; do
-	if lsusb | grep "$DOCK_DEVICE" > /dev/null 2>&1 ; then
-		DOCK_STATE="DOCKED"
-	else
-		DOCK_STATE="UNDOCKED"
-	fi
+	DOCK_STATE="UNDOCKED"
+	while read -r DOCK_DEVICE < "$DOCK_DEVICE_LIST" ; do
+		if lsusb | grep "$DOCK_DEVICE" > /dev/null 2>&1 ; then
+			DOCK_STATE="DOCKED"
+			break
+		fi
+	done
 
 	if [ "$DOCK_STATE" = "$PREV_DOCK_STATE" ] ; then
 		# do nothing
