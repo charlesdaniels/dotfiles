@@ -1,4 +1,5 @@
 
+
 !-- Tomorrow Color Scheme
 
 ! Names of the original color are in parenthesis.
@@ -42,5 +43,8 @@
 URxvt*cursorColor:       #ad0808
 
 ! use GohuFont
-urxvt*font: xft:gohufont:size=9:antialias=true
-urxvt*boldFont: xft:gohufont:size=9:antialias=true
+urxvt*font: xft:gohufont:size=11:antialias=true
+urxvt*boldFont: xft:gohufont:size=11:antialias=true
+
+! disable scrollbar in URxvt
+URxvt.scrollBar: false
