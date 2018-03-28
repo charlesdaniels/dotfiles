@@ -148,7 +148,7 @@ bindsym Print exec "~/bin/system-screenshot &"
 exec "xautolock -time 5 -locker ~/bin/system-lock &"
 
 # borders
-for_window [class="^.*"] border pixel 2
+for_window [class="^.*"] border pixel 1
 
 # media keys
 bindsym XF86AudioRaiseVolume exec ~/bin/audioctl up
@@ -165,19 +165,13 @@ exec "nm-applet"
 exec "dropbox start"
 # pulsaudio
 exec "pulseaudio --start"
-# compositing
-exec "compton --shadow-opacity=0 -i 1 -e 1 -m 1 --vsync drm"
-exec "numlockx on"
-exec "copyq"
-exec "xmodmap ~/.Xmodmap"
-exec "feh --bg-fill ~/.wallpapers/current"
-exec --no-startup-id redshift-gtk
+exec "~/bin/system-launch-compositor"
 exec "~/bin/desktop-spooler"
+exec "~/bin/restore-sanity"
 
 # media keys should be handled by mate-settings-daemon
 
 bar {
-	# status_command i3status
 	status_command "$HOME/bin/system-statusline"
 }
 

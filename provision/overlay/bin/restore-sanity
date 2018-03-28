@@ -3,7 +3,11 @@
 # .SCRIPTDOC
 
 # Linux-specific script to fix desktop environment after sleep / monitor
-# re-configuration and so on. 
+# re-configuration and so on.
+#
+# This is pretty much just for cases where programs are misbehaving and
+# need to be restarted often (and for fixing the wallpaper after a monitor
+# config change)
 
 # .LICENSE
 
@@ -18,3 +22,9 @@ feh --bg-fill ~/.wallpapers/current
 xmodmap ~/.Xmodmap
 killall mate-settings-daemon >/dev/null 2>&1 | true
 killall mate-screensaver > /dev/null 2>&1 | true
+numlockx on
+pkill -9 redshift-gtk
+pkill -9 redshift
+redshift-gtk > /dev/null 2>&1 &
+~/bin/system-launch-compositor
+disown

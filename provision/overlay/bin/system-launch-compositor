@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Launch compton. My preferred settings are baked into this file. The purpose
+# of this script is to try launch compton with different acceleration modes,
+# which is necessary since different modes are available on different systems.
+
+# .ENDOC
+
+
+# kill any existing instances
+pkill compton
+
+# vsync methods in order of preference
+VSYNC_METHODS="drm:opengl:opengl-oml:opengl-swc:opengl-mswc:none"
+
+SHADOW_OPACITY=0
+INACTIVE_OPACITY=1.0
+INACTIVE_DIM=0.2
+TITLEBAR_OPACITY=1.0
+DROPDOWN_OPACITY=1.0
+FADE_DURATION=2
+
+COMPTON_OPTS="--shadow-opacity=$SHADOW_OPACITY "
+COMPTON_OPTS="$COMPTON_OPTS -i $INACTIVE_OPACITY "
+COMPTON_OPTS="$COMPTON_OPTS -e $TITLEBAR_OPACITY "
+COMPTON_OPTS="$COMPTON_OPTS -m $DROPDOWN_OPACITY "
+COMPTON_OPTS="$COMPTON_OPTS -D $FADE_DURATION "
+COMPTON_OPTS="$COMPTON_OPTS --inactive-dim $INACTIVE_DIM "
+
+# enable fade in / fade out
+COMPTON_OPTS="$COMPTON_OPTS -f"
+
+# run in background
+COMPTON_OPTS="$COMPTON_OPTS -b"
+
+# blur background for transparent windows
+# COMPTON_OPTS="$COMPTON_OPTS --blur-background "
+
+echo "INFO: executing compton with options: $COMPTON_OPTS"
+
+echo "$VSYNC_METHODS" | tr ':' '\n' | while read -r method ; do
+	if compton $COMPTON_OPTS --vsync $method ; then
+		echo "INFO: Launched compton successfully"
+		exit 0
+	fi
+done
