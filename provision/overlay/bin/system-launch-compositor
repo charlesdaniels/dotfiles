@@ -38,6 +38,9 @@ COMPTON_OPTS="$COMPTON_OPTS -b"
 # blur background for transparent windows
 # COMPTON_OPTS="$COMPTON_OPTS --blur-background "
 
+# exempted windows for shadow effects et al.
+COMPTON_OPTS="$COMPTON_OPTS --focus-exclude name='rofi'"
+
 echo "INFO: executing compton with options: $COMPTON_OPTS"
 
 echo "$VSYNC_METHODS" | tr ':' '\n' | while read -r method ; do
