@@ -1,0 +1,15 @@
+[Unit]
+Description=reset_xhci
+After=suspend.target
+
+[Service]
+User=root
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/opt/net.cdaniels/bin/system-reset-xhci
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=xhci_reset
+
+[Install]
+WantedBy=suspend.target

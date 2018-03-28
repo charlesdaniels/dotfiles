@@ -64,12 +64,12 @@ while true ; do
 
 	# update dock state
 	DOCK_STATE="UNDOCKED"
-	while read -r DOCK_DEVICE < "$DOCK_DEVICE_LIST" ; do
+	while read -r DOCK_DEVICE  ; do
 		if lsusb | grep "$DOCK_DEVICE" > /dev/null 2>&1 ; then
 			DOCK_STATE="DOCKED"
 			break
 		fi
-	done
+	done < "$DOCK_DEVICE_LIST"
 
 	if [ "$DOCK_STATE" = "$PREV_DOCK_STATE" ] ; then
 		# nothing to do
