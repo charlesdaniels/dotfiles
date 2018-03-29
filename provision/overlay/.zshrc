@@ -97,8 +97,18 @@ for m in visual viopp; do
 	done
 done
 
+function nios2eds_status_disp {
+	# Detect when we are in a NIOS2 development environment and update
+	# the prompt to indicate this.
+	if [ -d "$SOPC_KIT_NIOS2" ] ; then
+		printf "\033[;31mnios2\033[0m/"
+	else
+		printf ""
+	fi
+}
+
 export PROMPT='[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
-(zsh) $ '
+($(nios2eds_status_disp)zsh) $ '
 
 # zsh syntax highlighting
 # MUST BE THE LAST THING SOURCED
