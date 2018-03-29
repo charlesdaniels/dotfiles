@@ -3,10 +3,13 @@ Description=screen_lock
 Before=sleep.target
 
 [Service]
-User=cad
+User=root
 Type=forking
 Environment=DISPLAY=:0
 ExecStart=/opt/net.cdaniels/bin/system-lock
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=lockscreen
 
 [Install]
 WantedBy=sleep.target

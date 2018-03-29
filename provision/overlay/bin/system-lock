@@ -4,9 +4,15 @@
 
 # Lock the screen using i3lock. The i3lock background is set to a screenshot
 # of the screen at the time the script is run, blurred via an 8x8 filter.
-#
+
 # Note that the dpms settings are re-configured automatically each time this
 # script is run.
+
+# Note also that this script checks to see if i3lock is already running, and if
+# so exits silentl, doing nothing.
+
+# This script can safely be run as root; it will detect the logged in user who
+# is running a process named ``i3``, and run ``i3lock`` as this user.
 
 # .LICENSE
 
@@ -17,18 +23,34 @@
 
 # .ENDOC
 
-for pn in convert scrot uuidgen ; do
-	if [ ! -x "$(which $pn)" ] ; then
-		echo "$pn not found, failing over to wallpaper lock"
-		i3lock -i ~/.wallpapers/current
-		exit
+TARGET_USER=$USER
+if [ $UID -eq 0 ] ; then
+	CANDIDATE_USERS="$(ps aux | awk '$11 == "i3" {print($1);}')"
+	if [ $(printf "$CANDIDATE_USERS" | wc -c) -lt 1 ] ; then
+		printf "ERROR: no user found running i3, cannot detect logged"
+		echo "in user"
+		exit 1
 	fi
-done
+	TARGET_USER="$(echo "$CANDIDATE_USERS" | head -n 1)"
+fi
+
+echo "target user is $TARGET_USER"
+
+LOCK_INSTANCES="$(ps aux | awk '$11 == "i3lock" {print($2);}')"
+if [ $(printf "$LOCK_INSTANCES" | wc -c) -gt 1 ] ; then
+	echo "i3lock already running, with the following PID(s):"
+	echo "$LOCK_INSTANCES"
+	exit 0
+fi
 
 TMPFILE="/tmp/$(uuidgen).png"
 scrot "$TMPFILE"
 convert "$TMPFILE" -blur "8x8" "$TMPFILE"
 
-i3lock -i "$TMPFILE"
-rm "$TMPFILE"
+if [ $UID -eq 0 ] ; then
+	sudo -u "$TARGET_USER" i3lock -i "$TMPFILE"
+else
+	i3lock -i "$TMPFILE"
+fi
+rm -f "$TMPFILE"
 
