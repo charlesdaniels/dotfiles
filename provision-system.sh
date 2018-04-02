@@ -98,6 +98,7 @@ sudo mkdir -p "/opt/net.cdaniels/bin"
 sudo mkdir -p "/opt/net.cdaniels/assets"
 sudo cp "$OVERLAY_DIR/bin/system-lock" "/opt/net.cdaniels/bin/system-lock"
 sudo cp "$OVERLAY_DIR/bin/system-reset-xhci" "/opt/net.cdaniels/bin/system-reset-xhci"
+sudo cp "$OVERLAY_DIR/bin/get-displays" "/opt/net.cdaniels/bin/get-displays"
 echo "DONE"
 
 ########10########20### third-party script installation ##60########70########80

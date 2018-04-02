@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Display to standard out a list of all X displays running on the system.
+
+# .ENDOC
+
+ps aux | awk '$11~/.*Xorg$/ {print($12)}'

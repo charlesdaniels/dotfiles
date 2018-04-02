@@ -43,12 +43,29 @@ if [ $(printf "$LOCK_INSTANCES" | wc -c) -gt 1 ] ; then
 	exit 0
 fi
 
+# Detect display - this is required for when this script is run as a service.
+# This should also make it possible to run this script over ssh.
+if [ -z "$DISPLAY" ] ; then
+	echo "WARNING: display not set"
+	if [ ! -x "$(which get-displays)" ] ; then
+		export DISPLAY=$(/opt/net.cdaniels/bin/get-displays | head -n1)
+	else
+		export DISPLAY=$(get-displays | head -n1)
+	fi
+fi
+
+echo "target X display is $DISPLAY"
+
 TMPFILE="/tmp/$(uuidgen).png"
-scrot "$TMPFILE"
+if [ $UID -eq 0 ] ; then
+	sudo -u "$TARGET_USER" DISPLAY=$DISPLAY scrot "$TMPFILE"
+else
+	scrot "$TMPFILE"
+fi
 convert "$TMPFILE" -blur "8x8" "$TMPFILE"
 
 if [ $UID -eq 0 ] ; then
-	sudo -u "$TARGET_USER" i3lock -i "$TMPFILE"
+	sudo -u "$TARGET_USER" DISPLAY=$DISPLAY i3lock -i "$TMPFILE"
 else
 	i3lock -i "$TMPFILE"
 fi
