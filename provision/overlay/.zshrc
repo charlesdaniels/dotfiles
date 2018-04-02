@@ -36,9 +36,6 @@ fpath=(~/.zsh $fpath)
 autoload -U compinit && compinit
 zmodload -i zsh/complist
 
-# zsh autosuggestions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
 # k
 source ~/.zsh/k.sh
 
@@ -101,7 +98,7 @@ function nios2eds_status_disp {
 	# Detect when we are in a NIOS2 development environment and update
 	# the prompt to indicate this.
 	if [ -d "$SOPC_KIT_NIOS2" ] ; then
-		printf "\033[;31mnios2\033[0m/"
+		printf "nios2/"
 	else
 		printf ""
 	fi
@@ -109,6 +106,10 @@ function nios2eds_status_disp {
 
 export PROMPT='[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
 ($(nios2eds_status_disp)zsh) $ '
+
+
+# zsh autosuggestions
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # zsh syntax highlighting
 # MUST BE THE LAST THING SOURCED

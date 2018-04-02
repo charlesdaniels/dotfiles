@@ -68,6 +68,8 @@ while true ; do
 		if lsusb | grep "$DOCK_DEVICE" > /dev/null 2>&1 ; then
 			DOCK_STATE="DOCKED"
 			break
+		else
+			log_msg "INFO" $DOCK_DEVICE" not found"
 		fi
 	done < "$DOCK_DEVICE_LIST"
 

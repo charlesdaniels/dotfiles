@@ -25,6 +25,7 @@ Plug 'dhruvasagar/vim-table-mode'
 Plug 'vimwiki/vimwiki'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
+Plug 'ledger/vim-ledger'
 
 call plug#end()
 

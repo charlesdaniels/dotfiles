@@ -14,7 +14,7 @@ SEARCH_PATHS="$SEARCH_PATHS /usr/local/3rdparty/altera/quartus12/nios2eds/"
 for edsdir in $SEARCH_PATHS ; do
 	if [ -d "$edsdir" ] ; then
 		echo "Launching EDS environment from $edsdir"
-		"$edsdir/$CMDSHELL" zsh
+		"$edsdir/$CMDSHELL" zsh -i
 		exit $?
 	fi
 done
