@@ -22,7 +22,6 @@ Plug 'roxma/vim-paste-easy'
 Plug 'chrisbra/csv.vim'
 Plug 'mzlogin/vim-markdown-toc'
 Plug 'dhruvasagar/vim-table-mode'
-Plug 'vimwiki/vimwiki'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
@@ -395,6 +394,10 @@ let project1 = {
 		\ 'scratch_path': 'Diary'}
 let g:riv_projects = [project1]
 
+" vimwiki-like bindings, for convenience
+nmap <Leader>ww <C-U>ww zR
+nmap <Leader>sc <C-U>sc zR
+
 """"""""10""""""""20"""""" jcommenter configuration """"""60""""""""70""""""""80
 
 autocmd FileType java nmap <silent> <C-g> :call JCommentWriter()<CR>
@@ -463,29 +466,6 @@ call MapTmuxNavigator()
 """"""""10""""""""20""" vim-markdown-toc configuration """60""""""""70""""""""80
 " auto update TOC on save
 let g:vmt_auto_update_on_save = 1
-
-
-""""""""10""""""""20"""""""" vimwiki configuration """""""60""""""""70""""""""80
-
-let g:vimwiki_list = [{
-	\ 'path': '~/src/git/wiki/source',
-	\ 'path_html': '~/src/git/wiki/html',
-	\ 'nested_syntaxes': {
-		  \   'ruby': 'ruby',
-		  \   'elixir': 'elixir',
-		  \   'python': 'python',
-		  \   'c++': 'c',
-		  \   'c': 'c',
-		  \   'javascript': 'javascript',
-		  \   'bash': 'sh' },
-	\ 'syntax': 'default',
-	\ 'ext': '.wiki',
-	\ 'template_path': '~/src/git/wiki/templates',
-	\ 'template_ext': '.tpl',
-	\ 'template_default': 'default',
-	\ 'auto_toc' : 1,
-	\ }]
-
 
 """"""""10""""""""20""""""""30" DoxygenToolkit "50""""""""60""""""""70""""""""80
 
