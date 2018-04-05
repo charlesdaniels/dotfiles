@@ -88,6 +88,15 @@ REMOTE_FILE="$REMOTE_PATH/$FILE_NAME"
 # hence the slightly unorthodox copying method.
 cat "$INPUT_FILE" > "$TMP_FILE"
 
+# Sanity check that the input file was copied successfully, and that it is
+# nonzero in size.
+if [ $(cat "$TMP_FILE" | wc -c) -lt 1 ] ; then
+	echo "ERROR: input file is zero bytes" > /dev/stderr
+	rm -f "$LOG_FILE"
+	rm -f "$TMP_FILE"
+	exit 1
+fi
+
 # Validate that we can get the credentials that we want.
 if ! get-token --get "share-file-username" > /dev/null 2>&1 ; then
 	echo "ERROR: no token 'share-file-username'" > /dev/stderr
@@ -108,7 +117,7 @@ FTP_USERNAME="$(get-token --get "share-file-username")"
 FTP_PASSWORD="$(get-token --get "share-file-password")"
 
 if ! lftp -u "$FTP_USERNAME,$FTP_PASSWORD" "$SHARE_FILE_FTP_HOST" \
-	-e "mkdir $REMOTE_PATH ; put \"$INPUT_FILE\" -o \"$REMOTE_FILE\" ; bye" \
+	-e "mkdir $REMOTE_PATH ; put \"$TMP_FILE\" -o \"$REMOTE_FILE\" ; bye" \
 	> "$LOG_FILE" 2>&1 ; then
 	echo "ERROR: FTP upload failed" > /dev/stderr
 	cat "$LOG_FILE" > /dev/stderr
