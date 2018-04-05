@@ -398,6 +398,9 @@ let g:riv_projects = [project1]
 nmap <Leader>ww <C-U>ww zR
 nmap <Leader>sc <C-U>sc zR
 
+" build wiki using ,wb
+nmap <Leader>wb :!make -C ~/src/git/wiki-next html <enter>
+
 """"""""10""""""""20"""""" jcommenter configuration """"""60""""""""70""""""""80
 
 autocmd FileType java nmap <silent> <C-g> :call JCommentWriter()<CR>
