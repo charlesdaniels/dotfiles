@@ -79,3 +79,9 @@ sudo rm -f /etc/fonts/conf.d/70-yes-bitmaps.conf
 sudo ln -s /etc/fonts/conf.avail/70-yes-bitmaps.conf /etc/fonts/conf.d/70-yes-bitmaps.conf
 echo "DONE"
 
+printf "INFO: setting nvim as the system vim... "
+if ! sudo update-alternatives --set vim /usr/bin/nvim  > /dev/null 2>&1
+	echo "FAIL"
+else:
+	echo "DONE"
+fi
