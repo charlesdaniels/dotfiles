@@ -39,7 +39,7 @@
 # apps-password with only FTP access permissions.
 
 # For additional security, the file will be placed in a folder whose name is a
-# random UUID, so if you upload ``foo.txt``, it will wind up in
+# (shortened) random UUID, so if you upload ``foo.txt``, it will wind up in
 # ``example.com/sharedfolder/some-uuid/foo.txt``. Assuming you also have
 # directory browsing disabled, this will prevent an attacker without a file's
 # full URL from guessing it via dictionary attack.
@@ -74,6 +74,9 @@ if [ $# -lt 2 ] ; then
 	FILE_NAME="$(basename "$INPUT_FILE")"
 fi
 
+# ensure that spaces do not appear in the file name
+FILE_NAME="$(echo "$FILE_NAME" | tr ' ' '_')"
+
 # validate that the config file exists
 if [ ! -e "$CONFIG_FILE" ] ; then
 	echo "ERROR: no config file at '$CONFIG_FILE'" > /dev/stderr
@@ -85,7 +88,7 @@ fi
 TMP_FILE="/tmp/$(uuidgen)"
 LOG_FILE="/tmp/$(uuidgen)"
 META_FILE="/tmp/$(uuidgen)"
-REMOTE_DIR="$(uuidgen)"
+REMOTE_DIR="$(uuidgen | cut -d- -f 1)"
 REMOTE_PATH="$SHARE_FILE_FTP_PATH/$REMOTE_DIR"
 REMOTE_FILE="$REMOTE_PATH/$FILE_NAME"
 
