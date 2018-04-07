@@ -158,6 +158,15 @@ bindsym XF86AudioPlay exec ~/bin/audioctl toggle
 bindsym XF86AudioNext exec ~/bin/audioctl next
 bindsym XF86AudioPrev exec ~/bin/audioctl prev
 
+# hint: use Xev to find what i3 calls non-alphanumeric keys
+bindsym Control+Next exec ~/bin/audioctl down     # ctrl+page up
+bindsym Control+Prior exec ~/bin/audioctl up      # ctrl+page down
+bindsym Control+Pause exec ~/bin/audioctl mute    # ctrl+pause
+bindsym Control+Home exec ~/bin/audioctl pause    # ctrl+home
+bindsym Control+End exec ~/bin/audioctl next      # ctrl+end
+bindsym Control+Insert exec ~/bin/audioctl toggle # ctrl+insert
+bindsym Control+Delete exec ~/bin/audioctl prev   # ctrl+del
+
 # Auto Start
 exec "source $HOME/.profile"
 exec pasystray
