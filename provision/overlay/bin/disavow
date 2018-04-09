@@ -35,6 +35,8 @@
 #
 # -v . . . verbose mode
 #
+# -p . . . Print PID of spawned process
+#
 # $@ . . . Specify the process to run
 
 # .LICENSE
@@ -76,6 +78,7 @@ PROC_CMD=""
 VERBOSE_MODE=0
 DROP_TOKEN=0
 PREV_TOKEN=""
+PRINT_PID=0
 
 # The " " makes sure that we always see every PREV_TOKEN. Note that this method
 # for parsing argv does not support merged flags (i.e. -abc vs -a -b -c).
@@ -100,6 +103,9 @@ for TOKEN in $* " "; do
 			;;
 		"-v")
 			VERBOSE_MODE=1
+			;;
+		"-p")
+			PRINT_PID=1
 			;;
 		*)
 			if [ $DROP_TOKEN -eq 0 ] ; then
@@ -131,3 +137,8 @@ verbose "Spawned process with PID $PROC_PID"
 disown $PROC_PID
 
 verbose "Disowned process."
+
+if [ $PRINT_PID -eq 1 ] ; then
+	verbose "Displaying pid because of -p"
+	echo "$PROC_PID"
+fi
