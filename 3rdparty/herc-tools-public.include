@@ -1,15 +1,11 @@
 if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
 	# we only want to do a non-privileged install
 
-	printf "INFO: installing herc-tools-public"
+	printf "INFO: installing herc-tools-public.."
 
 	HERC_TOOLS_PUBLIC="$THIRDPARTY_DIR/herc-tools-public"
-	for f in "$HERC_TOOLS_PUBLIC"/python/* ; do
-		DEST_FILE="$HOME/bin/$(basename "$f")"
-		if [ -e "$DEST_FILE" ] ; then
-			run_step "$LOG_DIR/herc_tools_public.log" rm "$DEST_FILE"
-		fi
-		run_step "$LOG_DIR/herc_tools_public.log" ln -s "$f" "$DEST_FILE"
-	done
+
+	run_step "$LOG_DIR/herc_tools_public.log" make -C "$HERC_TOOLS_PUBLIC" install
+
 	echo " DONE"
 fi
