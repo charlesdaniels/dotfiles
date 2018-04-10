@@ -23,6 +23,8 @@ setopt appendhistory
 setopt sharehistory
 # immediately append history lines, rather then on session close
 setopt incappendhistory
+# bash globbing behavior
+setopt NO_NOMATCH
 
 # use keybindings that aren't stupid
 bindkey -e
