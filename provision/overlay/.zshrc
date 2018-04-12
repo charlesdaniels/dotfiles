@@ -12,11 +12,11 @@ set completion-ignore-case on
 # disable correction
 unsetopt correct_all
 # lines of history to store
-HISTSIZE=1000
+HISTSIZE=10000
 # place to store them
 HISTFILE=~/.zsh_history
 # lines to store on disk
-SAVEHIST=1000
+SAVEHIST=1000000
 # append history to file without writing
 setopt appendhistory
 # share history across sessions

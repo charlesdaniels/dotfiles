@@ -25,6 +25,7 @@ Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
+Plug 'altercation/vim-colors-solarized'
 
 call plug#end()
 
@@ -72,6 +73,13 @@ if has("mouse")
 		set ttymouse=xterm2
 	endif
 endif
+
+
+""""""""10""""""""20""""""""30""" colorscheme ""50""""""""60""""""""70""""""""80
+
+colorscheme solarized
+let g:solarized_termcolors=256
+let t_Co=256
 
 """"""""10""""""""20""""""""30""" key mapping ""50""""""""60""""""""70""""""""80
 
