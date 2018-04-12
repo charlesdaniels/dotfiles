@@ -38,6 +38,9 @@ set -gx GOPATH "$HOME/.go-workspace"
 test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
 
 
+if test -d "$HOME/.cargo/bin"
+    set -gx PATH $HOME/.cargo/bin $PATH
+end
 if test -d "$HOME/bin"
     set -gx PATH $HOME/bin $PATH
 end
@@ -59,4 +62,3 @@ end
 if test -d "/opt/net.cdaniels/bin"
     set -gx PATH /opt/net.cdaniels/bin $PATH
 end
-

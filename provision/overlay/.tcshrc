@@ -3,6 +3,7 @@ setenv EDITOR vim
 setenv VISUAL vim
 setenv GOPATH $HOME/.go-workspace
 
+setenv PATH $HOME/.cargo/bin:$PATH
 setenv PATH $HOME/bin:$PATH
 setenv PATH $HOME/.go-workspace/bin:$PATH
 setenv PATH $HOME/.net.cdaniels.toolchest/bin:$PATH
