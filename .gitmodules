@@ -37,3 +37,6 @@
 [submodule "3rdparty/k"]
 	path = 3rdparty/k
 	url = https://github.com/supercrabtree/k
+[submodule "3rdparty/latexrun"]
+	path = 3rdparty/latexrun
+	url = https://github.com/aclements/latexrun.git

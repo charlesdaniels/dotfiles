@@ -1,0 +1,13 @@
+# symlink latexrun in place
+
+if [ "$PROVISION_HAVE_ROOT" = "NO" ] ; then
+	# we only want to do a non-privileged install
+
+	printf "INFO: installing latexrun..."
+
+	# this assumes ~/bin is where binaries go
+	rm -f "$HOME/bin/latexrun"
+	ln -s "$THIRDPARTY_DIR/latexrun/latexrun" "$HOME/bin/latexrun"
+
+	echo " DONE"
+fi
