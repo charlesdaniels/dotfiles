@@ -77,9 +77,13 @@ endif
 
 """"""""10""""""""20""""""""30""" colorscheme ""50""""""""60""""""""70""""""""80
 
-colorscheme solarized
-let g:solarized_termcolors=256
-let t_Co=256
+if $TERM == "rxvt-unicode"
+	colorscheme solarized
+	let g:solarized_termcolors=256
+	let t_Co=256
+else
+	colorscheme default
+endif
 
 """"""""10""""""""20""""""""30""" key mapping ""50""""""""60""""""""70""""""""80
 
