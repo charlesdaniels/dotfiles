@@ -24,7 +24,10 @@
 # .ENDOC
 
 TARGET_USER=$USER
-if [ $UID -eq 0 ] ; then
+CURRENT_UID="$(id -u)"
+echo "User ID is: $CURRENT_UID"
+
+if [ $CURRENT_UID -eq 0 ] ; then
 	CANDIDATE_USERS="$(ps aux | awk '$11 == "i3" {print($1);}')"
 	if [ $(printf "$CANDIDATE_USERS" | wc -c) -lt 1 ] ; then
 		printf "ERROR: no user found running i3, cannot detect logged"
@@ -57,14 +60,14 @@ fi
 echo "target X display is $DISPLAY"
 
 TMPFILE="/tmp/$(uuidgen).png"
-if [ $UID -eq 0 ] ; then
+if [ $CURRENT_UID -eq 0 ] ; then
 	sudo -u "$TARGET_USER" DISPLAY=$DISPLAY scrot "$TMPFILE"
 else
 	scrot "$TMPFILE"
 fi
 convert "$TMPFILE" -blur "8x8" "$TMPFILE"
 
-if [ $UID -eq 0 ] ; then
+if [ $CURRENT_UID -eq 0 ] ; then
 	sudo -u "$TARGET_USER" DISPLAY=$DISPLAY i3lock -i "$TMPFILE"
 else
 	i3lock -i "$TMPFILE"
