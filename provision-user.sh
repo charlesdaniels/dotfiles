@@ -147,6 +147,10 @@ if [ -x "$(which xrdb)" ] ; then
 fi
 
 printf "INFO: installing vim plugins."
+if [ -x "$(which nvim)" ] ; then
+	run_step "$LOG_DIR/vim_update.log" nvim --headless +PlugInstall +qall < /dev/null
+	run_step "$LOG_DIR/vim_update.log" nvim --headless +PlugUpdate +qall < /dev/null
+fi
 run_step "$LOG_DIR/vim_update.log" vim +PlugInstall +qall < /dev/null
 run_step "$LOG_DIR/vim_update.log" vim +PlugUpdate +qall < /dev/null
 echo " DONE"
