@@ -82,6 +82,6 @@ echo "DONE"
 printf "INFO: setting nvim as the system vim... "
 if ! sudo update-alternatives --set vim /usr/bin/nvim  > /dev/null 2>&1
 	echo "FAIL"
-else:
+else
 	echo "DONE"
 fi
