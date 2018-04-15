@@ -28,7 +28,7 @@ CURRENT_UID="$(id -u)"
 echo "User ID is: $CURRENT_UID"
 
 if [ $CURRENT_UID -eq 0 ] ; then
-	CANDIDATE_USERS="$(ps aux | awk '$11 == "i3" {print($1);}')"
+	CANDIDATE_USERS="$(ps aux | awk '$11 ~ /i3/ {print($1);}')"
 	if [ $(printf "$CANDIDATE_USERS" | wc -c) -lt 1 ] ; then
 		printf "ERROR: no user found running i3, cannot detect logged"
 		echo "in user"
@@ -39,7 +39,7 @@ fi
 
 echo "target user is $TARGET_USER"
 
-LOCK_INSTANCES="$(ps aux | awk '$11 == "i3lock" {print($2);}')"
+LOCK_INSTANCES="$(ps aux | awk '$11 ~ /i3lock/ {print($2);}')"
 if [ $(printf "$LOCK_INSTANCES" | wc -c) -gt 1 ] ; then
 	echo "i3lock already running, with the following PID(s):"
 	echo "$LOCK_INSTANCES"
