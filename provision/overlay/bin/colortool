@@ -24,6 +24,8 @@ def str2RGB(s):
 
     c = []
     if (s[0] == "#") or (',' not in s):
+        if s[0] != "#":
+            s = "#" + s
         c = [int(s[i:i+2], 16) for i in range(1, len(s), 2)]
     else:
         c = [int(x) for x in s.split(',')] 
