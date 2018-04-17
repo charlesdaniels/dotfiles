@@ -74,6 +74,8 @@ if has("mouse")
 	endif
 endif
 
+" Yank to system clipboard with ,yc
+noremap <Leader>yc "+yy
 
 """"""""10""""""""20""""""""30""" colorscheme ""50""""""""60""""""""70""""""""80
 
