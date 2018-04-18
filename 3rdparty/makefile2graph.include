@@ -1,0 +1,17 @@
+if [ "$PROVISION_HAVE_ROOT" = "YES" ] ; then
+	# we only want to do a privileged install
+	printf "INFO: installing makefile2graph"
+	run_step "$LOG_DIR/makefile2graph.log" "make -C $THIRDPARTY_DIR/makefile2graph clean"
+	run_step "$LOG_DIR/makefile2graph.log" "make -C $THIRDPARTY_DIR/makefile2graph"
+	run_step "$LOG_DIR/makefile2graph.log" "sudo make -C $THIRDPARTY_DIR/makefile2graph install"
+	echo " DONE"
+else
+	printf "INFO: installing makefile2graph"
+	run_step "$LOG_DIR/makefile2graph.log" "make -C $THIRDPARTY_DIR/makefile2graph clean"
+	run_step "$LOG_DIR/makefile2graph.log" "make -C $THIRDPARTY_DIR/makefile2graph"
+	run_step "$LOG_DIR/makefile2graph.log" "rm -f $HOME/bin/makefile2graph"
+	run_step "$LOG_DIR/makefile2graph.log" "rm -f $HOME/bin/make2graph"
+	run_step "$LOG_DIR/makefile2graph.log" "ln -s $THIRDPARTY_DIR/makefile2graph/makefile2graph $HOME/bin/makefile2graph"
+	run_step "$LOG_DIR/makefile2graph.log" "ln -s $THIRDPARTY_DIR/makefile2graph/make2graph $HOME/bin/make2graph"
+	echo " DONE"
+fi

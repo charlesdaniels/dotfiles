@@ -40,3 +40,6 @@
 [submodule "3rdparty/latexrun"]
 	path = 3rdparty/latexrun
 	url = https://github.com/aclements/latexrun.git
+[submodule "3rdparty/makefile2graph"]
+	path = 3rdparty/makefile2graph
+	url = https://github.com/lindenb/makefile2graph.git

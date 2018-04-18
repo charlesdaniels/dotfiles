@@ -77,6 +77,9 @@ endif
 " Yank to system clipboard with ,yc
 noremap <Leader>yc "+yy
 
+" Visualize Makefiles
+noremap <Leader>vm :!visualize-makefile % <CR> <CR>
+
 """"""""10""""""""20""""""""30""" colorscheme ""50""""""""60""""""""70""""""""80
 
 if $TERM == "rxvt-unicode"
