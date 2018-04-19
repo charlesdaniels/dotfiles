@@ -53,6 +53,9 @@ if [ ! -e "$1" ] ; then
 	exit 1
 fi
 
+# seems to fix some edge cases 
+cd "$(dirname "$1")"
+
 # extract target list (https://stackoverflow.com/questions/19076482/gnu-make-how-to-automatically-list-and-build-all-targets)
 TARGETS="$(make -f "$1" -qp | awk -F':' '/^[a-zA-Z0-9][^$#\/\t=]*:([^=]|$)/ {split($1,A,/ /);for(i in A)print A[i]}' | grep -v '^Makefile$' | tr '\n' ' ')"
 
