@@ -20,11 +20,21 @@ def get_size_on_disk(fp):
     :param fp:
     """
     cmd = ["du", "--block-size=1", "-s", str(fp)]
-    return int(subprocess.check_output(cmd).split()[0])
+    size = 0
+    try:
+        size = int(subprocess.check_output(cmd).split()[0])
+    except subprocess.CalledProcessError:
+        pass
+    return size
 
 def get_apparent_size(fp):
     cmd = ["du", "--block-size=1", "-s", "--apparent-size", str(fp)]
-    return int(subprocess.check_output(cmd).split()[0])
+    size = 0
+    try:
+        size = int(subprocess.check_output(cmd).split()[0])
+    except subprocess.CalledProcessError:
+        pass
+    return size
 
 def format_size(n, pretty):
     try:
@@ -116,6 +126,7 @@ def main():
     targets = []
     globs = []
     globs.append(args.directory + "/*" * (args.depth))
+    globs.append(args.directory + "/.*" * (args.depth))
 
     for g in globs:
         for fp in glob.iglob(g):
