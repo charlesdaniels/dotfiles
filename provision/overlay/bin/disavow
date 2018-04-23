@@ -37,6 +37,9 @@
 #
 # -p . . . Print PID of spawned process
 #
+# -- . . . Stop parsing argument and treat all remaining input as part of the
+#          command to run regardless of the presence of '-' characters.
+#
 # $@ . . . Specify the process to run
 
 # .LICENSE
@@ -79,42 +82,50 @@ VERBOSE_MODE=0
 DROP_TOKEN=0
 PREV_TOKEN=""
 PRINT_PID=0
+STOP_PARSING=0
 
 # The " " makes sure that we always see every PREV_TOKEN. Note that this method
 # for parsing argv does not support merged flags (i.e. -abc vs -a -b -c).
 # DROP_TOKEN is used to signal *) that it should ignore the next token that
 # it sees, so as to avoid putting spurious values into PROC_CMD
 for TOKEN in $* " "; do
-	case "$PREV_TOKEN" in
-		"-i")
-			PROC_STDIN="$TOKEN"
-			DROP_TOKEN=1
-			;;
-		"-o")
-			PROC_STDOUT="$TOKEN"
-			DROP_TOKEN=1
-			;;
-		"-e")
-			PROC_STDERR="$TOKEN"
-			DROP_TOKEN=1
-			;;
-		"-h")
-			echo "$0 [-i <stdin>] [-o <stdout>] [-e <stderr>] [-v]  [cmd]"
-			;;
-		"-v")
-			VERBOSE_MODE=1
-			;;
-		"-p")
-			PRINT_PID=1
-			;;
-		*)
-			if [ $DROP_TOKEN -eq 0 ] ; then
-				PROC_CMD="$PROC_CMD $PREV_TOKEN"
-			else
-				DROP_TOKEN=0
-			fi
-			;;
-	esac
+	if [ $STOP_PARSING -ne 0 ] ; then
+		PROC_CMD="$PROC_CMD $PREV_TOKEN"
+	else
+		case "$PREV_TOKEN" in
+			"-i")
+				PROC_STDIN="$TOKEN"
+				DROP_TOKEN=1
+				;;
+			"-o")
+				PROC_STDOUT="$TOKEN"
+				DROP_TOKEN=1
+				;;
+			"-e")
+				PROC_STDERR="$TOKEN"
+				DROP_TOKEN=1
+				;;
+			"-h")
+				echo "$0 [-i <stdin>] [-o <stdout>] [-e <stderr>] [-v]  [cmd]"
+				;;
+			"-v")
+				VERBOSE_MODE=1
+				;;
+			"-p")
+				PRINT_PID=1
+				;;
+			"--")
+				STOP_PARSING=1
+				;;
+			*)
+				if [ $DROP_TOKEN -eq 0 ] ; then
+					PROC_CMD="$PROC_CMD $PREV_TOKEN"
+				else
+					DROP_TOKEN=0
+				fi
+				;;
+		esac
+	fi
 	PREV_TOKEN="$TOKEN"
 done
 
