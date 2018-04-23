@@ -115,11 +115,10 @@ def main():
 
     targets = []
     globs = []
-    for i in range(1, args.depth+1):
-        globs.append(args.directory + "/*"*i)
+    globs.append(args.directory + "/*" * (args.depth))
 
     for g in globs:
-        for fp in glob.iglob(g, recursive=True):
+        for fp in glob.iglob(g):
             if os.path.isdir(fp):
                 targets.append(fp)
 
