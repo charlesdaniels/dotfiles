@@ -71,7 +71,7 @@ def display_results(table, pretty=True):
 
     except ImportError:
         for row in table:
-            sys.stdout.write("{}\n".format('\t'.join(row)))
+            sys.stdout.write("{}\n".format('\t'.join([str(x) for x in row])))
 
 def get_table_row(fp):
         row = []
