@@ -78,7 +78,7 @@ endif
 noremap <Leader>yc "+yy
 
 " Visualize Makefiles
-noremap <Leader>vm :!visualize-makefile % <CR> <CR>
+noremap <Leader>vm :!visualize-makefile %:p <CR> <CR>
 
 """"""""10""""""""20""""""""30""" colorscheme ""50""""""""60""""""""70""""""""80
 
