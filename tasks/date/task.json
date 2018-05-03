@@ -1,0 +1,5 @@
+{
+	"provides": "date",
+	"manifest": [],
+	"run-script": [["date"]]
+}

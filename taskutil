@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import os
+import pathlib
+import json
+import subprocess
+import pprint
+import re
+
+class TaskError(Exception):
+    pass
+
+def print_warning(msg):
+    sys.stderr.write("WARNING: {}\n".format(msg))
+    sys.stderr.flush()
+
+def index_tasks(taskstore):
+    pathlist = pathlib.Path(taskstore).glob("*/task.json")
+    tasks = {}
+    for p in pathlist:
+        with open(str(p), 'r') as f:
+            j = json.load(f)
+            name = j["provides"]
+            if 'provides' not in j:
+                print_warning("taskfile is missing 'provides' field: {}"
+                              .format(p))
+                continue
+            if 'manifest' not in j:
+                print_warning("taskfile is missing 'manifest' field: {}"
+                              .format(p))
+                continue
+            if name in tasks:
+                print_warning("duplicate provider for '{}' in: {}"
+                              .format(name, p))
+                continue
+            tasks[name] = j
+
+    return tasks
+
+def nop(task):
+    # explicitly do nothing
+    return ["NOP"]
+
+def run_script(task):
+    log = []
+    for cmd in task["run-script"]:
+        result = subprocess.check_output(cmd)
+        result = result.decode("utf-8")
+        result = result.strip()
+        log.append(result)
+    return log
+
+def require_uname(task):
+    uname_regex = re.compile(task["require-uname"])
+    uname = subprocess.check_output(["uname"]).decode("utf-8").strip()
+    if not uname_regex.match(uname):
+        raise TaskError("Uname '{}' did not match '{}'"
+                .format(uname, task["require-uname"]))
+    else:
+        return ["Uname '{}' matched regex '{}'".format(
+                    uname, task["require-uname"])]
+
+def run_task(task):
+    fieldhandlers = {
+        "run-script": run_script,
+        "manifest": nop,
+        "provides": nop,
+        "require-uname": require_uname,
+    }
+
+    log = {}
+    failed = False
+    for k in task.keys():
+        if k not in fieldhandlers:
+            print_warning("No handler for field '{}' in task '{}'."
+                          .format(k, task["provides"]))
+        else:
+            try:
+                log[k] = fieldhandlers[k](task)
+            except Exception as e:
+                log[k] = [str(e)]
+                failed = True
+                break
+
+    return log, failed
+
+def dump_log(log):
+    for task in log:
+        sys.stdout.write("{}\n".format(task))
+        for field in log[task]:
+            sys.stdout.write("\t{}\n".format(field))
+            for entry in log[task][field]:
+                for line in entry.split("\n"):
+                    sys.stdout.write("\t\t{}\n".format(line.strip()))
+
+
+def main():
+    parser = argparse.ArgumentParser()
+
+    action_group = parser.add_mutually_exclusive_group()
+
+    action_group.add_argument("--run", "-r", nargs="+", default=None,
+            help="List one or more tasks to execute")
+
+    action_group.add_argument("--list", "-l",
+            default=False, action="store_true")
+
+    parser.add_argument("--dump_log", "-d", default=False, action="store_true",
+            help="Unconditionally dump a full execution log.")
+
+    parser.add_argument("--dump_tasks", default=False, action="store_true",
+            help="Dump all task data to the console.")
+
+    args = parser.parse_args()
+
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    tasks_dir = os.path.join(base_dir, "tasks")
+
+    tasks = index_tasks(tasks_dir)
+
+    if args.list:
+        sys.stdout.write("\n".join(tasks.keys()))
+        sys.stdout.write("\n")
+        sys.stdout.flush()
+
+    log = {}
+    if args.run is not None:
+        for t in args.run:
+            if t not in tasks:
+                print_warning("Task '{}' is unknown.".format(T))
+                continue
+            log[t], failed = run_task(tasks[t])
+            if failed:
+                print_warning("Task '{}' failed, refusing to continue."
+                        .format(t))
+                dump_log(log)
+                exit(1)
+
+    if args.dump_log:
+        dump_log(log)
+
+    if args.dump_tasks:
+        pp = pprint.PrettyPrinter()
+        pp.pprint(tasks)
+
+
+if __name__ == "__main__":
+    main()
