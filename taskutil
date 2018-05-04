@@ -8,6 +8,7 @@ import json
 import subprocess
 import pprint
 import re
+import traceback
 
 class TaskError(Exception):
     pass
@@ -35,22 +36,25 @@ def index_tasks(taskstore):
                 print_warning("duplicate provider for '{}' in: {}"
                               .format(name, p))
                 continue
+
+            j["status"] = "not started"
+            j["results"] = {}
+
+            if "require-task" not in j:
+                j["require-task"] = []
+
             tasks[name] = j
 
     return tasks
 
-def nop(task):
-    # explicitly do nothing
-    return ["NOP"]
-
 def run_script(task):
-    log = []
+    results = {}
     for cmd in task["run-script"]:
         result = subprocess.check_output(cmd)
         result = result.decode("utf-8")
         result = result.strip()
-        log.append(result)
-    return log
+        results[str(cmd)] = result
+    return results
 
 def require_uname(task):
     uname_regex = re.compile(task["require-uname"])
@@ -62,39 +66,92 @@ def require_uname(task):
         return ["Uname '{}' matched regex '{}'".format(
                     uname, task["require-uname"])]
 
-def run_task(task):
+def run_task(tasks, target_task):
+
+    task = tasks[target_task]
+
     fieldhandlers = {
         "run-script": run_script,
-        "manifest": nop,
-        "provides": nop,
         "require-uname": require_uname,
     }
 
-    log = {}
-    failed = False
+    ignore_fields = [
+        "provides",
+        "manifest",
+        "results",
+        "status",
+        "require-task"
+    ]
+
+    # we assume the caller has only tried to run this task if it's status is
+    # either queued or pending
+    task["status"] = "queued"
+
+    # dependency resolution
+    for t in task["require-task"]:
+        # if any dependency has failed, this task also fails
+        if tasks[t]["status"] == "failed":
+            task["status"] = "failed"
+            task["results"] = "Dependency '{}' failed".format(t)
+            tasks[target_task] = task
+            return tasks
+        # if if the dependency status is not started, queue it
+        elif tasks[t]["status"] == "not started":
+            task["status"] = "pending"
+            tasks[t]["status"] = "queued"
+
+    # we are still waiting on our dependencies to finish
+    if task["status"] == "pending":
+        tasks[target_task] = task
+        return tasks
+
     for k in task.keys():
+        if k in ignore_fields:
+            continue
+
         if k not in fieldhandlers:
             print_warning("No handler for field '{}' in task '{}'."
                           .format(k, task["provides"]))
         else:
             try:
-                log[k] = fieldhandlers[k](task)
+                task["results"][k] = fieldhandlers[k](task)
+                task["status"] = "done"
             except Exception as e:
-                log[k] = [str(e)]
-                failed = True
+                task["results"][k] = str(e) + "\n" + traceback.format_exc()
+                task["status"] = "failed"
                 break
 
-    return log, failed
+    tasks[target_task] = task
+    return tasks
 
-def dump_log(log):
-    for task in log:
-        sys.stdout.write("{}\n".format(task))
-        for field in log[task]:
-            sys.stdout.write("\t{}\n".format(field))
-            for entry in log[task][field]:
-                for line in entry.split("\n"):
-                    sys.stdout.write("\t\t{}\n".format(line.strip()))
+def dispatch_tasks(tasks):
+    while (number_pending(tasks) + number_queued(tasks)) > 0:
+        for t in tasks:
+            if (tasks[t]["status"] == "queued") or \
+               (tasks[t]["status"] == "pending"):
+                tasks = run_task(tasks, t)
 
+    return tasks
+
+def format_failed(tasks):
+    s = ""
+    for t in tasks:
+        if tasks[t]["status"] == "failed":
+            s += "task '{}' failed:\n".format(tasks[t]["provides"])
+            s += pprint.pformat(tasks[t]["results"])
+
+    return s
+
+def format_summary(tasks):
+    return "\n".join(["{}: {}"
+        .format(tasks[t]["provides"], tasks[t]["status"]) for t in tasks
+        if tasks[t]["status"] != "not started"]) + "\n"
+
+def number_queued(tasks):
+    return len([t for t in tasks if tasks[t]["status"] == "queued"])
+
+def number_pending(tasks):
+    return len([t for t in tasks if tasks[t]["status"] == "pending"])
 
 def main():
     parser = argparse.ArgumentParser()
@@ -107,11 +164,12 @@ def main():
     action_group.add_argument("--list", "-l",
             default=False, action="store_true")
 
-    parser.add_argument("--dump_log", "-d", default=False, action="store_true",
-            help="Unconditionally dump a full execution log.")
-
     parser.add_argument("--dump_tasks", default=False, action="store_true",
             help="Dump all task data to the console.")
+
+    parser.add_argument("--summarize", "-s", default=False,
+                        action="store_true", help="Display a summary " +
+                        "of task execution.")
 
     args = parser.parse_args()
 
@@ -124,26 +182,28 @@ def main():
         sys.stdout.write("\n".join(tasks.keys()))
         sys.stdout.write("\n")
         sys.stdout.flush()
+        exit(0)
 
-    log = {}
     if args.run is not None:
         for t in args.run:
             if t not in tasks:
                 print_warning("Task '{}' is unknown.".format(T))
                 continue
-            log[t], failed = run_task(tasks[t])
-            if failed:
-                print_warning("Task '{}' failed, refusing to continue."
-                        .format(t))
-                dump_log(log)
-                exit(1)
+            tasks[t]["status"] = "queued"
 
-    if args.dump_log:
-        dump_log(log)
+    tasks = dispatch_tasks(tasks)
+
 
     if args.dump_tasks:
         pp = pprint.PrettyPrinter()
         pp.pprint(tasks)
+    elif args.summarize:
+        sys.stderr.write(format_summary(tasks))
+    else:
+        sys.stderr.write(format_failed(tasks))
+
+
+    exit(len(format_failed(tasks)))
 
 
 if __name__ == "__main__":
