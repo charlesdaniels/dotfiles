@@ -13,6 +13,61 @@ import traceback
 class TaskError(Exception):
     pass
 
+class Task:
+
+    def __init__(this, provides, manifest):
+
+        this.provides = provides
+        this.manifest = manifest
+
+        this.status = "not started"
+        this.result = {}
+        this.require_task = []
+        this.run_script = []
+        this.require_uname = []
+
+    def do_run_script(this):
+        results = {}
+        for cmd in this.run_script:
+            result = subprocess.check_output(cmd)
+            result = result.decode("utf-8")
+            result = result.strip()
+            results[str(cmd)] = result
+        if 'run-script' not in this.result:
+            this.result["run-script"] = {}
+        this.result["run-script"][cmd] = results
+
+    def do_require_uname(this):
+        uname_regex = re.compile(this.require_uname)
+        uname = subprocess.check_output(["uname"]).decode("utf-8").strip()
+        if not uname_regex.match(uname):
+            this.result["require-uname"] = \
+                    "Uname '{}' did not match regext {}'".format(
+                        uname, this.require_uname)
+        else:
+            this.result["require-uname"] = \
+                    "Uname '{}' matched regex '{}'".format(
+                        uname, this.require_uname)
+
+    def generate_graphviz(this):
+        s = '\t"{}";\n'.format(this.provides)
+        for t in this.require_task:
+            s += t.generate_graphviz()
+        for t in this.require_task:
+            s += '\t"{}" -> "{}";\n'.format(this.provides, t.provides)
+        return s
+
+    def hydrate(this, tasks):
+        for i in range(len(this.require_task)):
+            if type(this.require_task[i]) is str:
+                this.require_task[i] = tasks[this.require_task[i]]
+            this.require_task[i].hydrate(tasks)
+
+
+    def __str__(this):
+        return "{}: {}".format(this.provides, this.status)
+
+
 def print_warning(msg):
     sys.stderr.write("WARNING: {}\n".format(msg))
     sys.stderr.flush()
@@ -37,121 +92,22 @@ def index_tasks(taskstore):
                               .format(name, p))
                 continue
 
-            j["status"] = "not started"
-            j["results"] = {}
+            task = Task(name, j["manifest"])
 
-            if "require-task" not in j:
-                j["require-task"] = []
+            if 'require-task' in j:
+                task.require_task = j["require-task"]
 
-            tasks[name] = j
+            if 'run-script' in j:
+                task.run_script = j["run-script"]
 
-    return tasks
+            if 'require-uname' in j:
+                task.require_uname = j["require-uname"]
 
-def run_script(task):
-    results = {}
-    for cmd in task["run-script"]:
-        result = subprocess.check_output(cmd)
-        result = result.decode("utf-8")
-        result = result.strip()
-        results[str(cmd)] = result
-    return results
-
-def require_uname(task):
-    uname_regex = re.compile(task["require-uname"])
-    uname = subprocess.check_output(["uname"]).decode("utf-8").strip()
-    if not uname_regex.match(uname):
-        raise TaskError("Uname '{}' did not match '{}'"
-                .format(uname, task["require-uname"]))
-    else:
-        return ["Uname '{}' matched regex '{}'".format(
-                    uname, task["require-uname"])]
-
-def run_task(tasks, target_task):
-
-    task = tasks[target_task]
-
-    fieldhandlers = {
-        "run-script": run_script,
-        "require-uname": require_uname,
-    }
-
-    ignore_fields = [
-        "provides",
-        "manifest",
-        "results",
-        "status",
-        "require-task"
-    ]
-
-    # we assume the caller has only tried to run this task if it's status is
-    # either queued or pending
-    task["status"] = "queued"
-
-    # dependency resolution
-    for t in task["require-task"]:
-        # if any dependency has failed, this task also fails
-        if tasks[t]["status"] == "failed":
-            task["status"] = "failed"
-            task["results"] = "Dependency '{}' failed".format(t)
-            tasks[target_task] = task
-            return tasks
-        # if if the dependency status is not started, queue it
-        elif tasks[t]["status"] == "not started":
-            task["status"] = "pending"
-            tasks[t]["status"] = "queued"
-
-    # we are still waiting on our dependencies to finish
-    if task["status"] == "pending":
-        tasks[target_task] = task
-        return tasks
-
-    for k in task.keys():
-        if k in ignore_fields:
-            continue
-
-        if k not in fieldhandlers:
-            print_warning("No handler for field '{}' in task '{}'."
-                          .format(k, task["provides"]))
-        else:
-            try:
-                task["results"][k] = fieldhandlers[k](task)
-                task["status"] = "done"
-            except Exception as e:
-                task["results"][k] = str(e) + "\n" + traceback.format_exc()
-                task["status"] = "failed"
-                break
-
-    tasks[target_task] = task
-    return tasks
-
-def dispatch_tasks(tasks):
-    while (number_pending(tasks) + number_queued(tasks)) > 0:
-        for t in tasks:
-            if (tasks[t]["status"] == "queued") or \
-               (tasks[t]["status"] == "pending"):
-                tasks = run_task(tasks, t)
+            tasks[name] = task
 
     return tasks
 
-def format_failed(tasks):
-    s = ""
-    for t in tasks:
-        if tasks[t]["status"] == "failed":
-            s += "task '{}' failed:\n".format(tasks[t]["provides"])
-            s += pprint.pformat(tasks[t]["results"])
 
-    return s
-
-def format_summary(tasks):
-    return "\n".join(["{}: {}"
-        .format(tasks[t]["provides"], tasks[t]["status"]) for t in tasks
-        if tasks[t]["status"] != "not started"]) + "\n"
-
-def number_queued(tasks):
-    return len([t for t in tasks if tasks[t]["status"] == "queued"])
-
-def number_pending(tasks):
-    return len([t for t in tasks if tasks[t]["status"] == "pending"])
 
 def main():
     parser = argparse.ArgumentParser()
@@ -164,12 +120,8 @@ def main():
     action_group.add_argument("--list", "-l",
             default=False, action="store_true")
 
-    parser.add_argument("--dump_tasks", default=False, action="store_true",
-            help="Dump all task data to the console.")
-
-    parser.add_argument("--summarize", "-s", default=False,
-                        action="store_true", help="Display a summary " +
-                        "of task execution.")
+    action_group.add_argument("--visualize", "-s",
+            default=False, action="store_true")
 
     args = parser.parse_args()
 
@@ -184,26 +136,23 @@ def main():
         sys.stdout.flush()
         exit(0)
 
+    if args.visualize:
+        master = Task("__master__", [])
+        master.require_task = list(tasks.keys())
+
+        master.hydrate(tasks)
+
+        sys.stdout.write("digraph G {\n")
+        sys.stdout.write(master.generate_graphviz())
+        sys.stdout.write("}\n")
+
     if args.run is not None:
-        for t in args.run:
-            if t not in tasks:
-                print_warning("Task '{}' is unknown.".format(T))
-                continue
-            tasks[t]["status"] = "queued"
+        master = Task("__master__", [])
+        master.require_task = args.run
 
-    tasks = dispatch_tasks(tasks)
+        master.hydrate(tasks)
 
-
-    if args.dump_tasks:
-        pp = pprint.PrettyPrinter()
-        pp.pprint(tasks)
-    elif args.summarize:
-        sys.stderr.write(format_summary(tasks))
-    else:
-        sys.stderr.write(format_failed(tasks))
-
-
-    exit(len(format_failed(tasks)))
+        master.execute()
 
 
 if __name__ == "__main__":
