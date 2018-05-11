@@ -1,0 +1,6 @@
+{
+	"provides": "simple-copy",
+	"manifest": ["testprog"],
+	"copy-file": [["testprog", "{BIN_DIR}/testprog"]],
+	"mark-executable": ["{BIN_DIR}/testprog"]
+}

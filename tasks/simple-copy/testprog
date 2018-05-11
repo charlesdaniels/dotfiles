@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "a simple test program"
+date
+uptime
