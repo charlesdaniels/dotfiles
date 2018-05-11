@@ -1,0 +1,6 @@
+{
+    "provides": "git-test",
+    "manifest": [],
+    "require-git": [["https://github.com/tonyfischetti/qstats.git", "qstats", "master"]]
+}
+
