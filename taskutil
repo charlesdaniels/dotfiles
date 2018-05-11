@@ -76,10 +76,14 @@ class Task:
         if len(this.run_script) == 0:
             return
 
+        scriptenv = { ** os.environ }
+        for k in this.env:
+            scriptenv["TASKUTIL_"+k] = this.env[k]
+
         results = {}
         for cmd in this.run_script:
             try:
-                result = subprocess.check_output(cmd)
+                result = subprocess.check_output(cmd, env=scriptenv)
                 result = result.decode("utf-8")
                 result = result.strip()
                 results[str(cmd)] = result
@@ -153,7 +157,7 @@ class Task:
         for k in this.result:
             s += "\t{}: ".format(k)
             if type(this.result[k]) is str:
-                s += this.result[k]
+                s += '\n\t\t'.join(this.result[k].split('\n'))
                 s += "\n"
             elif type(this.result[k]) is list:
                 s += "\n"
@@ -162,11 +166,20 @@ class Task:
             elif type(this.result[k]) is dict:
                 s += "\n"
                 for ik in this.result[k]:
-                    s += "\t\t{}: ".format(ik)
-                    s += str(this.result[k][ik])
-                    s += "\n"
+                    if type(this.result[k]) is str:
+                        s += '\n\t\t\t'.join(this.result[k].split('\n'))
+                        s += "\n"
+                    elif type(this.result[k]) is list:
+                        s += "\n"
+                        for li in this.result[k]:
+                            s += "\t\t\t{}\n".format(li)
+                    else:
+                        s += "\t\t{}: ".format(ik)
+                        s += '\n\t\t\t'.join(
+                                str(this.result[k][ik]).split('\n'))
+                        s += "\n"
             else:
-                s += str(this.result[k])
+                s += '\n\t\t'.join(str(this.result[k]).split('\n'))
                 s += "\n"
 
         s += "\n"
