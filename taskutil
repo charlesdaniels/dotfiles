@@ -24,26 +24,36 @@ class Task:
         this.result = {}
         this.require_task = []
         this.run_script = []
-        this.require_uname = []
+        this.require_uname = None
 
     def do_run_script(this):
+        if len(this.run_script) == 0:
+            return
+
         results = {}
         for cmd in this.run_script:
-            result = subprocess.check_output(cmd)
-            result = result.decode("utf-8")
-            result = result.strip()
-            results[str(cmd)] = result
-        if 'run-script' not in this.result:
-            this.result["run-script"] = {}
-        this.result["run-script"][cmd] = results
+            try:
+                result = subprocess.check_output(cmd)
+                result = result.decode("utf-8")
+                result = result.strip()
+                results[str(cmd)] = result
+            except Exception as e:
+                results[str(cmd)] = str(e)
+                this.status = "failed"
+
+        this.result["run-script"] = results
 
     def do_require_uname(this):
+        if this.require_uname is None:
+            return
+
         uname_regex = re.compile(this.require_uname)
         uname = subprocess.check_output(["uname"]).decode("utf-8").strip()
         if not uname_regex.match(uname):
             this.result["require-uname"] = \
                     "Uname '{}' did not match regext {}'".format(
                         uname, this.require_uname)
+            this.status = "failed"
         else:
             this.result["require-uname"] = \
                     "Uname '{}' matched regex '{}'".format(
@@ -63,6 +73,53 @@ class Task:
                 this.require_task[i] = tasks[this.require_task[i]]
             this.require_task[i].hydrate(tasks)
 
+    def execute(this):
+        # ensure all dependancies are satisfied
+        for task in this.require_task:
+            if task.status == "not started":
+                task.execute()
+
+            if task.status == "failed":
+                this.status = "failed"
+                if "require-task" not in this.result:
+                    this.result["require-task"] = {}
+                this.result["require-task"][task.provides] = \
+                        "Task '{}' reported itself to be in failure state" \
+                        .format(task.provides)
+
+        if this.status != "failed":
+            this.do_require_uname()
+            this.do_run_script()
+
+        if this.status != "failed":
+            this.status = "complete"
+
+    def get_result_summary(this):
+        s = "{}: {}\n".format(this.provides, this.status)
+        for k in this.result:
+            s += "\t{}: ".format(k)
+            if type(this.result[k]) is str:
+                s += this.result[k]
+                s += "\n"
+            elif type(this.result[k]) is list:
+                s += "\n"
+                for li in this.result[k]:
+                    s += "\t\t{}\n".format(li)
+            elif type(this.result[k]) is dict:
+                s += "\n"
+                for ik in this.result[k]:
+                    s += "\t\t"
+                    s += str(this.result[k][ik])
+            else:
+                s += str(this.result[k])
+                s += "\n"
+
+        s += "\n"
+
+        for t in this.require_task:
+            s += t.get_result_summary()
+
+        return s
 
     def __str__(this):
         return "{}: {}".format(this.provides, this.status)
@@ -120,8 +177,8 @@ def main():
     action_group.add_argument("--list", "-l",
             default=False, action="store_true")
 
-    action_group.add_argument("--visualize", "-s",
-            default=False, action="store_true")
+    action_group.add_argument("--visualize", "-s", nargs="*",
+            default=None)
 
     args = parser.parse_args()
 
@@ -136,9 +193,13 @@ def main():
         sys.stdout.flush()
         exit(0)
 
-    if args.visualize:
+    if args.visualize is not None:
         master = Task("__master__", [])
-        master.require_task = list(tasks.keys())
+
+        if len(args.visualize) == 0:
+            master.require_task = list(tasks.keys())
+        else:
+            master.require_task = args.visualize
 
         master.hydrate(tasks)
 
@@ -153,6 +214,8 @@ def main():
         master.hydrate(tasks)
 
         master.execute()
+
+        sys.stdout.write(master.get_result_summary())
 
 
 if __name__ == "__main__":
