@@ -416,11 +416,19 @@ class Task:
                 break
 
             delete = True
-            for m in this.manifest:
-                m = os.path.join(this.env["TASK_DIR"], m)
-                if os.path.normpath(p) == os.path.normpath(m):
-                    sys.stderr.write("protected: {}\n".format(m))
-                    delete = False
+            for mg in this.manifest:
+                mg = os.path.join(this.env["TASK_DIR"], mg)
+
+                # pathlib.glob does not support globbing on absolute paths,
+                # so we convert to a relative path
+                mg = os.path.relpath(mg, os.getcwd())
+
+                for m in pathlib.Path().glob(mg):
+                    m = os.path.realpath(m)
+                    p = os.path.realpath(p)
+                    if os.path.normpath(p) == os.path.normpath(m):
+                        sys.stderr.write("protected: {}\n".format(m))
+                        delete = False
 
             if delete:
                 if os.path.isfile(p):
@@ -435,6 +443,7 @@ class Task:
             for p in dirstack:
                     try:
                         os.rmdir(p)
+                        pass
                     except Exception as e:
                         pass
 
