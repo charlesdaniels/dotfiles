@@ -1,0 +1,8 @@
+{
+    "provides": "provision-unix-core",
+    "manifest": [],
+    "require-task": [
+        "require-unix",
+        "install-qstats"
+    ]
+}

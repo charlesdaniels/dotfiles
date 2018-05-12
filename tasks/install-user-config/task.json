@@ -6,6 +6,9 @@
                      "install-cmus-config",
                      "install-share-file-config",
                      "install-synapse-config",
-                     "install-texmf"
+                     "install-texmf",
+                     "install-vimrc",
+                     "install-tmux-config",
+                     "install-xconfig"
     ]
 }

@@ -111,7 +111,6 @@ class Task:
         for g in this.require_github:
             url, clonedir, branch = g
             fullurl = "https://github.com/{}.git".format(url)
-            print(fullurl)
             this.require_git = [[fullurl, clonedir, branch], *this.require_git]
 
     def do_require_file(this):

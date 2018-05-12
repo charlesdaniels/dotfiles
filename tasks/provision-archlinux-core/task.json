@@ -1,0 +1,8 @@
+{
+    "provides": "provision-archlinux-core",
+    "manifest": [],
+    "require-task": [
+        "require-archlinux",
+        "provision-linux-core"
+    ]
+}
