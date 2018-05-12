@@ -36,7 +36,7 @@ class Task:
         this.require_git = []
         this.require_http = []
         this.require_github = []
-        this.require_sudo = True
+        this.require_sudo = False
         this.require_any = []
 
         this.env = {}
