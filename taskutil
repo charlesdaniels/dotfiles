@@ -63,6 +63,11 @@ class Task:
                     dpath = os.path.join(dest, dpath)
                     dparent = os.path.dirname(dpath)
 
+                    if os.path.isdir(spath):
+                        results[rn] += "create directory '{}'\n".format(dpath)
+                        os.makedirs(dpath, exist_ok=True)
+                        continue
+
                     # ensure the destination's parent directory exists
                     results[rn] += "create directory '{}'\n".format(dparent)
                     os.makedirs(dparent, exist_ok=True)
