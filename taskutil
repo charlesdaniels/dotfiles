@@ -37,6 +37,7 @@ class Task:
         this.require_http = []
         this.require_github = []
         this.require_sudo = True
+        this.require_any = []
 
         this.env = {}
         this.env["HOME"] = os.path.expanduser("~")
@@ -247,6 +248,16 @@ class Task:
                 this.require_task[i] = tasks[this.require_task[i]]
             this.require_task[i].hydrate(tasks)
 
+        for i in range(len(this.require_any)):
+            for j in range(len(this.require_any[i])):
+                taskname = this.require_any[i][j]
+                if taskname not in tasks:
+                    sys.stderr.write("FATAL: unknown task '{}'\n"
+                            .format(taskname))
+                    raise TaskError()
+                this.require_any[i][j] = tasks[taskname]
+                this.require_any[i][j].hydrate(tasks)
+
     def execute(this, sudo_pw=None):
 
         # ensure we have the sudo password if we need it
@@ -272,6 +283,27 @@ class Task:
                 this.result["require-task"][task.provides] = \
                         "Task '{}' reported itself to be in failure state" \
                         .format(task.provides)
+
+        # ensure any "any" groups are satisfied
+        this.result["require-any"] = {}
+        for group in this.require_any:
+            group_ok = False
+            group_name = str([x.provides for x in group])
+            for task in group:
+                if task.status == "not started":
+                    task.execute()
+
+                if task.status == "complete":
+                    group_ok = True
+                    break
+
+            if not group_ok:
+                this.status = "failed"
+                this.result["require-any"][group_name] = "No tasks in " + \
+                    "group completed successfully."
+            else:
+                this.result["require-any"][group_name] = "One or more tasks" +\
+                    " in group completed successfully."
 
         if this.status != "failed":
             os.chdir(this.env["TASK_DIR"])
@@ -319,8 +351,19 @@ class Task:
 
         s += "\n"
 
+        seen = []
         for t in this.require_task:
+            if t in seen:
+                continue
             s += t.get_result_summary()
+            seen.append(t)
+
+        for g in this.require_any:
+            for t in g:
+                if t in seen:
+                    continue
+                s += t.get_result_summary()
+                seen.append(t)
 
         return s
 
@@ -402,6 +445,9 @@ def index_tasks(taskstore):
 
             if 'require-task' in j:
                 task.require_task = j["require-task"]
+
+            if 'require-any' in j:
+                task.require_any = j["require-any"]
 
             if 'run-script' in j:
                 task.run_script = j["run-script"]

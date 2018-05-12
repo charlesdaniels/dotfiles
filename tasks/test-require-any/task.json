@@ -1,0 +1,6 @@
+{
+	"provides": "test-require-any",
+	"manifest": [],
+	"run-script": [["echo", "foobar"]],
+	"require-any": [["false", "hello-world", "date"]]
+}
