@@ -38,6 +38,7 @@ class Task:
         this.require_github = []
         this.require_sudo = False
         this.require_any = []
+        this.require_file = []
 
         this.env = {}
         this.env["HOME"] = os.path.expanduser("~")
@@ -68,6 +69,21 @@ class Task:
             fullurl = "https://github.com/{}.git".format(url)
             print(fullurl)
             this.require_git = [[fullurl, clonedir, branch], *this.require_git]
+
+    def do_require_file(this):
+        if len(this.require_file) == 0:
+            return
+
+        results = {}
+        for f in this.require_file:
+            rn = "File '{}' must exist".format(f)
+            if os.path.exists(f):
+                results[rn] = "File exists."
+            else:
+                results[rn] = "File does not exist."
+                this.status = "failed"
+
+        this.result["require-file"] = results
 
     def do_require_http(this):
         if len(this.require_http) == 0:
@@ -285,8 +301,9 @@ class Task:
                         .format(task.provides)
 
         # ensure any "any" groups are satisfied
-        this.result["require-any"] = {}
         for group in this.require_any:
+            if "require-any" not in this.result:
+                this.result["require-any"] = {}
             group_ok = False
             group_name = str([x.provides for x in group])
             for task in group:
@@ -308,6 +325,7 @@ class Task:
         if this.status != "failed":
             os.chdir(this.env["TASK_DIR"])
             this.do_require_uname()
+            this.do_require_file()
             this.do_require_github()
             this.do_require_git()
             this.do_require_http()
@@ -472,6 +490,9 @@ def index_tasks(taskstore):
 
             if 'require-sudo' in j:
                 task.require_sudo = j["require-sudo"]
+
+            if 'require-file' in j:
+                task.require_file = j["require-file"]
 
             tasks[name] = task
 
