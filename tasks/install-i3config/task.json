@@ -1,0 +1,6 @@
+{
+    "provides": "install-i3config",
+    "manifest": ["overlay", "overlay/*", "overlay/**/*"],
+    "require-task": ["require-unix"],
+    "overlay": [["overlay", "{HOME}"]]
+}

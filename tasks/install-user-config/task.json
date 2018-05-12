@@ -1,0 +1,11 @@
+{
+    "provides": "install-user-config",
+    "manifest": [],
+    "require-task": ["install-i3config",
+                     "install-shellrc",
+                     "install-cmus-config",
+                     "install-share-file-config",
+                     "install-synapse-config",
+                     "install-texmf"
+    ]
+}

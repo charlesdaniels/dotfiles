@@ -1,0 +1,6 @@
+{
+    "provides": "install-share-file-config",
+    "manifest": ["overlay", "overlay/*", "overlay/**/*"],
+    "require-task": ["require-unix"],
+    "overlay": [["overlay", "{HOME}"]]
+}
