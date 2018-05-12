@@ -34,6 +34,7 @@ class Task:
         this.mark_executable = []
         this.require_git = []
         this.require_http = []
+        this.require_github = []
 
         this.env = {}
         this.env["HOME"] = os.path.expanduser("~")
@@ -57,6 +58,13 @@ class Task:
                 results[rn] = str(e)
 
         this.result["copy-file"] = results
+
+    def do_require_github(this):
+        for g in this.require_github:
+            url, clonedir, branch = g
+            fullurl = "https://github.com/{}.git".format(url)
+            print(fullurl)
+            this.require_git = [[fullurl, clonedir, branch], *this.require_git]
 
     def do_require_http(this):
         if len(this.require_http) == 0:
@@ -242,6 +250,7 @@ class Task:
         if this.status != "failed":
             os.chdir(this.env["TASK_DIR"])
             this.do_require_uname()
+            this.do_require_github()
             this.do_require_git()
             this.do_require_http()
             this.do_copy_file()
@@ -382,6 +391,9 @@ def index_tasks(taskstore):
 
             if 'require-git' in j:
                 task.require_git = j["require-git"]
+
+            if 'require-github' in j:
+                task.require_github = j["require-github"]
 
             if 'require-http' in j:
                 task.require_http = j["require-http"]

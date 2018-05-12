@@ -1,0 +1,6 @@
+{
+    "provides": "test-github",
+    "manifest": [],
+    "require-github": [["tonyfischetti/sake", "sake", "master"]]
+}
+
