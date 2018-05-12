@@ -293,7 +293,8 @@ class Task:
     def generate_graphviz(this, seen_nodes = [], seen_edges = []):
         s = ""
         if this.provides not in seen_nodes:
-            s = '\t"{}";\n'.format(this.provides)
+            if this.provides != "__master__":
+                s = '\t"{}";\n'.format(this.provides)
             seen_nodes.append(this.provides)
 
         for t in this.require_task:
@@ -301,7 +302,8 @@ class Task:
         for t in this.require_task:
             edge = (this.provides, t.provides)
             if edge not in seen_edges:
-                s += '\t"{}" -> "{}";\n'.format(this.provides, t.provides)
+                if this.provides != "__master__":
+                    s += '\t"{}" -> "{}";\n'.format(this.provides, t.provides)
                 seen_edges.append(edge)
 
         for g in this.require_any:
