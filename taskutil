@@ -405,51 +405,72 @@ class Task:
         if this.status != "failed":
             this.status = "complete"
 
-    def get_result_summary(this):
-        s = "{}: {}\n".format(this.provides, this.status)
-        for k in this.result:
-            s += "\t{}: ".format(k)
-            if type(this.result[k]) is str:
-                s += '\n\t\t'.join(this.result[k].split('\n'))
-                s += "\n"
-            elif type(this.result[k]) is list:
-                s += "\n"
-                for li in this.result[k]:
-                    s += "\t\t{}\n".format(li)
-            elif type(this.result[k]) is dict:
-                s += "\n"
-                for ik in this.result[k]:
-                    if type(this.result[k]) is str:
-                        s += '\n\t\t\t'.join(this.result[k].split('\n'))
-                        s += "\n"
-                    elif type(this.result[k]) is list:
-                        s += "\n"
-                        for li in this.result[k]:
-                            s += "\t\t\t{}\n".format(li)
-                    else:
-                        s += "\t\t{}: ".format(ik)
-                        s += '\n\t\t\t'.join(
-                                str(this.result[k][ik]).split('\n'))
-                        s += "\n"
-            else:
-                s += '\n\t\t'.join(str(this.result[k]).split('\n'))
-                s += "\n"
+    def get_result_summary(this, seen=[]):
+        s = ""
+        if this.provides not in seen:
+            seen.append(this.provides)
 
-        s += "\n"
+            # task name
+            s = "{}: {}\n".format(this.provides, this.status)
 
-        seen = []
+            for k in this.result:
+                s += "\t{}: ".format(k)
+
+                # case where result is a string
+                if type(this.result[k]) is str:
+                    s += '\n\t\t'.join(this.result[k].split('\n'))
+                    s += "\n"
+
+                # case where result is a list
+                elif type(this.result[k]) is list:
+                    s += "\n"
+                    for li in this.result[k]:
+                        s += "\t\t{}\n".format(li)
+
+                # case where result is a nested table
+                elif type(this.result[k]) is dict:
+                    s += "\n"
+
+                    # iterate over nested fields
+                    for ik in this.result[k]:
+
+                        # string fields
+                        if type(this.result[k]) is str:
+                            s += '\n\t\t\t'.join(this.result[k].split('\n'))
+                            s += "\n"
+
+                        # list fields
+                        elif type(this.result[k]) is list:
+                            s += "\n"
+                            for li in this.result[k]:
+                                s += "\t\t\t{}\n".format(li)
+
+                        # unknown fields
+                        else:
+                            s += "\t\t{}: ".format(ik)
+                            s += '\n\t\t\t'.join(
+                                    str(this.result[k][ik]).split('\n'))
+                            s += "\n"
+
+                # case where field type is not known
+                else:
+                    s += '\n\t\t'.join(str(this.result[k]).split('\n'))
+                    s += "\n"
+
+            s += "\n"
+
+        # descend into required tasks
         for t in this.require_task:
             if t in seen:
                 continue
-            s += t.get_result_summary()
-            seen.append(t)
+            s += t.get_result_summary(seen=seen)
 
+        # descend into require-any tasks
         for g in this.require_any:
             for t in g:
                 if t in seen:
                     continue
-                s += t.get_result_summary()
-                seen.append(t)
+                s += t.get_result_summary(seen=seen)
 
         return s
 
