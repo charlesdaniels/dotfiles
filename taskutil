@@ -246,12 +246,30 @@ class Task:
                     "Uname '{}' matched regex '{}'".format(
                         uname, this.require_uname)
 
-    def generate_graphviz(this):
-        s = '\t"{}";\n'.format(this.provides)
+    def generate_graphviz(this, seen_nodes = [], seen_edges = []):
+        s = ""
+        if this.provides not in seen_nodes:
+            s = '\t"{}";\n'.format(this.provides)
+            seen_nodes.append(this.provides)
+
         for t in this.require_task:
-            s += t.generate_graphviz()
+            s += t.generate_graphviz(seen_nodes, seen_edges)
         for t in this.require_task:
-            s += '\t"{}" -> "{}";\n'.format(this.provides, t.provides)
+            edge = (this.provides, t.provides)
+            if edge not in seen_edges:
+                s += '\t"{}" -> "{}";\n'.format(this.provides, t.provides)
+                seen_edges.append(edge)
+
+        for g in this.require_any:
+            for t in g:
+                s += t.generate_graphviz(seen_nodes, seen_edges)
+            for t in g:
+                edge = (this.provides, t.provides)
+                if edge not in seen_edges:
+                    s += '\t"{}" -> "{}" [style=dashed];\n' \
+                            .format(this.provides, t.provides)
+                    seen_edges.append(edge)
+
         return s
 
     def hydrate(this, tasks):
@@ -267,6 +285,9 @@ class Task:
         for i in range(len(this.require_any)):
             for j in range(len(this.require_any[i])):
                 taskname = this.require_any[i][j]
+                if type(taskname) is not str:
+                    # dont hydrate the same task more than once
+                    continue
                 if taskname not in tasks:
                     sys.stderr.write("FATAL: unknown task '{}'\n"
                             .format(taskname))
