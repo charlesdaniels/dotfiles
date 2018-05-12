@@ -120,6 +120,14 @@ class Task:
                 result = result.strip()
                 results[rn] += result + "\n"
 
+
+            except Exception as e:
+                results[rn] += str(e)
+                this.status = "failed"
+                continue
+
+            try:
+
                 results[rn] += "$ git pull origin {}\n".format(branch)
                 result = subprocess.check_output(
                         ["git", "pull", "origin", branch],
@@ -129,9 +137,17 @@ class Task:
                 results[rn] += result + "\n"
 
             except Exception as e:
-                results[rn] += str(e)
-                this.status = "failed"
-                continue
+                results[rn] += "\nFailed to pull origin. Failure is non"
+                results[rn] += "-fatal to task completion.\n"
+
+        gitignore = os.path.join(this.env["TASK_DIR"], ".gitignore")
+        if not os.path.exists(gitignore):
+            with open(gitignore, "w") as f:
+                for g in this.require_git:
+                    url, clonedir, branch = g
+                    f.write(clonedir)
+                    f.write("\n")
+
 
         this.result["require-git"] = results
 

@@ -6,3 +6,4 @@ log
 3rdparty/st/st
 3rdparty/st/st.o
 3rdparty/moss
+tasks/*/.gitignore
