@@ -1,7 +1,0 @@
-{
-    "provides": "test-sudo",
-    "manifest": ["test_sudo.sh"],
-    "require-sudo": true,
-    "run-script": [["./test_sudo.sh"]]
-}
-

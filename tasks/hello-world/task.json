@@ -1,5 +1,0 @@
-{
-	"provides": "hello-world",
-	"manifest": [],
-	"run-script": [["echo", "hello world"]]
-}

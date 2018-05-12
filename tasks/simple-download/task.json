@@ -1,5 +1,0 @@
-{
-	"provides": "simple-download",
-	"manifest": ["testprog"],
-	"require-http": [["http://cdaniels.net", "test.html"]]
-}

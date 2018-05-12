@@ -1,6 +1,0 @@
-{
-	"provides": "test-require",
-	"manifest": [],
-	"run-script": [["echo", "foobar"]],
-	"require-task": ["hello-world", "false", "date"]
-}

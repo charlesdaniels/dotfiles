@@ -1,5 +1,0 @@
-{
-	"provides": "env",
-	"manifest": [],
-	"run-script": [["env"]]
-}

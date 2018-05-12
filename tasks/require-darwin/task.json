@@ -1,0 +1,5 @@
+{
+    "provides": "require-darwin",
+    "manifest": [],
+    "require-uname": ".*Darwin.*"
+}

@@ -1,0 +1,5 @@
+{
+    "provides": "require-unix",
+    "manifest": [],
+    "require-any": [["require-linux", "require-darwin"]]
+}
