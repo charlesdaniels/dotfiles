@@ -12,6 +12,7 @@ import traceback
 import shutil
 import stat
 import urllib.request
+import getpass
 
 class TaskError(Exception):
     pass
@@ -35,6 +36,7 @@ class Task:
         this.require_git = []
         this.require_http = []
         this.require_github = []
+        this.require_sudo = True
 
         this.env = {}
         this.env["HOME"] = os.path.expanduser("~")
@@ -182,6 +184,8 @@ class Task:
         if len(this.run_script) == 0:
             return
 
+        os.chdir(this.env["TASK_DIR"])
+
         scriptenv = { ** os.environ }
         for k in this.env:
             scriptenv["TASKUTIL_"+k] = this.env[k]
@@ -189,10 +193,20 @@ class Task:
         results = {}
         for cmd in this.run_script:
             try:
-                result = subprocess.check_output(cmd, env=scriptenv)
+                result = subprocess.check_output(cmd,
+                        env=scriptenv, stdin=subprocess.DEVNULL,
+                        stderr=subprocess.PIPE)
                 result = result.decode("utf-8")
                 result = result.strip()
                 results[str(cmd)] = result
+            except subprocess.CalledProcessError as e:
+                results[str(cmd)] = str(e)
+                results[str(cmd)] += "\n- - - stdout - - -\n"
+                results[str(cmd)] += e.output.decode("utf-8")
+                results[str(cmd)] += "\n- - - stderr - - -\n"
+                results[str(cmd)] += e.stderr.decode("utf-8")
+                this.status = "failed"
+
             except Exception as e:
                 results[str(cmd)] = str(e)
                 this.status = "failed"
@@ -233,11 +247,23 @@ class Task:
                 this.require_task[i] = tasks[this.require_task[i]]
             this.require_task[i].hydrate(tasks)
 
-    def execute(this):
-        # ensure all dependancies are satisfied
+    def execute(this, sudo_pw=None):
+
+        # ensure we have the sudo password if we need it
+        if this.require_sudo:
+            if (sudo_pw is None) and (not sys.stdin.isatty()):
+                this.status = "failed"
+                this.result["require-sudo"] = "Task requires sudo and " + \
+                    "no sudo password was provided"
+            elif sudo_pw is None:
+                sudo_pw = getpass.getpass("Sudo password is required: ")
+
+            this.env["SUDO_PASSWORD"] = sudo_pw
+
+        # ensure all dependencies are satisfied
         for task in this.require_task:
             if task.status == "not started":
-                task.execute()
+                task.execute(sudo_pw=sudo_pw)
 
             if task.status == "failed":
                 this.status = "failed"
@@ -398,6 +424,9 @@ def index_tasks(taskstore):
             if 'require-http' in j:
                 task.require_http = j["require-http"]
 
+            if 'require-sudo' in j:
+                task.require_sudo = j["require-sudo"]
+
             tasks[name] = task
 
     return tasks
@@ -421,7 +450,23 @@ def main():
     action_group.add_argument("--clean", "-c", nargs="*",
             default=None)
 
+    sudo_group = parser.add_mutually_exclusive_group()
+
+    sudo_group.add_argument("--sudo_password", "-p", default=None,
+                            help="Specify password for sudo as an argument")
+
+    sudo_group.add_argument("--sudo_file", "-f", default=None,
+                            help="Specify a file which contains the " +
+                            "password for sudo.")
+
     args = parser.parse_args()
+
+    sudo_pw = None
+    if args.sudo_password is not None:
+        sudo_pw = args.sudo_password
+    elif args.sudo_file is not None:
+        with open(args.sudo_file, 'r') as f:
+            sudo_pw = f.read()
 
     base_dir = os.path.dirname(os.path.realpath(__file__))
     tasks_dir = os.path.join(base_dir, "tasks")
@@ -465,7 +510,7 @@ def main():
 
         master.hydrate(tasks)
 
-        master.execute()
+        master.execute(sudo_pw=sudo_pw)
 
         sys.stdout.write(master.get_result_summary())
 
