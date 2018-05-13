@@ -5,6 +5,6 @@
         "apply-x220-usb-workaround",
         "provision-archlinux-workstation",
         "install-user-config",
-        "install-lockscreen.service"
+        "provision-linux-laptop"
     ]
 }

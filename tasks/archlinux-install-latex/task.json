@@ -1,5 +1,5 @@
 {
-    "provides": "archlinux-install-xorg",
+    "provides": "archlinux-install-latex",
     "manifest": [],
     "require-sudo": true,
     "require-task": [
@@ -9,13 +9,7 @@
     "run-script": [
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
         ["pacaur", "-S", "--noedit", "--noconfirm", "--needed",
-            "xorg",
-            "xorg-xinit",
-            "i3",
-            "xdotool",
-            "xclip",
-            "lxdm",
-            "arandr"
+            "texlive-most"
         ]
     ]
 }

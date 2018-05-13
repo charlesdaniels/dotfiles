@@ -7,6 +7,8 @@
         "archlinux-update",
         "archlinux-update-pacaur",
         "provision-archlinux-core",
-        "archlinux-install-xorg"
+        "archlinux-install-xorg",
+        "archlinux-install-desktop",
+        "archlinux-install-latex"
     ]
 }

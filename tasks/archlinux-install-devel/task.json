@@ -12,7 +12,6 @@
             "python",
             "gcc",
             "binutils",
-            "texlive-most",
             "perl",
             "ruby",
             "python-psutil",

@@ -1,0 +1,26 @@
+{
+    "provides": "archlinux-install-desktop",
+    "manifest": [],
+    "require-sudo": true,
+    "require-task": [
+        "require-archlinux",
+        "archlinux-update",
+        "archlinux-install-pacaur"],
+    "run-script": [
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
+        ["pacaur", "-S", "--noedit", "--noconfirm", "--needed",
+            "pcmanfm-qt",
+            "firefox",
+            "thunderbird",
+            "rofi",
+            "rxvt-unicode",
+            "keepassxc",
+            "dropbox",
+            "pasystray",
+            "pavucontrol",
+            "network-manager-applet",
+            "pulseaudio",
+            "pulseaudio-alsa"
+        ]
+    ]
+}

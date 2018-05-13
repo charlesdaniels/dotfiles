@@ -1,0 +1,6 @@
+{
+    "provides": "ensure-network-manager",
+    "manifest": [],
+    "require-any": [["require-network-manager",
+                    "archlinux-install-network-manager"]]
+}

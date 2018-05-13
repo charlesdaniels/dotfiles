@@ -336,8 +336,10 @@ class Task:
         for i in range(len(this.require_task)):
             if type(this.require_task[i]) is str:
                 if this.require_task[i] not in tasks:
-                    sys.stderr.write("FATAL: unknown task '{}'\n"
+                    sys.stderr.write("FATAL: unknown task '{}' "
                             .format(this.require_task[i]))
+                    sys.stderr.write("while hydrating task '{}'.\n"
+                            .format(this.provides))
                     raise TaskError()
                 this.require_task[i] = tasks[this.require_task[i]]
             this.require_task[i].hydrate(tasks)
@@ -349,8 +351,10 @@ class Task:
                     # dont hydrate the same task more than once
                     continue
                 if taskname not in tasks:
-                    sys.stderr.write("FATAL: unknown task '{}'\n"
+                    sys.stderr.write("FATAL: unknown task '{}'"
                             .format(taskname))
+                    sys.stderr.write("while hydrating task '{}'.\n"
+                            .format(this.provides))
                     raise TaskError()
                 this.require_any[i][j] = tasks[taskname]
                 this.require_any[i][j].hydrate(tasks)
