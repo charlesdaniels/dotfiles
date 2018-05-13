@@ -303,7 +303,12 @@ class Task:
         s = ""
         if this.provides not in seen_nodes:
             if this.provides != "__master__":
-                s = '\t"{}";\n'.format(this.provides)
+                if this.require_sudo:
+                    s = '\t"{}" [color=red];\n'.format(this.provides)
+                elif this.predict_sudo():
+                    s = '\t"{}" [color=orange];\n'.format(this.provides)
+                else:
+                    s = '\t"{}";\n'.format(this.provides)
             seen_nodes.append(this.provides)
 
         for t in this.require_task:
