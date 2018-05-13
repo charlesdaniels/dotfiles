@@ -620,6 +620,52 @@ def index_tasks(taskstore):
 
     return tasks
 
+def generate_summary(tasks):
+    summary = {}
+    for name in tasks:
+        summary[name] = tasks[name].result
+        summary[name]["status"] = tasks[name].status
+    return summary
+
+
+def format_summary_list(l, indent):
+    s = ""
+    for elem in l:
+        if type(elem) is list:
+            s += format_summary_list(elem, indent + 1)
+        elif type(elem) is dict:
+            s += format_summary_dict(elem, indent + 1)
+        else:
+            s += format_summary_other(elem, indent + 1)
+
+def format_summary_other(o, indent):
+    s = ""
+    s = "\t" * indent
+    s += ("\n" + "\t" * indent).join(str(o).split("\n"))
+    s += "\n"
+    return s
+
+def format_summary_dict(d, indent=0):
+    s = ""
+    for key in d:
+        s += "\t" * indent + key + ":\n"
+        if type(d[key]) is list:
+            s += format_summary_list(d[key], indent + 1)
+        elif type(d[key]) is dict:
+            s += format_summary_dict(d[key], indent + 1)
+        else:
+            s += format_summary_other(d[key], indent + 1)
+    return s
+
+def format_summary(summary):
+    scrubbed_summary = {}
+    for key in summary:
+        elem = summary[key]
+        if elem["status"] == "not started":
+            continue
+        scrubbed_summary[key] = elem
+
+    return format_summary_dict(scrubbed_summary)
 
 
 def main():
@@ -647,6 +693,13 @@ def main():
     sudo_group.add_argument("--sudo_file", "-f", default=None,
                             help="Specify a file which contains the " +
                             "password for sudo.")
+
+    parser.add_argument("--write_summary", "-w", default=None,
+                        help="Specify a JSON file to write summary to.")
+
+    parser.add_argument("--print_summary", "-n", default=False,
+                        action="store_true", help="Display summary to " +
+                        "standard out.")
 
     args = parser.parse_args()
 
@@ -701,7 +754,14 @@ def main():
 
         master.execute(sudo_pw=sudo_pw)
 
-        sys.stdout.write(master.get_result_summary())
+        summary = generate_summary(tasks)
+
+        if args.write_summary is not None:
+            with open(args.write_summary, "w") as f:
+                json.dump(summary, f, indent=4)
+
+        if args.print_summary:
+            sys.stdout.write(format_summary(summary))
 
 
 if __name__ == "__main__":
