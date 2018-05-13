@@ -1,0 +1,9 @@
+{
+    "provides": "archlinux-update",
+    "manifest": [],
+    "require-sudo": true,
+    "require-task": ["require-archlinux"],
+    "run-script": [
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S pacman -Syu --noconfirm"]
+    ]
+}

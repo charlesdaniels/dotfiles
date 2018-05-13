@@ -3,6 +3,10 @@
     "manifest": [],
     "require-task": [
         "require-archlinux",
-        "provision-linux-core"
+        "provision-linux-core",
+        "archlinux-update",
+        "archlinux-update-pacaur",
+        "archlinux-install-utils",
+        "archlinux-install-devel"
     ]
 }

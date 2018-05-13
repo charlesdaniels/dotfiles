@@ -1,0 +1,20 @@
+{
+    "provides": "archlinux-install-devel",
+    "manifest": [],
+    "require-sudo": true,
+    "require-task": [
+        "require-archlinux",
+        "archlinux-update",
+        "archlinux-install-pacaur"],
+    "run-script": [
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
+        ["pacaur", "-S", "--noedit", "--noconfirm",
+            "python",
+            "gcc",
+            "binutils",
+            "texlive-most",
+            "perl",
+            "ruby"
+        ]
+    ]
+}
