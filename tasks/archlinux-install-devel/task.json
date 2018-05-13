@@ -8,7 +8,7 @@
         "archlinux-install-pacaur"],
     "run-script": [
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
-        ["pacaur", "-S", "--noedit", "--noconfirm",
+        ["pacaur", "-S", "--noedit", "--noconfirm", "--needed",
             "python",
             "gcc",
             "binutils",
@@ -16,7 +16,7 @@
             "perl",
             "ruby",
             "python-psutil",
-            "python-tabular",
+            "python-tabulate",
             "python-humanize",
             "python-numpy",
             "python-scipy",

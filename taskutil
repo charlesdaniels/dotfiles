@@ -548,6 +548,21 @@ class Task:
         for r in this.require_task:
             r.clean()
 
+    def index_failed(this):
+        failed = set()
+
+        if this.status == "failed":
+            failed.add(this.provides)
+
+        for t in this.require_task:
+            for f in t.index_failed():
+                failed.add(f)
+        for g in this.require_any:
+            for t in g:
+                for f in t.index_failed():
+                    failed.add(f)
+        return failed
+
     def __str__(this):
         return "{}: {}".format(this.provides, this.status)
 
@@ -665,14 +680,18 @@ def format_summary_dict(d, indent=0):
     return s
 
 def format_summary(summary):
-    scrubbed_summary = {}
+    s = ""
     for key in summary:
         elem = summary[key]
         if elem["status"] == "not started":
             continue
-        scrubbed_summary[key] = elem
+        elif elem["status"] == "complete":
+            s += "{}: complete\n".format(key)
+        else:
+            s += "{}:\n".format(key)
+            s += format_summary_dict(summary[key], 1)
 
-    return format_summary_dict(scrubbed_summary)
+    return s
 
 
 def main():
@@ -769,6 +788,14 @@ def main():
 
         if args.print_summary:
             sys.stdout.write(format_summary(summary))
+
+        for failed in master.index_failed():
+            print_warning("Task {} failed.".format(failed))
+
+        num_failed = len(master.index_failed())
+        if num_failed > 0:
+            print_warning("{} tasks failed".format(num_failed))
+            exit(num_failed)
 
 
 if __name__ == "__main__":
