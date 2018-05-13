@@ -1,0 +1,8 @@
+{
+    "provides": "apply-mime-associations",
+    "manifest": ["mimeassoc.tsv", "applymime.sh"],
+    "require-task": ["install-list-desktop-files"],
+    "run-script": [
+        ["./applymime.sh"]
+    ]
+}

@@ -10,6 +10,8 @@
                      "install-vimrc",
                      "install-tmux-config",
                      "install-xconfig",
-                     "install-scripts"
+                     "install-scripts",
+                     "apply-mime-associations",
+                     "install-list-desktop-files"
     ]
 }
