@@ -262,6 +262,7 @@ class Task:
 
         results = {}
         for cmd in this.run_script:
+            cmd = [x.format(**this.env) for x in cmd]
             try:
                 result = subprocess.check_output(cmd,
                         env=scriptenv, stdin=subprocess.DEVNULL,
