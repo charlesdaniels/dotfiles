@@ -3,6 +3,7 @@
     "manifest": [],
     "require-task": [
         "require-linux",
+        "install-minos-static",
         "provision-unix-core"
     ]
 }

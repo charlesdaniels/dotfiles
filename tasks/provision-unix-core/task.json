@@ -3,6 +3,8 @@
     "manifest": [],
     "require-task": [
         "require-unix",
-        "install-qstats"
+        "install-qstats",
+        "install-latexrun",
+        "install-herc-tools-public"
     ]
 }

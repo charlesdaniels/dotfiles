@@ -93,12 +93,22 @@ class Task:
         if len(this.copy_file) == 0:
             return
 
+        os.chdir(this.env["TASK_DIR"])
+
         results = {}
         for cp in this.copy_file:
             src = cp[0].format(**this.env)
             dest = cp[1].format(**this.env)
             rn = "Copy file '{}' to '{}'".format(src, dest)
             try:
+                # explicitly delete the destination
+                if os.path.exists(dest):
+                    if os.path.isdir(dest):
+                        shutil.rmtree(dest)
+                    else:
+                        os.remove(dest)
+
+                # perform the copy
                 shutil.copyfile(src, dest)
                 results[rn] = "Copy finished ok."
             except Exception as e:

@@ -1,0 +1,7 @@
+{
+    "provides": "install-latexrun",
+    "manifest": [],
+    "require-github": [["aclements/latexrun", "latexrun", "master"]],
+    "copy-file": [["latexrun/latexrun", "{BIN_DIR}/latexrun"]],
+    "mark-executable": ["{BIN_DIR}/latexrun"]
+}
