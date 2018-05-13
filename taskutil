@@ -767,6 +767,7 @@ def main():
         master.hydrate(tasks)
 
         sys.stdout.write("digraph G {\n")
+        sys.stdout.write("\trankdir=LR;\n")
         sys.stdout.write(master.generate_graphviz())
         sys.stdout.write("}\n")
 
