@@ -5,6 +5,7 @@
         "require-unix",
         "install-qstats",
         "install-latexrun",
-        "install-herc-tools-public"
+        "install-herc-tools-public",
+        "install-list-desktop-files"
     ]
 }

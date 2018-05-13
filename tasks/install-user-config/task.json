@@ -14,6 +14,9 @@
                      "install-scripts",
                      "apply-mime-associations",
                      "install-list-desktop-files",
-                     "install-zsh-config"
+                     "install-zsh-config",
+                     "install-minos-static",
+                     "install-herc-tools-public",
+                     "install-latexrun"
     ]
 }
