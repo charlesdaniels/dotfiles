@@ -526,7 +526,6 @@ class Task:
                     m = os.path.realpath(m)
                     p = os.path.realpath(p)
                     if os.path.normpath(p) == os.path.normpath(m):
-                        sys.stderr.write("protected: {}\n".format(m))
                         delete = False
 
             if delete:
