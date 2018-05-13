@@ -1,0 +1,26 @@
+{
+    "provides": "archlinux-install-xorg",
+    "manifest": [],
+    "require-sudo": true,
+    "require-task": [
+        "require-archlinux",
+        "archlinux-update",
+        "archlinux-install-pacaur"],
+    "run-script": [
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
+        ["pacaur", "-S", "--noedit", "--noconfirm",
+            "xorg",
+            "xorg-xinit",
+            "i3",
+            "pcmanfm-qt",
+            "firefox",
+            "thunderbird",
+            "rofi",
+            "rxvt-unicode",
+            "xdotool",
+            "xclip",
+            "keepassxc",
+            "dropbox"
+        ]
+    ]
+}

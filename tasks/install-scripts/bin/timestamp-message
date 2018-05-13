@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Display one timestamped log message in a sane format to standard out.  This
+# is used as a catch-all for logging from other small shell scripts.
+
+# The format '[timestamp][class]: message'
+
+# .SYNTAX
+
+# $1 . . . message class (i.e. INFO, DEBUG, etc.), this is an arbitrary string.
+#
+# $@ . . . the actual message.
+
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .ENDOC
+
+if [ $# -lt 2 ] ; then
+	echo "usage: $0 class message" > /dev/stderr
+	exit 1
+fi
+
+MSGCLASS="$1"
+shift
+MSG="$@"
+TIMESTAMP="$(date)"
+
+echo "[$TIMESTAMP][$MSGCLASS]: $MSG"

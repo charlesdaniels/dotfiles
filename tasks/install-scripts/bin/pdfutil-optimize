@@ -1,0 +1,146 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+#  OVERVIEW
+#  ========
+#  This script attempts to intelligently optimize a PDF file using
+#  ghostscript. This script will work best on image-heavy PDFs, as it should
+#  not modify any vector content in a PDF. It will not modify the PDF in-line.
+#  This script is written with quality preservation in mind - it should not
+#  down sample below 300dpi ever. For a 600dpi scan, this script was tested to
+#  offer a size reduction of 90%.
+#
+#  USAGE
+#  =====
+#    $1 . . . . absolute or relative path to the file to optimize
+#
+#    $2 . . . . absolute or relative path to output file (optional_)
+#
+#  OUTPUT
+#  ======
+#  If $2 exists, the optimized PDF will be written there. If not, then output
+#  will be written to $1-optimized.pdf.
+#
+#  pdf-optimize will not overwrite existing files, and will error if the
+#  output file already exists.
+#
+########10########20########30# CONFIGURATION  #50########60########70########80
+GS_COMMAND_NAME='gs'
+INPUT_FILE=$1
+OUTPUT_FILE=$2
+if [ -z "$2" ] ; then
+  OUTPUT_FILE=$1-optimized.pdf
+fi
+TIMESTAMP="$(date +"%Y-%m-%d_%H-%M-%S")"
+# postscript configuration
+# see here: http://milan.kupcevic.net/ghostscript-ps-pdf/
+GS_LOG_PATH="/tmp/pdf-optimize-$TIMESTAMP.log"
+GS_OPTS=" -sDEVICE=pdfwrite \
+-dDetectDuplicateImages=true \
+-dCompatibilityLevel=1.4 \
+-dColorConversionStrategy=/LeaveColorUnchanged \
+-dDownsampleMonoImages=false \
+-dDownsampleGrayImages=false \
+-dDownsampleColorImages=false \
+-o"
+
+########10########20########30#### LISCENSE ####50########60########70########80
+# Copyright (c) 2016, Charles Daniels
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+# this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright notice,
+# this list of conditions and the following disclaimer in the documentation
+# and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+# contributors may be used to endorse or promote products derived from this
+# software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+########10########20########30########40########50########60########70########80
+
+
+# check number of arguments
+if [ "$#" -ne 1 ] && [ "$#" -ne 2 ] ; then
+  echo "Usage: $0 [input file] [output file]"
+  echo "output file is optional"
+  exit 1
+fi
+
+GS_PATH=$(command -v $GS_COMMAND_NAME)
+# validate that ghostscript exists
+if [ $? -ne 0 ] ; then
+  echo "ERROR: ghostscript was not found on this system"
+  exit 1
+fi
+
+# validate input file
+if [ ! -f "$INPUT_FILE" ] ; then
+  echo "ERROR: input file does not exist or is not a file!"
+  exit 1
+fi
+
+# http://stackoverflow.com/questions/16152583/tell-if-a-file-is-pdf-in-bash
+IS_PDF=$(file "$INPUT_FILE" | grep -q 'PDF' && echo 'YES'  || echo 'NO')
+if [ "$IS_PDF" == "NO" ] ; then
+  echo "ERROR: input file does not seem to be a PDF"
+  exit 1
+fi
+
+# validate output file
+if [ -f "$OUTPUT_FILE" ] ; then
+  echo "ERROR: output file already exists!"
+  exit 1
+fi
+
+echo "INFO: Using input file: $INPUT_FILE"
+echo "INFO: Using output file: $OUTPUT_FILE"
+echo "INFO: Using gs command: $GS_PATH"
+echo "INFO: Using gs options: $GS_OPTS"
+echo "INFO: Log path: $GS_LOG_PATH"
+
+printf "STATUS: Optimizing pdf... "
+# we copy to temp with filenames that don't have spaces or special characters
+TEMPIF=/tmp/pdf-optimize_input_$TIMESTAMP.pdf
+TEMPOF=/tmp/pdf-optimize_output_$TIMESTAMP.pdf
+cp "$INPUT_FILE" "$TEMPIF"
+
+
+START=$(date +%s)
+$GS_PATH $GS_OPTS "$TEMPOF" "$TEMPIF" > $GS_LOG_PATH 2>&1
+echo "done"
+END=$(date +%s)
+DIFF=$(( $END - $START ))
+echo "INFO: optimized PDF in $DIFF seconds"
+
+cp "$TEMPOF" "$OUTPUT_FILE"
+echo "INFO: GhostScript log written to: $GS_LOG_PATH"
+
+printf "STATUS: cleaning up... "
+rm "$TEMPOF" "$TEMPIF"
+echo "done"
+
+IFSIZE=$(du -h "$INPUT_FILE" | cut -f 1)
+OFSIZE=$(du -h "$OUTPUT_FILE" | cut -f 1)
+echo "Input file size: $IFSIZE"
+echo "Output file size: $OFSIZE"
+
+
+
+

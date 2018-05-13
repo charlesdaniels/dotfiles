@@ -1,0 +1,7 @@
+{
+    "provides": "require-systemd",
+    "manifest": [],
+    "run-script": [
+        ["sh", "-c", "[ -x \"$(which systemctl)\" ]"]
+    ]
+}

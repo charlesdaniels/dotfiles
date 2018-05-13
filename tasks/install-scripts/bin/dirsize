@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+
+import os
+import subprocess
+import sys
+import argparse
+from math import log
+import pathlib
+import multiprocessing
+import glob
+from operator import itemgetter
+
+__description__ = "A tool for calculating directory sizes."
+
+def get_size_on_disk(fp):
+    """get_size_on_disk
+
+    Get number of bytes consumed by a file on disk.
+
+    :param fp:
+    """
+    cmd = ["du", "--block-size=1", "-s", str(fp)]
+    size = 0
+    try:
+        size = int(subprocess.check_output(cmd).split()[0])
+    except subprocess.CalledProcessError:
+        pass
+    return size
+
+def get_apparent_size(fp):
+    cmd = ["du", "--block-size=1", "-s", "--apparent-size", str(fp)]
+    size = 0
+    try:
+        size = int(subprocess.check_output(cmd).split()[0])
+    except subprocess.CalledProcessError:
+        pass
+    return size
+
+def format_size(n, pretty):
+    try:
+        if not pretty:
+            raise ImportError
+
+        import humanize
+        return humanize.naturalsize(n)
+    except ImportError:
+        return str(n)
+    except ValueError:
+        return n
+
+def display_results(table, pretty=True):
+    try:
+        if not pretty:
+            raise ImportError()
+
+        import tabulate
+
+        newtable = []
+        for row in table:
+            newtable.append([row[0],
+                            format_size(row[1], pretty),
+                            format_size(row[2], pretty)])
+        table = newtable
+
+        tablestr = tabulate.tabulate(table, tablefmt="simple")
+
+        tablestr = '\n'.join(tablestr.split('\n')[1:-1])
+
+        sys.stdout.write(tablestr)
+        sys.stdout.write("\n")
+
+    except ImportError:
+        for row in table:
+            sys.stdout.write("{}\n".format('\t'.join([str(x) for x in row])))
+
+def get_table_row(fp):
+        row = []
+        row.append(str(fp))
+        row.append(get_apparent_size(fp))
+        row.append(get_size_on_disk(fp))
+        return row
+
+def main():
+    parser = argparse.ArgumentParser(description=__description__)
+
+    parser.add_argument("--directory", "-i", default=os.getcwd(),
+                        help="Specify directory to scan. (default: ./)")
+
+    parser.add_argument("--ugly", "-u", default=False, action="store_true",
+                        help="Do not use pretty formatting for output. If" +
+                        " standard out is not a tty, this is implied.")
+
+    parser.add_argument("--depth", "-d", default=1, type=int,
+                        help="Recurse this many directories below the " +
+                        "specified directory. (default: 1)")
+
+    parser.add_argument("--sort", "-s", default="none", choices=["none",
+                        "size", "alpha"], help="Specify sort type. 'none' " +
+                        "for unordered output, 'size' to sort by size, and " +
+                        "'alpha' to sort alphabetically. (default: none)")
+
+    parser.add_argument("--noheader", "-n", default=False, action="store_true",
+                        help="Suppress header, even without --ugly.")
+
+    args = parser.parse_args()
+
+    if not sys.stdout.isatty():
+        args.ugly = True
+
+    if not args.ugly:
+        try:
+            import humanize
+        except ImportError:
+            sys.stderr.write("WARNING: 'humanize' is not installed, sizes will" +
+                             " be displayed as bytes.\n")
+
+        try:
+            import tabulate
+        except ImportError:
+            sys.stderr.write("WARNING: 'tabulate' is not installed, output " +
+                             "can not be pretty printed\n")
+
+    table = []
+
+
+    targets = []
+    globs = []
+    globs.append(args.directory + "/*" * (args.depth))
+    globs.append(args.directory + "/.*" * (args.depth))
+
+    for g in globs:
+        for fp in glob.iglob(g):
+            if os.path.isdir(fp):
+                targets.append(fp)
+
+    pool = multiprocessing.Pool()
+
+    for row in pool.map(get_table_row, targets):
+        table.append(row)
+
+    if args.sort == "alpha":
+        table = sorted(table, key=itemgetter(0))
+    elif args.sort == "size":
+        table = sorted(table, key=itemgetter(2))
+        table.reverse()
+
+    if (not args.ugly) and (not args.noheader):
+        table.insert(0, ["path", "size", "size on disk"])
+
+    display_results(table, not args.ugly)
+
+if __name__ == "__main__":
+    main()

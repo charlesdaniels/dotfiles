@@ -15,7 +15,16 @@
             "htop",
             "tmux",
             "zsh",
-            "parallel"
+            "parallel",
+            "cmus",
+            "ffmpeg",
+            "ctags",
+            "vorbis-tools",
+            "cdparanoia",
+            "youtube-dl",
+            "wget",
+            "curl",
+            "sanoid"
         ]
     ]
 }

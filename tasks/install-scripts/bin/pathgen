@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+import os
+import sys
+import argparse
+
+descr = """Generate $PATH definitions for various shells.
+
+This script consumes a list of fully qualified paths, one per line. As output,
+it produces appropriate entries for the rcfile of various shells. The use case
+for this script is maintaining a consistant $PATH across a multitude of shells.
+The following shells are supported: zsh/bash/sh, ksh, tcsh, fish.
+"""
+
+parser = argparse.ArgumentParser(description=descr)
+
+parser.add_argument("--input", "-i", help="Input file. (default: standard " +
+                    "input)", default=sys.stdin)
+
+parser.add_argument("--output", "-o", help="Output file, will be overwritten" +
+                    ". (default: standard output)", default=sys.stdout)
+
+parser.add_argument("--style", "-s", default="sh", help="Specify style for" +
+                    " output. (default: sh)", choices=["bash", "dash", "sh",
+                    "zsh", "fish", "ksh", "tcsh"])
+
+parser.add_argument("--check_exist", "-c", default=False, action="store_true",
+                    help="If asserted, input lines which would imply " +
+                    "nonexistant path elements will be ignored silently.")
+
+args = parser.parse_args()
+
+if args.style in ["bash", "dash", "zsh", "ksh"]:
+    args.style = "sh"
+
+if args.input is not sys.stdin:
+    args.input = open(args.input, 'r')
+
+if args.output is not sys.stdout:
+    args.output = open(args.output, 'w')
+
+
+for line in args.input:
+    line = line.strip()
+    if args.check_exist:
+        if not os.path.exists(line):
+            continue
+    entry = ""
+    if args.style == "sh":
+        entry = "export PATH={}:$PATH".format(line)
+    elif args.style == "tcsh":
+        entry = "setenv PATH {}:$PATH".format(line)
+    elif args.style == "fish":
+        entry = "if test -d \"{}\"\n    set -gx PATH {} $PATH\nend" \
+                .format(line, line)
+    else:
+        sys.stderr.write("Style '{}' unknown or not implemented.\n"
+                         .format(args.style))
+
+    args.output.write(entry)
+    args.output.write("\n")
+
+args.output.flush()
+args.input.close()
+args.output.close()

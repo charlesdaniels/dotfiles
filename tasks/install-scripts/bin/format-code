@@ -1,0 +1,47 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# This script will produce a nicely formatted copy of each source file it is
+# given on standard out (headings, line numbers, etc.).
+
+# .SYNTAX
+#
+# $@ . . . space-delimited list of filenames to process
+
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .ENDOC
+
+printf_n () {
+  str=$1
+  num=$2
+  printf "%0.s$str" $(seq 1 $num)
+}
+
+format_code () {
+  # $1 . . . the path to the file to format
+  TARGET_FILE="$1"
+  TARGET_BASENAME=$(basename "$TARGET_FILE")
+  FNAME_LENGTH="$(echo -n $TARGET_BASENAME | wc -m)"
+  SEP_LEN=$(expr \( 84 - $FNAME_LENGTH \) / 2 - 1)
+  SEP_CHAR='~'
+  printf "\f\n"
+  printf "      "
+  printf_n $SEP_CHAR $SEP_LEN
+  printf " %s " "$(echo $TARGET_BASENAME)"
+  printf_n $SEP_CHAR $SEP_LEN
+  echo ""
+  echo ""
+  cat -n "$TARGET_FILE"
+
+}
+
+for f in $@ ; do
+	format_code "$f"
+done

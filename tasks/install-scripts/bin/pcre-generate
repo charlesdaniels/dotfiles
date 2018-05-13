@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+# .SCRIPTDOC
+# This script reads in 1 or more PCRE compliant regular expressions, newline
+# delimited from standard in.
+#
+# For each regex...
+#
+#   * produce a random number from 0 to 100, if it is greater than n, skip
+#     processing this line. Thus, if n is 50, half of all inputs will be
+#     discarded. If n is 100, no inputs will be discarded.
+#
+#   * for each remaining input line, generate a random string which is valid
+#     for the given regex, called v[k] for the kth input line
+#
+#   * produce a string s with length l containing all elements in v
+#     concatenated, and separated by x characters of random padding such that
+#     m=(l+x)/l => x = l(m - 1) => l = x/(m-1). The resulting s is output to
+#     stdout.
+#
+# Further, on standard error, the following is output:
+#
+#   * for each element in v, the regex (input line) and the generated string,
+#     separated by a tab character, terminated with a newline
+#
+#.SYNTAX
+# $1 . . . . keep rate n (0 < n <= 100)
+#
+# $2 . . . . padding factor m (0 < m < 2^32-1)
+#
+# stdin  . . newline delimited, PCRE compliant regular expressions
+
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+#
+# .ENDOC
+
+import exrex
+import sys
+import random
+import string
+
+if len(sys.argv) != 3:
+  print("usage: pcre-checl [m] [n]")
+
+n = int(sys.argv[1])
+m = int(sys.argv[2])
+v = []
+
+for line in sys.stdin:
+  line = line.rstrip()
+  sys.stderr.write("-"*80)
+  sys.stderr.write("\n")
+  sys.stderr.write("REGEX: \n\n{}\n\n".format(line))
+  v_k = exrex.getone(line)
+  v.append(v_k)
+  sys.stderr.write("MATCH: \n\n{}\n\n".format(v_k))
+
+s = ""
+for substr in v:
+  l = len(substr)
+  x = l * (m - 1)
+  pad1 = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(int(x/2)))
+  pad2 = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(int(x/2)))
+  assert int(l) == int(x/(m-1))
+  s += pad1 + substr + pad2
+
+sys.stdout.write(s)

@@ -1,0 +1,235 @@
+#!/bin/sh
+########10########20########30## DOCUMENTATION #50########60########70########80
+#
+# OVERVIEW
+# ========
+#
+# This script scrubs a given PDF file using the following process:
+#
+# 1. Poppler's pdftocairo tool attempts to repair any corruption.
+# 2. mupdf-tools's mutool attempts to rpair any corruption.
+# 3. Poppler's pdfseparate is used to split the PDF into individual pages.
+# 4. Convert is used to convert each page to a bitmap. *
+# 5. The original PDF format pages are deleted.
+# 6. Convert is used to turn each page back into a PDF. *
+# 7. Pages are re-combined using pdf-combine.
+# 8. The resulting PDF is optimized using pdf-optimize.
+#
+# * indicates stages executed in parallel using the parallel command.
+#
+# This script is useful for repairing PDF documents which have been damaged or
+# corrupted. I have personally seen cases where a document will render just
+# fine in a GUI PDF viewer, but is sufficiently garbled to confuse OCR/PDF
+# Editing software. By forcibly converting the PDF to a dumb bitmap, the hope
+# is to remove any "junk" which might confuse other softwares.
+#
+# This script is not fast, and has many fairly large dependencies; this is
+# intended to be a serious tool for PDF repair, and an avenue of last resort.
+# "works" is much more important here than "fast", although parallelism is used
+# where possible.
+#
+# This script will write into ./, and may require considerably disk space to
+# run. Please ensure you are working with a read/write mounted filesystem, and
+# that you have r+w permissions on ./
+#
+# NOTE: this will destroy any "select-able" text, embedded content, or anything
+# else that would be lost during printing.
+#
+# NOTE: while running, this script will create, use, and then delete the folder
+# ./.pdf-scrub-working. If this folder already exists, it will be silently
+# deleted.
+#
+# NOTE: do not invoke multiple instances of this script in the same working
+# directory at the same time. You will create a race condition, and Bad Things
+# (tm) will occur.
+#
+# USAGE
+# =====
+#
+# $1 . . . the PDF document to scrub
+#
+# $2 . . . output file to write the result to
+#
+########10########20########30##### LICENSE ####50########60########70########80
+#  Copyright (c) 2017, Charles Daniels
+#  All rights reserved.
+#
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+#
+#  1. Redistributions of source code must retain the above copyright notice,
+#     this list of conditions and the following disclaimer.
+#
+#  2. Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in the
+#     documentation and/or other materials provided with the distribution.
+#
+#  3. Neither the name of the copyright holder nor the names of its
+#     contributors may be used to endorse or promote products derived from
+#     this software without specific prior written permission.
+#
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+#
+########10########20########30########40########50########60########70########80
+
+if [ $# -ne 2 ] ; then
+	echo "ERROR 74: incorrect number of arguments"
+	if [ -e `which toolchest-doc` ] ; then
+		toolchest-doc $0
+	fi
+	exit 1
+fi
+
+INPUT_PDF="$1"
+OUTPUT_PDF="$2"
+
+if [ ! -e "$INPUT_PDF" ] ; then
+	echo "ERROR 85: input document '$INPUT_PDF' does not exist."
+	exit 1
+fi
+
+if [ "$INPUT_PDF" == "$OUTPUT_PDF" ] ; then
+	echo "ERROR 90: input and output document may not be the same."
+	exit 1
+fi
+
+if [ -e "$OUTPUT_PDF" ] ; then
+	echo "ERROR 95: output document '$OUTPUT_PDF' already exists"
+	exit 1
+fi
+
+# make sure we have GNU paralle, and not moreutils parallel
+parallel --version 2>&1 | grep "GNU parallel" > /dev/null 2>&1
+if [ $? -ne 0 ] ; then
+	echo "ERROR 114: no parallel, or installed parallel is not GNU parallel"
+	echo "INFO: (hint) moreutils parallel will *not* work"
+	exit 1
+fi
+
+# clean working directory if it already exists
+WORK_DIR="./.pdf-scrub-working"
+if [ -e "$WORK_DIR" ] ; then
+	printf "INFO: '$WORK_DIR' exists, deleting it... "
+	rm -rf "$WORK_DIR"
+	echo "DONE"
+fi
+
+# create working directory
+printf "INFO: creating '$WORK_DIR'... "
+mkdir -p "$WORK_DIR"
+echo "DONE"
+
+# make sure the working dir exists
+if [ ! -d "$WORK_DIR" ] ; then
+	echo "ERROR 122: '$WORK_DIR' does not exist after being created."
+	exit 1
+fi
+
+# attempt to repair using poppler
+printf "INFO: repairing PDF with pdftocairo... "
+pdftocairo -pdf "$INPUT_PDF" "$WORK_DIR/repaired.pdf" > "$WORK_DIR/pdftocairo.log" 2>&1 
+if [ $? -ne 0 ] ; then
+	echo "FAIL"
+	echo "INFO: see '$WORK_DIR/pdftocairo.log'"
+	rm -f "$WORK_DIR/repaired.pdf"
+else
+	echo "DONE"
+fi
+
+# attempt to repair using mutool
+printf "INFO: repairing PDF with mutool... "
+MUTOOL_INPUT="$INPUT_PDF"
+if [ -e "$WORK_DIR/repaired.pdf" ] ; then
+	MUTOOL_INPUT="$WORK_DIR/repaired.pdf"
+fi
+mutool clean "$MUTOOL_INPUT" "$WORK_DIR/repaired.next.pdf" > "$WORK_DIR/mutool.log" 2>&1
+if [ $? -ne 0 ] ; then
+	echo "FAIL"
+	echo "INFO: see '$WORK_DIR/mutool.log'"
+	rm -f "$WORK_DIR/repaired.next.pdf"
+else
+	mv "$WORK_DIR/repaired.next.pdf" "$WORK_DIR/repaired.pdf"
+	echo "DONE"
+fi
+
+# if either or both repairs worked, use the repaired PDF as input for GS
+GS_INPUT="$INPUT_PDF"
+if [ -e "$WORK_DIR/repaired.pdf" ] ; then
+	echo "INFO: at least one PDF repair method seems to have worked."
+	GS_INPUT="$WORK_DIR/repaired.pdf"
+fi
+
+# convert PDF to individual pages
+printf "INFO: splitting PDF pages... "
+pdfseparate "$GS_INPUT" "$WORK_DIR/page_%05d.pdf" > "$WORK_DIR/pdfseparate.log" 2>&1
+if [ $? -ne 0 ] ; then
+	echo "ERROR 185: pdfseparate returned nonzero exit code."
+	echo "INFO: see '$WORK_DIR/pdfseparate.log'"
+	exit 1
+else
+	echo "DONE"
+fi
+
+# convert pages to bitmaps
+printf "INFO: converting pages to images ... "
+
+# generate convert commands and pipe to parallel for execution
+for f in "$WORK_DIR"/page_*.pdf ; do
+	outfile=$(basename "$f" .pdf).png
+	echo "convert \"$f\" \"$WORK_DIR/$outfile\""
+done | parallel > "$WORK_DIR/2img.log" 2>&1
+
+if [ $? -ne 0 ] ; then
+	echo "FAIL"
+	echo "ERROR 182: converting to images, failed, see '$WORK_DIR/2img.log'"
+	exit 1
+else
+	echo "DONE"
+fi
+
+# delete PDF pages
+printf "INFO: deleting PDF pages... "
+rm -f "$WORK_DIR"/page_*.pdf
+echo "DONE"
+
+# convert images back to PDF pages
+printf "INFO: converting images to PDF pages... "
+
+for f in "$WORK_DIR"/page_*.png; do
+	outfile=$(basename "$f" .png).pdf
+	echo "convert \"$f\" \"$WORK_DIR/$outfile\""
+done | parallel > "$WORK_DIR/2pdf.log" 2>&1
+
+if [ $? -ne 0 ] ; then
+	echo "FAIL"
+	echo "ERROR 215: converting to images, failed, see '$WORK_DIR/2pdf.log'"
+	exit 1
+else
+	echo "DONE"
+fi
+
+# delete PNG pages
+printf "INFO: deleting images... "
+rm -f "$WORK_DIR"/page_*.png
+echo "DONE"
+
+# combine PDFs
+pdf-combine "$WORK_DIR"/output.pdf "$WORK_DIR"/page_*.pdf
+
+# optimize result
+pdf-optimize "$WORK_DIR"/output.pdf "$OUTPUT_PDF"
+
+# clean working dir
+printf "INFO: cleaning '$WORK_DIR'... "
+rm -rf "$WORK_DIR"
+echo "DONE"

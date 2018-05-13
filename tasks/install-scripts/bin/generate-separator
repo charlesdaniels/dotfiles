@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+import subprocess
+import os
+import sys
+import re
+import argparse
+
+parser = argparse.ArgumentParser(description="A tool for generating " +
+                                 " separators suitable for embedding in " +
+                                 "source code files, with embedded " +
+                                 "column counters included. Optionally, a " +
+                                 "heading may be burned in.")
+
+parser.add_argument("--length", "-l", type=int, default=80,
+                    help="Desired width of separator to generate. (default: " +
+                    "80)")
+parser.add_argument("--heading", "-e", default="", help="Heading to burn" +
+                    " in. (default: '')")
+parser.add_argument("--position", "-p", default=-1, type=int,
+                    help="Position (as an integer number of columns from " +
+                    "the left) at which the header should be burned in." +
+                    " (default: center)")
+parser.add_argument("--style", "-s", default="hash", help="Style of comment" +
+                    " to generate. Available choices are: hash, stars, c, " +
+                    "and percent for languages with #-comments, " +
+                    "c-style languages, and languages with percent-comments" +
+                    "such as LaTeX." +
+                    "You can also specify any of the following languages " +
+                    "as the style, and the appropriate style will be " +
+                    "selected automatically: python, sh, shell, c, java, " +
+                    "c++, cpp, latex, tex, ps, verilog. (default: hash)")
+
+args = parser.parse_args()
+
+########10########20########30########40########50########60########70########80
+
+length = args.length
+heading = args.heading
+heading_position = args.position
+style = args.style
+# spacing between label ends
+label_pitch = 10
+
+# keys are styles, values are list of aliases
+styles = {"hash":["python", "sh", "shell"],
+          "c":["c++", "java", "cpp", "verilog"],
+          "stars": ["star"],
+          "percent":["latex", "tex", "ps"]}
+# comment characters
+comment_chars = {"hash": "#", "c": "/", "stars": "*", "percent": "%"}
+
+# resolve style aliases
+for key in styles:
+  if style in styles[key]:
+    style = key
+    break
+
+# check if position should be center
+if heading_position < 0:
+  heading_position = "center"
+
+separator = length*comment_chars[style]
+separator = list(separator)  # this lets us do subscription on the string
+
+run_length = 0
+# we want to get length inclusive, whereas range is by default exclusive on
+# the upper bound.
+for i in range(0, length + 1):
+  if run_length >= label_pitch:
+    current_col = str(i)  # we need to read things out of this by subscript
+    label_idx = 0  # position in subscripting the label (current_col)
+    char_idx = len(current_col)
+    while char_idx > 0:
+      # i - char_idx will be the position of the first character of the label
+      # this is so that the last character of the label will lie in the column
+      # that it indicates. This line writes the current character from the
+      # label, left-to-right into the current (leftmost) index of the
+      # separator.
+      separator[i - char_idx] = current_col[label_idx]
+      label_idx += 1
+      char_idx -= 1
+    # while char_idx > 0:
+    run_length = 0
+  # if run_length >= label_pitch:
+  run_length += 1
+
+
+if style == "stars":
+  separator[0] = '/'
+
+# to have the heading centered, the leftmost character of the heading must lie
+# at the index contained in `center`
+center = int(length / 2) - int(0.5 * len(heading)) - 1
+
+if heading_position == 'center':
+  heading_position = center
+
+# validate that we have room for the heading
+if heading_position > (length - len(heading)):
+  print("ERROR 224: heading is too long, or is explicitly placed out of bounds")
+  exit(1)
+
+# write heading into the separator
+for heading_idx in range(0, len(heading)):
+  separator[heading_position + heading_idx] = heading[heading_idx]
+
+# add spaces around the heading, only if the heading is non-empty
+if len(heading) > 0:
+  separator[heading_position - 1] = ' '
+  separator[heading_position + len(heading)] = ' '
+
+
+separator = ''.join(separator)  # re-constitute the list back into a string
+sys.stdout.write(separator)

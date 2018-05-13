@@ -1,0 +1,44 @@
+#!/bin/sh
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .SCRIPTDOC
+# Just a wrapper for wget which will attempt to download an HTML page and
+# all resources from the same domain at the same or lower level within the
+# directory structure on the HTTP server. This is mostly intended to download
+# HTML ebooks and things of a similar format.
+
+# .SYNTAX
+# $1 . . . URL to download
+#
+# $2 . . . website's domain
+
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .ENDOC
+
+if [ $# -ne 2 ] ; then
+	echo "ERROR 52: incorrect number of arguments"
+	exit 1
+fi
+
+wget \
+  --recursive \
+  --page-requisites \
+  --html-extension \
+  --convert-links \
+  --domains "$2" \
+  --no-parent \
+  --limit-rate=750k \
+  --wait=1 \
+  -e robots=off \
+  -U "Mozilla/5.0 (compatible; Konqueror/3.2; Linux)" \
+  "$1"

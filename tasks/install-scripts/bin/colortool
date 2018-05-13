@@ -1,0 +1,180 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+import re
+
+def RGB2Hex(c):
+    if len(c) != 3:
+        sys.stderr.write("FATAL: invalid color tuple '{}'\n".format(c))
+        exit(1)
+
+    c_temp = [hex(x)[2:] for x in c]
+    c = []
+    for elem in c_temp:
+        while len(elem) < 2:
+            elem = "0" + elem
+        c.append(elem)
+    s = "#{}{}{}".format(*c)
+    return s
+
+def str2RGB(s):
+    s = s.strip()
+    s = s.replace(' ', '')
+
+    c = []
+    if (s[0] == "#") or (',' not in s):
+        if s[0] != "#":
+            s = "#" + s
+        c = [int(s[i:i+2], 16) for i in range(1, len(s), 2)]
+    else:
+        c = [int(x) for x in s.split(',')] 
+
+    if len(c) != 3:
+        sys.stderr.write("FATAL: {} has too many/too few elements.\n"
+                         .format(c))
+        exit(1)
+
+    for elem in c:
+        if elem > 255 or elem < 0:
+            sys.stderr.write("FATAL: element {} out of bounds.\n".format(elem))
+            exit(1)
+
+    return c
+
+def display_color(c):
+    from tkinter import Tk
+    from tkinter import Canvas
+    from tkinter import Label
+
+    root = Tk()
+    root.attributes('-type', 'dialog')
+
+    canvas = Canvas(root, width=100, height=100)
+    canvas.create_rectangle(0, 0, 100, 100, fill=RGB2Hex((c)))
+    canvas.pack()
+
+    text = "{} / {}".format(c, RGB2Hex(c))
+    text = Label(root, text=text)
+    text.pack()
+
+    # make any keypress close the window
+    root.bind('<Key>', lambda e: root.destroy())
+
+    root.mainloop()
+
+def parse_maskdef(d):
+    r = re.compile("^([rgb]\:[01]{8})(\,[rgb]\:[01]{8}){0,2}$")
+    if not r.match(d):
+        sys.stderr.write("FATAL: invalid maskdef '{}'\n".format(d))
+        exit(1)
+    d = [(x.split(":")[0], int(x.split(":")[1], 2)) for x in d.split(',')]
+    return d
+
+def apply_filter(c, m):
+    masks = parse_maskdef(m)
+    r_mask = None
+    g_mask = None
+    b_mask = None
+
+    for mask in masks:
+        if mask[0] == "r":
+            r_mask = mask[1]
+        elif mask[0] == "g":
+            g_mask = mask[1]
+        elif mask[0] == "b":
+            b_mask = mask[1]
+
+    if r_mask is not None:
+        c[0] = c[0] & r_mask
+    if g_mask is not None:
+        c[1] = c[1] & g_mask
+    if b_mask is not None:
+        c[2] = c[2] & b_mask
+
+    return c
+
+
+def apply_mask(c, m):
+    masks = parse_maskdef(m)
+    r_mask = None
+    g_mask = None
+    b_mask = None
+
+    for mask in masks:
+        if mask[0] == "r":
+            r_mask = mask[1]
+        elif mask[0] == "g":
+            g_mask = mask[1]
+        elif mask[0] == "b":
+            b_mask = mask[1]
+
+    if r_mask is not None:
+        c[0] = c[0] | r_mask
+    if g_mask is not None:
+        c[1] = c[1] | g_mask
+    if b_mask is not None:
+        c[2] = c[2] | b_mask
+
+    return c
+
+
+def main():
+
+    descr = """
+    This script can be used to interact with colors in various formats and
+    types, including converting from RGB to HEX color and vice-versa, and
+    applying masks and/or filters. This script is intended to be useful in
+    conjunction with other scripts that need to interact with HEX or RGB 
+    colors.
+    """
+
+    parser = argparse.ArgumentParser(description=descr)
+
+
+    parser.add_argument("--color", "-c", default=None,
+                        help="Input color, infer format.")
+
+    parser.add_argument("--output_hex", "-x", help="Display input color in " +
+                        "HEX format to standard out", action="store_true")
+
+    parser.add_argument("--output_rgb", "-r", help="Display input color in " +
+                        "RGB format to standard out", action="store_true")
+
+    parser.add_argument("--display", "-d", help="Display color using " +
+                        "a graphical window. Requires Xorg and Tk.",
+                        action="store_true")
+
+    parser.add_argument("--mask", "-m", help="Color mask in the format: " +
+                        "c:n where c is one of {r, g, b} identifying " +
+                        " the channel, and n is an 8-digit binary number. " +
+                        "The mask is applied as a bitwise OR. Masks can " +
+                        "be specified for multiple channels by comma " +
+                        "delimiting, for example: c1:n1,c2:n2",
+                        default=None)
+
+    parser.add_argument("--filter", "-f", help="Filter (bitwise AND)." +
+                        " Uses the same syntax as --mask. Filters are " +
+                        "applied after masks.", default=None)
+
+    args = parser.parse_args()
+
+    color = str2RGB(args.color)
+
+    if args.mask is not None:
+        color = apply_mask(color, args.mask)
+
+    if args.filter is not None:
+        color = apply_filter(color, args.filter)
+
+    if args.output_rgb:
+        print("{},{},{}".format(*color))
+
+    if args.output_hex:
+        print(RGB2Hex(color))
+
+    if args.display:
+        display_color(color)
+
+if __name__ == "__main__":
+    main()

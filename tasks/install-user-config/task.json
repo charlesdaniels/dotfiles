@@ -9,6 +9,7 @@
                      "install-texmf",
                      "install-vimrc",
                      "install-tmux-config",
-                     "install-xconfig"
+                     "install-xconfig",
+                     "install-scripts"
     ]
 }

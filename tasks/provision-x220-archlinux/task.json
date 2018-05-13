@@ -1,0 +1,10 @@
+{
+    "provides": "provision-x220-archlinux",
+    "manifest": [],
+    "require-task": [
+        "apply-x220-usb-workaround",
+        "provision-archlinux-workstation",
+        "install-user-config",
+        "install-lockscreen.service"
+    ]
+}

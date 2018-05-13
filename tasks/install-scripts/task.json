@@ -1,0 +1,6 @@
+{
+    "provides": "install-scripts",
+    "manifest": ["bin", "bin/*"],
+    "require-task": ["require-unix"],
+    "overlay": [["bin", "{BIN_DIR}"]]
+}

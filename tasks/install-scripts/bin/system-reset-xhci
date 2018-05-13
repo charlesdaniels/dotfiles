@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# This script attempts to reset all XHCI drivers in the kernel. This fixes
+# the no USB after resume on some Linux laptops.
+
+# Original source for this methodology:
+# http://www.ubuntubuzz.com/2016/06/reset-usb-20-ehci-usb-30-xhci-without-reboot-linux.html
+
+# .ENDOC
+
+if [ "$(uname)" != "Linux" ] ; then
+	echo "ERROR: must be run on linux"
+	exit 1
+fi
+
+if [ "$(whoami)" != "root" ] ; then
+	echo "ERROR: must be run as root"
+	exit 1
+fi
+
+PCI_DRIVER_PATH="/sys/bus/pci/drivers/"
+
+for XHCI_DRIVER_PATH in "$PCI_DRIVER_PATH"/xhci_* ; do
+	if [ ! -e "$XHCI_DRIVER_PATH" ] ; then
+		echo "ERROR: driver path '$XHCI_DRIVER_PATH' does not exist"
+		continue
+	fi
+	ls -1 "$XHCI_DRIVER_PATH" | grep '^0000' | while read -r devid ; do
+		echo "INFO: unbinding resetting $devid... "
+		echo -n "$devid" | tee /sys/bus/pci/drivers/xhci_hcd/unbind
+		echo ""
+		echo "INFO: binding $devid... "
+		echo -n "$devid" | tee /sys/bus/pci/drivers/xhci_hcd/bind
+		echo ""
+		echo "INFO: finished resetting $devid"
+	done
+done

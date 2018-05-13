@@ -1,0 +1,155 @@
+#!/bin/bash
+
+# .SCRIPTDOC
+
+# Run a process in the background. This is useful when spawning GUI program in
+# the background, as this program will detach the process from the terminal
+# after launching it. Thus, if a program is running a GUI window, closing the
+# terminal will not also kill the window.
+
+# As an example, consider running the command ``xterm &``. Xterm will run, but
+# closing the terminal from which it was run will also kill xterm.  On the
+# other hand, ``disavow xterm`` will cause it to run, but closing the terminal
+# from which it was run will nave no effect on xterm.
+
+# This script also has flags to re-direct the standard in, out, and error of 
+# the background-ed process. By default, /dev/null is used for all three,
+# but arbitrary files can be specified. This is useful for cases where it
+# is desirable to monitor program progress. Note that files used for standard
+# out or standard error will be *overwritten*.
+
+# On the back-end, this script is really just a wrapper for ``disown``. The
+# value that is provided here is that stdio are handled gracefully, and a
+# process can be run and backgrounder in a single shell command, rather than
+# two.
+
+# .SYNTAX
+#
+# -i . . . Specify standard input for process (default: /dev/null)
+#
+# -o . . . Specify standard output for process (default: /dev/null)
+#
+# -e . . . Specify standard error for process (default: /dev/null)
+#
+# -h . . . Display usage
+#
+# -v . . . verbose mode
+#
+# -p . . . Print PID of spawned process
+#
+# -- . . . Stop parsing argument and treat all remaining input as part of the
+#          command to run regardless of the presence of '-' characters.
+#
+# $@ . . . Specify the process to run
+
+# .LICENSE
+
+# Copyright 2018 Charles Daniels
+
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+
+#  1. Redistributions of source code must retain the above copyright notice,
+#  this list of conditions and the following disclaimer.
+
+#  2. Redistributions in binary form must reproduce the above copyright notice,
+#  this list of conditions and the following disclaimer in the documentation
+#  and/or other materials provided with the distribution.
+
+#  3. Neither the name of the copyright holder nor the names of its
+#  contributors may be used to endorse or promote products derived from this
+#  software without specific prior written permission.
+
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+
+# .ENDOC
+
+PROC_STDIN=/dev/null
+PROC_STDOUT=/dev/null
+PROC_STDERR=/dev/null
+PROC_CMD=""
+VERBOSE_MODE=0
+DROP_TOKEN=0
+PREV_TOKEN=""
+PRINT_PID=0
+STOP_PARSING=0
+
+# The " " makes sure that we always see every PREV_TOKEN. Note that this method
+# for parsing argv does not support merged flags (i.e. -abc vs -a -b -c).
+# DROP_TOKEN is used to signal *) that it should ignore the next token that
+# it sees, so as to avoid putting spurious values into PROC_CMD
+for TOKEN in $* " "; do
+	if [ $STOP_PARSING -ne 0 ] ; then
+		PROC_CMD="$PROC_CMD $PREV_TOKEN"
+	else
+		case "$PREV_TOKEN" in
+			"-i")
+				PROC_STDIN="$TOKEN"
+				DROP_TOKEN=1
+				;;
+			"-o")
+				PROC_STDOUT="$TOKEN"
+				DROP_TOKEN=1
+				;;
+			"-e")
+				PROC_STDERR="$TOKEN"
+				DROP_TOKEN=1
+				;;
+			"-h")
+				echo "$0 [-i <stdin>] [-o <stdout>] [-e <stderr>] [-v]  [cmd]"
+				;;
+			"-v")
+				VERBOSE_MODE=1
+				;;
+			"-p")
+				PRINT_PID=1
+				;;
+			"--")
+				STOP_PARSING=1
+				;;
+			*)
+				if [ $DROP_TOKEN -eq 0 ] ; then
+					PROC_CMD="$PROC_CMD $PREV_TOKEN"
+				else
+					DROP_TOKEN=0
+				fi
+				;;
+		esac
+	fi
+	PREV_TOKEN="$TOKEN"
+done
+
+verbose () {
+	if [ $VERBOSE_MODE -eq 1 ] ; then
+		echo $@ > /dev/stderr
+	fi
+}
+
+verbose "Executing command '$PROC_CMD'"
+verbose "With stdin: '$PROC_STDIN'"
+verbose "With stdout: '$PROC_STDOUT'"
+verbose "With stderr: '$PROC_STDERR'"
+
+$PROC_CMD < "$PROC_STDIN" > "$PROC_STDOUT" 2> "$PROC_STDERR" &
+PROC_PID="$!"
+
+verbose "Spawned process with PID $PROC_PID"
+
+disown $PROC_PID
+
+verbose "Disowned process."
+
+if [ $PRINT_PID -eq 1 ] ; then
+	verbose "Displaying pid because of -p"
+	echo "$PROC_PID"
+fi

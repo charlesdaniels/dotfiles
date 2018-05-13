@@ -561,7 +561,14 @@ def index_tasks(taskstore):
     tasks = {}
     for p in pathlist:
         with open(str(p), 'r') as f:
-            j = json.load(f)
+            j = None
+            try:
+                j = json.load(f)
+            except Exception  as e:
+                sys.stderr.write("FATAL: failed to load JSON file '{}': {}\n"
+                                 .format(str(p), str(e)))
+                exit(1)
+
             name = j["provides"]
             if 'provides' not in j:
                 print_warning("taskfile is missing 'provides' field: {}"

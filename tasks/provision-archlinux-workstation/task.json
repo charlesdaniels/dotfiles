@@ -1,0 +1,12 @@
+{
+    "provides": "provision-archlinux-workstation",
+    "manifest": [],
+    "require-task": [
+        "require-archlinux",
+        "provision-linux-core",
+        "archlinux-update",
+        "archlinux-update-pacaur",
+        "provision-archlinux-core",
+        "archlinux-install-xorg"
+    ]
+}

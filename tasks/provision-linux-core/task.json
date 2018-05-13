@@ -4,6 +4,7 @@
     "require-task": [
         "require-linux",
         "install-minos-static",
-        "provision-unix-core"
+        "provision-unix-core",
+        "apply-altera-usbblaster-udev"
     ]
 }

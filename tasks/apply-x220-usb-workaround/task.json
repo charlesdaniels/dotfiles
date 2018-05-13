@@ -1,0 +1,10 @@
+{
+    "provides": "apply-x220-usb-workaround",
+    "manifest": ["xhci-reset.service"],
+    "require-sudo": true,
+    "require-task": ["require-systemd", "require-linux", "install-scripts-opt"],
+    "run-script": [
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S cp $TASKUTIL_TASK_DIR/xhci_reset.service /etc/systemd/system/xhci_reset.service"],
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl enable xhci_reset.service"]
+    ]
+}

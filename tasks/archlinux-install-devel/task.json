@@ -14,7 +14,15 @@
             "binutils",
             "texlive-most",
             "perl",
-            "ruby"
+            "ruby",
+            "python-psutil",
+            "python-tabular",
+            "python-humanize",
+            "python-numpy",
+            "python-scipy",
+            "graphviz",
+            "sphinx",
+            "python-recommonmark"
         ]
     ]
 }

@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+# .SCRIPTDOC
+# Accepts one or more MAC addresses on standard input, formats them to be
+# lower case and colon-delimited. Characters which are not valid hexadecimal
+# characters will be discarded. Each converted input is displayed on it's own
+# line on standard out. Error checking is not done - if you put invalid MACs
+# in, you will get invalid MACs back out.
+#
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .ENDOC
+
+import sys
+import re
+
+stderr = sys.stderr.write
+stdout = sys.stdout.write
+
+def format_mac(mac):
+  mac = mac.lower()
+  mac = re.sub(r"[^0-9a-f]","", mac)
+
+  # http://stackoverflow.com/a/3258596
+  #
+  # This inserts the colons
+  mac = ":".join(a+b for a,b in zip(mac[::2], mac[1::2]))
+
+  return mac
+
+
+for line in sys.stdin.readlines():
+  print(format_mac(line))
+

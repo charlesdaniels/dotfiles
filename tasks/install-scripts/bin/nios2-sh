@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Search paths where I am likely to have a Quartus instance, find an
+# appropriate NIOS2 command shell launcher, and launch zsh inside of it.
+
+# .ENDOC
+
+CMDSHELL="nios2_command_shell.sh"
+SEARCH_PATHS="/opt/altera/quartus_12.1/nios2eds/"
+SEARCH_PATHS="$SEARCH_PATHS /usr/local/3rdparty/altera/quartus12/nios2eds/"
+
+for edsdir in $SEARCH_PATHS ; do
+	if [ -d "$edsdir" ] ; then
+		echo "Launching EDS environment from $edsdir"
+		"$edsdir/$CMDSHELL" zsh -i
+		exit $?
+	fi
+done
+
+echo "ERROR: no '$CMDSHELL' found in any of: $SEARCH_PATHS"
+exit 1
+

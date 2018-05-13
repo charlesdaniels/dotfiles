@@ -1,0 +1,177 @@
+#!/usr/bin/env python3
+
+# Copyright 2018 Charles Daniels
+
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+
+#  1. Redistributions of source code must retain the above copyright notice,
+#  this list of conditions and the following disclaimer.
+
+#  2. Redistributions in binary form must reproduce the above copyright notice,
+#  this list of conditions and the following disclaimer in the documentation
+#  and/or other materials provided with the distribution.
+
+#  3. Neither the name of the copyright holder nor the names of its
+#  contributors may be used to endorse or promote products derived from this
+#  software without specific prior written permission.
+
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+
+descr = """Script to download the contents of a webpage, then print the results
+of a specified xPath query and exit. Use cases primarily include extracting
+bits of information readily located by xPath, such as counters or statuses.
+One specific use case this tool has proven useful for was getting the number of
+upvotes on a Reddit post. Disclaimer: this tool is intended for one off or very
+low-volume queries, and includes tools to facilitate that such as user-agent
+spoofing. Please be considerate of other people's servers and use a more
+sophisticated tool and proper authentication (i.e. OAuth) if you plan to make
+higher-volume queries against other peoples sites. If you use this tool to send
+hundreds of requests per minute while spoofing your use agent to googlebot, you
+will probably get IP banned from whatever you are doing, and are alsovery
+likely  a bad person. In short, please be nice when using this tool."""
+
+import argparse
+import urllib.request
+import urllib
+import lxml.etree
+import sys
+
+def show_warning(msg):
+    if not args.quiet:
+        sys.stderr.write("WARNING: {}\n".format(msg))
+
+    sys.stderr.flush()
+
+def show_error(msg):
+    if not args.quiet:
+        sys.stderr.write("ERROR: {}\n".format(msg))
+
+    sys.stderr.flush()
+    sys.stdout.flush()
+    exit(1)
+
+common_user_agents = {
+        "edge-win10": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246",
+        "chromebook": "Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36",
+        "safari-macos": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9",
+        "chrome-win7": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36",
+        "firefox-linux": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1",
+        "googlebot": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+}
+
+common_user_agent_msg = ', '.join([x for x in common_user_agents])
+
+parser = argparse.ArgumentParser(description=descr)
+
+parser.add_argument("--url", "-u", help="Specify target URL.", required=True)
+
+parser.add_argument("--query", "-q", help="Specify xPath query.",
+                    required=True)
+
+parser.add_argument("--extract_content", "-e", default=False,
+                    action="store_true", help="Display content only as " +
+                    "output, rather than HTML markup")
+
+parser.add_argument("--output_separator", "-s", default="\n",
+                    help="Change string used to delimit matches to query in " +
+                    "the output. (default: single newline)")
+
+parser.add_argument("--disable_separator_expansion", "-E", default=False,
+                    action="store_true", help="If asserted, escape " +
+                    "sequences such as \\n found within the string supplied" +
+                    " in --output_separator will not be expanded.")
+
+parser.add_argument("--encoding", "-n", default="utf-8",
+                    help="Specify string encoding to use where applicable." +
+                    " (default: utf-8)")
+
+parser.add_argument("--noexpand", "-x" , default=False, action="store_true",
+                    help="Assert to avoid expanding control characters " +
+                    "such as \\n wherever possible.")
+
+parser.add_argument("--quiet", "-t", default=False, action="store_true",
+                    help="Suppress all warning and error messages.")
+
+parser.add_argument("--user_agent", "-a", default="Python-urllib/3.5",
+                    help="Spoof an alternate user agent string." +
+                    " (default: Python-urllib/3.5)")
+
+parser.add_argument("--common_user_agent", "-A", default=None,
+                    help="Select a user agent from a list of common ones. " +
+                    "Valid options are: "  + common_user_agent_msg +
+                    ". This overrides any value given via --user_agent")
+
+args = parser.parse_args()
+
+if args.common_user_agent is not None:
+    if args.common_user_agent not in common_user_agents:
+        show_error("Common user agent '{}' is not one of '{}'."
+                   .format(args.common_user_agent, common_user_agent_msg))
+    else:
+        args.user_agent = common_user_agents[args.common_user_agent]
+
+# This allows the user to specify escape codes like \n within
+# --output_separator
+if not args.disable_separator_expansion:
+    args.output_separator = bytes(args.output_separator, "utf-8")
+    args.output_separator = args.output_separator.decode("unicode_escape")
+
+
+try:
+    request = urllib.request.Request(args.url, data=None, headers={
+        "User-Agent": args.user_agent})
+    handle = urllib.request.urlopen(request)
+except urllib.error.URLError as e:
+    show_error("Failed to open URL. Exception was: '{}'.".format(e))
+
+try:
+    tree = lxml.etree.HTML(handle.read())
+except Exception as e:
+    show_error("Failed to parse webpage. Exception was: '{}'.".format(e))
+
+handle.close()
+
+try:
+    results = tree.xpath(args.query)
+except Exception as e:
+    show_error("Query failed. Exception was: '{}'.".format(e))
+
+for r in results:
+
+    if args.extract_content:
+        if r.text is None:
+            # Sometimes we find an element with no visible text, in which case
+            # we can't really do much of anything.
+            show_warning("Ignored element '{}' because it had empty .text."
+                         .format(r))
+            continue
+        sys.stdout.write(r.text)
+
+    else:
+        text = lxml.etree.tostring(r, pretty_print=True)
+        try:
+            text = text.decode(args.encoding)
+        except Exception as e:
+            show_error("Failed to decode text. Exception was: '{}'.".format(e))
+
+        if args.noexpand:
+            text = "%r" % text
+            # this removes the leading and trailing single quotes introduced
+            # by the %r in the above statement.
+            text = text[1:-1]
+        sys.stdout.write(text)
+
+    sys.stdout.write(args.output_separator)
+
+sys.stdout.flush()

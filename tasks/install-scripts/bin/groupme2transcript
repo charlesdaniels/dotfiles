@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+import argparse
+import sys
+import textwrap
+
+descr = """
+This script is intended to allow the user to <C-a> <C-c> from GroupMe (the
+web client) and get a neatly formatted transcript out as a result.
+"""
+
+parser = argparse.ArgumentParser(description=descr)
+parser.add_argument("--input", "-i", default=sys.stdin,
+                    help="Specify input file. " +
+                    "(default: standard in)")
+
+args = parser.parse_args()
+
+if args.input is not sys.stdin:
+    args.input = open(sys.stdin, 'ro')
+
+def format_message(timestamp, name, text, width = 80):
+    """format_message
+
+    Format the given message so that it takes up not more than 80 columns, and
+    the "left part" (timestamp, name) is distinct from the text.
+
+    :param timestamp:
+    :param name:
+    :param text:
+    :param width:
+    """
+
+    leftpart = "[{}][{}]: ".format(timestamp, name)
+
+    left_width = len(leftpart)
+    text_width = width - left_width
+
+    text = ('\n' + ' '* left_width).join(
+            textwrap.wrap(text, text_width))
+
+    return leftpart + text
+
+
+# This is a buffer that stores a list of messages we have collected, but not
+# yet associated with timestamps
+messages = []
+
+# The current message.
+message = {}
+
+# If true at the beginning of the iteration, then the current line contains
+# the name.
+lineIsName = False
+
+# The previous time found, which is associated with the current message.
+time_prev = ''
+
+# The time found on the current loop iteration. When a time is found, then the
+# message buffer is flushed.
+time = ""
+
+# This is the text of the last message printed, which is used to avoid
+# duplicate messages.
+last_text = ""
+
+# This is used when multiple messages in a row have the same name.
+last_name = ""
+
+for line in sys.stdin:
+    line = line.strip()
+
+    # Line with the time always end with AM or PM (this assumes a US English
+    # locale)
+    if (line.endswith("AM") or line.endswith("PM")):
+        # If this loop body runs, we need to flush the message buffer.
+        if 'text' in message:
+            # If we mad a message in progress, make sure it gets included
+            # in the output.
+            messages.append(message)
+
+        # The current time is stored in this line.
+        time = line
+
+        # Display each message.
+        for message in messages:
+
+            message['text'] = message['text'].strip()
+
+            # Use blank names if none was found.
+            if 'name' not in message:
+                message['name'] = ''
+
+            # Filter spurious message text.
+            if message['text'] == "GroupMe":
+                continue
+            if message['text'] == 'Loading...':
+                continue
+            if message['text'] == '':
+                continue
+
+            # Prevent duplicate output.
+            if message['text'] == last_text:
+                continue
+            last_text = message['text']
+
+            # Display the current message.
+            sys.stdout.write(format_message(time_prev,
+                                            message['name'],
+                                            message['text']))
+            sys.stdout.write("\n")
+
+        # Clear message buffer.
+        messages = []
+
+        time_prev = time
+
+    # This signifies the beginning of a new message.
+    elif line == "Avatar":
+        # The next line will always be a name. Remember that this won't take
+        # effect until the next loop iteration.
+        lineIsName = True
+
+    # This line is supposed to contain a name.
+    elif lineIsName:
+        lineIsName = False
+        message['name'] = line
+
+    # This line contains message text.
+    else:
+        if 'text' not in message:
+            message['text'] = ''
+        try:
+            # Lines which are just ints are from the 'like' button, and are not
+            # part of the text.
+            int(line)
+        except Exception:
+            # Otherwise append to running message.
+            message['text'] = line
+
+            # There is usually 1 line per message.
+            if 'name' not in message:
+                message['name'] = last_name
+            messages.append(message)
+            last_name = message['name']
+            message = {}

@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+import os
+import argparse
+import sys
+import io
+import taglib
+import re
+
+parser = argparse.ArgumentParser(description="Search for media files by" +
+                                 "their tags using pytaglib.")
+parser.add_argument("--directory", "-d", default=os.getcwd(),
+                    help="Root directory for search. (default: ./)")
+parser.add_argument("--param", "-p", default=".*",
+                    help="Tag parameter to search (i.e. artist). This " +
+                    "takes a Python regex, so complex queries are possible" +
+                    ". (default: .*)")
+parser.add_argument("search_terms", nargs="*", help="Space-delimited" +
+                    " search terms. Each is a Python regex. Output is" +
+                    " all files where ANY search term matches.")
+parser.add_argument("--easy", "-e", default=None,
+                    help="Search for this argument with .* on either side. " +
+                    "This argument replaces search_terms")
+parser.add_argument("--case_sensitive", "-c", default=False,
+                    action="store_true",
+                    help="Asserted for case sensitive search in all regexes.")
+parser.add_argument("--file_list_stdin", "-l", default=False,
+                    action="store_true", help="The list of files to search" +
+                    "is read from standard in, rather than from a recursive " +
+                    "search of --directory. This argument is implied if " +
+                    "standard in is not a tty. This is useful for use in " +
+                    "pipelines, and can be used to create complex queries " +
+                    "by chaining tagsearch instances together.")
+
+args = parser.parse_args()
+
+if not sys.stdin.isatty():
+    args.file_list_stdin = True
+
+file_list = []
+if not args.file_list_stdin:
+    for root, directories, filenames in os.walk(args.directory):
+        for filename in filenames:
+            file_list.append(os.path.join(root, filename))
+else:
+    for line in sys.stdin:
+        file_list.append(line.strip())
+
+search_regex = '|'.join('({})'.format(x) for x in args.search_terms)
+if args.easy is not None:
+    search_regex = ".*{}.*".format(args.easy)
+
+param_regex = args.param
+if args.case_sensitive:
+    search_regex = re.compile(search_regex)
+    param_regex = re.compile(param_regex)
+else:
+    search_regex = re.compile(search_regex, re.IGNORECASE)
+    param_regex = re.compile(param_regex, re.IGNORECASE)
+
+seen = []
+
+for f in file_list:
+    song = None
+    try:
+        song = taglib.File(f)
+    except OSError:
+        continue
+    for key in song.tags:
+        if re.match(param_regex, key):
+            for val in song.tags[key]:
+                if re.match(search_regex, val):
+                    if f not in seen:
+                        # this prevents duplicate outputs
+                        print(f)
+                        seen.append(f)
+                    break

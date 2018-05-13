@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+
+# .SCRIPTDOC
+
+descr = """
+# This tool iterates over a list of image files and produces reStructuredText
+# which in-lines these images.
+"""
+
+descr = descr.replace("# ", "")
+# .SYNTAX
+#
+# Run this program with the argument --help for usage information.
+
+# .AUTHOR
+
+# Charles Daniels
+
+
+# .LICENSE
+
+# Copyright 2018 Charles Daniels
+
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+
+#  1. Redistributions of source code must retain the above copyright notice,
+#  this list of conditions and the following disclaimer.
+
+#  2. Redistributions in binary form must reproduce the above copyright notice,
+#  this list of conditions and the following disclaimer in the documentation
+#  and/or other materials provided with the distribution.
+
+#  3. Neither the name of the copyright holder nor the names of its
+#  contributors may be used to endorse or promote products derived from this
+#  software without specific prior written permission.
+
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+
+# .ENDOC
+
+import sys
+import argparse
+
+
+parser = argparse.ArgumentParser(description = descr)
+
+parser.add_argument("input_files", nargs="+", help="Input image files")
+
+parser.add_argument("--caption_type", "-c", default="it",
+                    choices=["text", "it", "h1", "h2", "h3"], help="If " +
+                    "captions are to be generated, select their type. Use " +
+                    "'text' for inline text, 'it' for inline italic text" +
+                    " or one of h1, h2, or h3 for a first, second, or third" +
+                    " level header. (default: it)")
+
+parser.add_argument("--caption", "-a", default="none", choices=["none",
+                    "file_name"], help="Specify the text of the captions to" +
+                    " generate. Use 'none' for no text, and 'file_name' for " +
+                    "the filename of the image file. (default: none)")
+
+args = parser.parse_args()
+
+for f in args.input_files:
+    caption_text = None
+    if args.caption == "file_name":
+        caption_text = f
+
+    if caption_text is not None:
+        n = len(caption_text)
+        if args.caption_type == "it":
+            caption_text = "*{}*".format(caption_text)
+
+        elif args.caption_type == "h1":
+            caption_text = "{}\n{}\n{}".format('#'*n, caption_text, '#'*n)
+
+        elif args.caption_type == "h2":
+            caption_text = "{}\n{}".format(caption_text, '='*n)
+
+        elif args.caption_type == "h3":
+            caption_text = "{}\n{}".format(caption_text, '-'*n)
+
+        sys.stdout.write(caption_text)
+        sys.stdout.write("\n\n")
+
+    sys.stdout.write(".. image:: {}\n\n".format(f))
+
+
