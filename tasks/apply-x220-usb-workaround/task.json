@@ -1,6 +1,6 @@
 {
     "provides": "apply-x220-usb-workaround",
-    "manifest": ["xhci-reset.service"],
+    "manifest": ["xhci_reset.service"],
     "require-sudo": true,
     "require-task": ["require-systemd", "require-linux", "install-scripts-opt"],
     "run-script": [
