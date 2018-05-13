@@ -8,10 +8,12 @@
                      "install-synapse-config",
                      "install-texmf",
                      "install-vimrc",
+                     "install-neovim-config",
                      "install-tmux-config",
                      "install-xconfig",
                      "install-scripts",
                      "apply-mime-associations",
-                     "install-list-desktop-files"
+                     "install-list-desktop-files",
+                     "install-zsh-config"
     ]
 }

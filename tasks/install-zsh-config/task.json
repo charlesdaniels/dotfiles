@@ -1,0 +1,11 @@
+{
+    "provides": "install-zsh-config",
+    "manifest": [".zshrc"],
+    "require-task": [
+        "install-zsh-k",
+        "install-zsh-abbr-path",
+        "install-zsh-fast-syntax-highlighting",
+        "install-zsh-autosuggestions"
+    ],
+    "copy-file": [[".zshrc", "{HOME}/.zshrc"]]
+}

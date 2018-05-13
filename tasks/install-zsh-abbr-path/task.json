@@ -1,0 +1,9 @@
+{
+    "provides": "install-zsh-abbr-path",
+    "manifest": [],
+    "require-github": [["felixgravila/zsh-abbr-path", "zsh-abbr-path", "master"]],
+    "run-script": [
+        ["mkdir", "-p", "{HOME}/.zsh"],
+        ["cp", "zsh-abbr-path/.abbr_pwd", "{HOME}/.zsh/abbr_pwd.zsh"]
+    ]
+}

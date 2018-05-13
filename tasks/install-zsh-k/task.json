@@ -1,0 +1,9 @@
+{
+    "provides": "install-zsh-k",
+    "manifest": [],
+    "require-github": [["supercrabtree/k", "k", "master"]],
+    "run-script": [
+        ["mkdir", "-p", "{HOME}/.zsh"],
+        ["cp", "k/k.sh", "{HOME}/.zsh/k.sh"]
+    ]
+}

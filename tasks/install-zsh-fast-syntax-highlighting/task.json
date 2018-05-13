@@ -1,0 +1,11 @@
+{
+    "provides": "install-zsh-fast-syntax-highlighting",
+    "manifest": [],
+    "require-github": [["zdharma/fast-syntax-highlighting", "fast-syntax-highlighting", "master"]],
+    "run-script": [
+        ["rm", "-rf", "{HOME}/.zsh/fast-syntax-highlighting"],
+        ["mkdir", "-p", "{HOME}/.zsh/"],
+        ["cp", "-r", "fast-syntax-highlighting", "{HOME}/.zsh/fast-syntax-highlighting"]
+
+    ]
+}
