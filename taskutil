@@ -350,10 +350,22 @@ class Task:
                 this.require_any[i][j] = tasks[taskname]
                 this.require_any[i][j].hydrate(tasks)
 
+
+    def predict_sudo(this):
+        if this.require_sudo:
+            return True
+
+        for t in this.require_task:
+            if t.predict_sudo():
+                return True
+
+        return False
+
+
     def execute(this, sudo_pw=None):
 
         # ensure we have the sudo password if we need it
-        if this.require_sudo:
+        if this.predict_sudo():
             if (sudo_pw is None) and (not sys.stdin.isatty()):
                 this.status = "failed"
                 this.result["require-sudo"] = "Task requires sudo and " + \
