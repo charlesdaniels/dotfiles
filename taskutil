@@ -25,6 +25,7 @@ class Task:
         this.manifest = manifest
 
         this.manifest.append("task.json")
+        this.manifest.append("doc.rst")
 
         this.status = "not started"
         this.result = {}
