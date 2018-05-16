@@ -8,6 +8,7 @@ TASK_DIR="$(pwd)/tasks"
 DOC_DIR="$(pwd)/doc/source"
 
 mkdir -p "$DOC_DIR/tasks"
+mkdir -p "$DOC_DIR/_static"
 
 # generate overview graph
 echo "$(./taskutil --visualize)" | dot "/dev/stdin" -Tsvg > "$DOC_DIR/_static/overview.svg"
