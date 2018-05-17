@@ -6,6 +6,9 @@ The Dotfiles of Charles Daniels
     :target: http://charlesdaniels-dotfiles.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
+.. image:: https://travis-ci.org/charlesdaniels/dotfiles.svg?branch=master
+    :target: https://travis-ci.org/charlesdaniels/dotfiles
+
 
 .. contents::
 
