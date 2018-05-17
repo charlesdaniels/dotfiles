@@ -3,8 +3,8 @@ The Dotfiles of Charles Daniels
 ###############################
 
 .. image:: https://readthedocs.org/projects/charlesdaniels-dotfiles/badge/?version=latest
-:target: http://charlesdaniels-dotfiles.readthedocs.io/en/latest/?badge=latest
-:alt: Documentation Status
+    :target: http://charlesdaniels-dotfiles.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 
 .. contents::
