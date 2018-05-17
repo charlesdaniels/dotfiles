@@ -25,7 +25,7 @@ Supplemental Documents
 Overview of Tasks
 =================
 
-.. image:: /_static/overview.svg
+.. image:: _static/overview.svg
 
 Index of Task Documentation
 ===========================
