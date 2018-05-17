@@ -613,8 +613,10 @@ def index_tasks(taskstore):
             try:
                 task.env["TASK_DIR"] = os.path.dirname(p)
             except AttributeError:
-                # workaround for the python3 variant that readthedocs uses
-                task.env["TASK_DIR"] = os.path.split(p)[0]
+                # Workaround for the python3 variant that readthedocs uses.
+                # This is horrible, because processing paths using string
+                # handling methods is evil.
+                task.env["TASK_DIR"] = "/".join(str(p).split("/"))[:-1]
 
 
             if 'require-task' in j:
