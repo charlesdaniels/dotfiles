@@ -1,0 +1,8 @@
+{
+	"provides": "archlinux-install-aurman",
+	"manifest": ["install-aurman.sh"],
+	"require-task": ["archlinux-update", "archlinux-install-devel"],
+	"require-sudo": true,
+	"run-script": [["sh", "./install-aurman.sh"]]
+
+}

@@ -4,11 +4,11 @@
     "require-sudo": true,
     "require-task": [
         "require-archlinux",
-        "archlinux-update-pacaur",
-        "archlinux-install-pacaur"],
+        "archlinux-update"
+    ],
     "run-script": [
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
-        ["pacaur", "-S", "--noedit", "--noconfirm", "--needed",
+        ["pacman", "-S", "--noedit", "--noconfirm", "--needed",
             "texlive-most"
         ]
     ]

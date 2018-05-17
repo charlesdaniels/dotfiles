@@ -1,9 +1,0 @@
-{
-    "provides": "archlinux-install-pacaur",
-    "manifest": [],
-    "require-sudo": true,
-    "require-task": ["require-archlinux", "archlinux-update"],
-    "run-script": [
-        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S pacman -S --noconfirm pacaur"]
-    ]
-}

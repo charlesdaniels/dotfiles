@@ -1,13 +1,13 @@
 {
-    "provides": "archlinux-update-pacaur",
+    "provides": "archlinux-update-aurman",
     "manifest": [],
     "require-sudo": true,
     "require-task": [
         "require-archlinux",
         "archlinux-update",
-        "archlinux-install-pacaur"],
+        "archlinux-install-aurman"],
     "run-script": [
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
-        ["pacaur", "-Syu", "--noconfirm", "--noedit"]
+        ["aurman", "-Syu", "--noconfirm", "--noedit"]
     ]
 }

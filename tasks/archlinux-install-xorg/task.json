@@ -4,11 +4,11 @@
     "require-sudo": true,
     "require-task": [
         "require-archlinux",
-        "archlinux-update-pacaur",
-        "archlinux-install-pacaur"],
+        "archlinux-update-aurman",
+        "archlinux-install-aurman"],
     "run-script": [
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
-        ["pacaur", "-S", "--noedit", "--noconfirm", "--needed",
+        ["aurman", "-S", "--noedit", "--noconfirm", "--needed",
             "xorg",
             "xorg-xinit",
             "i3",
