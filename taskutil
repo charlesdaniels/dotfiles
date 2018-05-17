@@ -610,7 +610,12 @@ def index_tasks(taskstore):
 
             task = Task(name, j["manifest"])
 
-            task.env["TASK_DIR"] = os.path.dirname(p)
+            try:
+                task.env["TASK_DIR"] = os.path.dirname(p)
+            except AttributeError:
+                # workaround for the python3 variant that readthedocs uses
+                task.env["TASK_DIR"] = os.path.split(p)[0]
+
 
             if 'require-task' in j:
                 task.require_task = j["require-task"]
