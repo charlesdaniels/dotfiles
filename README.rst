@@ -2,6 +2,11 @@
 The Dotfiles of Charles Daniels
 ###############################
 
+.. image:: https://readthedocs.org/projects/charlesdaniels-dotfiles/badge/?version=latest
+:target: http://charlesdaniels-dotfiles.readthedocs.io/en/latest/?badge=latest
+:alt: Documentation Status
+
+
 .. contents::
 
 What is This?
@@ -12,7 +17,7 @@ acyclic graph) of tasks such that each task is not executed until each of it's
 dependencies are executed. ``taskutil`` is used to implement a desired-state
 configuration system which allows my dotfiles, any part of my dotfiles, as well
 as my preferred environment for various UNIX variants to be provisioned in an
-auditable and unattended fashion. 
+auditable and unattended fashion.
 
 How Does it Work?
 =================
