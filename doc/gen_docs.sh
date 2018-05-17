@@ -58,6 +58,20 @@ for task in "$TASK_DIR"/* ; do
 	echo ".. image:: ../_static/$taskname.overview.svg" >> "$taskpage"
 	echo "" >> "$taskpage"
 
+	echo "Taskfile" >> "$taskpage"
+	echo "$(gen_header_underline "Taskfile")" | tr 'X' '=' >> "$taskpage"
+	echo "" >> "$taskpage"
+	echo ".. code-block:: json" >> "$taskpage"
+	echo "	:linenos:" >> "$taskpage"
+	echo "" >> "$taskpage"
+	OLDIFS=$IFS
+	IFS=""
+	cat "$task/task.json" | while read line ; do
+		printf "\t$line\n" >> "$taskpage"
+	done
+	IFS=$OLDIFS
+	echo "" >> "$taskpage"
+
 	# if a doc.rst exists in the task directory, add that in too...
 	if [ -e "$task/doc.rst" ] ; then
 		cat "$task/doc.rst" >> "$taskpage"
