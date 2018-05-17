@@ -5,10 +5,11 @@
         "require-archlinux",
         "provision-linux-core",
         "archlinux-update",
-        "archlinux-update-pacaur",
+        "archlinux-update-aurman",
         "provision-archlinux-core",
         "archlinux-install-xorg",
         "archlinux-install-desktop",
-        "archlinux-install-latex"
+        "archlinux-install-latex",
+        "archlinux-install-virtualization"
     ]
 }

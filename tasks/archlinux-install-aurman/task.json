@@ -1,8 +1,10 @@
 {
-	"provides": "archlinux-install-aurman",
-	"manifest": ["install-aurman.sh"],
-	"require-task": ["archlinux-update", "archlinux-install-devel"],
-	"require-sudo": true,
-	"run-script": [["sh", "./install-aurman.sh"]]
+    "provides": "archlinux-install-aurman",
+    "manifest": ["install-aurman.sh"],
+    "require-task": ["archlinux-update"],
+    "require-sudo": true,
+    "run-script": [
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S pacman -S --noconfirm --needed base-devel"],
+        ["sh", "./install-aurman.sh"]]
 
 }

@@ -8,7 +8,7 @@
         "archlinux-install-aurman"],
     "run-script": [
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
-        ["aurman", "-S", "--noedit", "--noconfirm", "--needed",
+        ["aurman", "-S", "--noconfirm", "--needed",
             "python",
             "gcc",
             "binutils",

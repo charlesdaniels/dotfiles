@@ -344,7 +344,14 @@ class Task:
                             .format(this.provides))
                     raise TaskError()
                 this.require_task[i] = tasks[this.require_task[i]]
-            this.require_task[i].hydrate(tasks)
+
+            try:
+                this.require_task[i].hydrate(tasks)
+            except RecursionError:
+                sys.stderr.write("FATAL: loop detected while processing task")
+                sys.stderr.write(" '{}'; tasks do not from a DAG.\n"
+                                 .format(this.provides))
+                raise TaskError()
 
         for i in range(len(this.require_any)):
             for j in range(len(this.require_any[i])):
@@ -817,4 +824,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except TaskError:
+        sys.stderr.write("FATAL: a task exception was encountered.\n")
+        exit(1)

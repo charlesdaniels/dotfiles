@@ -5,7 +5,7 @@
         "require-archlinux",
         "provision-linux-core",
         "archlinux-update",
-        "archlinux-update-pacaur",
+        "archlinux-update-aurman",
         "archlinux-install-utils",
         "archlinux-install-devel"
     ]

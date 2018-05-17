@@ -1,0 +1,18 @@
+{
+    "provides": "archlinux-install-virtualization",
+    "manifest": [],
+    "require-sudo": true,
+    "require-task": [
+        "require-archlinux",
+        "archlinux-update-aurman",
+        "archlinux-install-aurman"],
+    "run-script": [
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
+        ["aurman", "-S", "--noedit", "--noconfirm", "--needed",
+            "virt-manager",
+            "libvirt"
+        ],
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl enable libvirtd"],
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl start libvirtd"]
+    ]
+}
