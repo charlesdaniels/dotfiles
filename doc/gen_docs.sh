@@ -55,7 +55,7 @@ for task in "$TASK_DIR"/* ; do
 	echo "Dependency Graph" | tr 'X' '=' >> "$taskpage"
 	echo "$(gen_header_underline "Dependency Graph")" |tr 'X' '=' >> "$taskpage"
 	echo "" >> "$taskpage"
-	echo ".. image:: /_static/$taskname.overview.svg" >> "$taskpage"
+	echo ".. image:: ../_static/$taskname.overview.svg" >> "$taskpage"
 	echo "" >> "$taskpage"
 
 	# if a doc.rst exists in the task directory, add that in too...
