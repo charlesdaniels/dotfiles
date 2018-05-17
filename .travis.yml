@@ -8,7 +8,7 @@ python:
 # Run some basic sanity/end to end checks to make sure nothing got totally
 # broken.
 script:
-    - "/usr/vin/env python3 --version"
+    - "/usr/bin/env python3 --version"
     - "./taskutil --list"
     - "./taskutil --visualize > out.dot"
     - "./taskutil --run install-user-config --print_summary"
