@@ -118,19 +118,19 @@ class Task:
 
         results = {}
         for cp in this.copy_file:
-            src = cp[0].format(**this.env)
-            dest = cp[1].format(**this.env)
+            src = pathlib.Path(cp[0].format(**this.env))
+            dest = pathlib.Path(cp[1].format(**this.env))
             rn = "Copy file '{}' to '{}'".format(src, dest)
             try:
                 # explicitly delete the destination
-                if os.path.exists(dest):
-                    if os.path.isdir(dest):
-                        shutil.rmtree(dest)
+                if dest.exists():
+                    if os.path.isdir(str(dest)):
+                        shutil.rmtree((dest))
                     else:
-                        os.remove(dest)
+                        dest.rmdir()
 
                 # perform the copy
-                shutil.copyfile(src, dest)
+                shutil.copyfile(str(src), str(dest))
                 results[rn] = "Copy finished ok."
             except Exception as e:
                 this.status = "failed"
@@ -150,8 +150,9 @@ class Task:
 
         results = {}
         for f in this.require_file:
+            f = Pathlib.path(f)
             rn = "File '{}' must exist".format(f)
-            if os.path.exists(f):
+            if f.exists():
                 results[rn] = "File exists."
             else:
                 results[rn] = "File does not exist."
@@ -185,10 +186,15 @@ class Task:
         for g in this.require_git:
             os.chdir(str(this.env["TASK_DIR"]))
             url, clonedir, branch = g
+
+            clonedir = pathlib.Path(clonedir)
+
             rn = "Clone git repository '{}' on branch '{}' to '{}'" \
                     .format(url, branch, clonedir)
             results[rn] = "\n"
-            if not os.path.exists(clonedir):
+
+            if not clonedir.exists():
+                # Assume we have not cloned this repository before
                 results[rn] = "$ git clone {} {}\n".format(url, clonedir)
                 try:
                     result = subprocess.check_output(
@@ -202,9 +208,13 @@ class Task:
                     this.status = "failed"
                     continue
 
+            # At this point, we have either cloned the repo, or we assume it
+            # was already cloned previously since the dest already exists.
+
             os.chdir(str(clonedir))
 
             try:
+                # Checkout the specified branch.
                 results[rn] += "$ git checkout {}\n".format(branch)
                 result = subprocess.check_output(
                         ["git", "checkout", branch],
@@ -213,6 +223,8 @@ class Task:
                 result = result.strip()
                 results[rn] += result + "\n"
 
+                # Reset it to HEAD, in case we have modified it since the last
+                # run.
                 results[rn] += "$ git reset --hard HEAD\n"
                 result = subprocess.check_output(
                         ["git", "reset", "--hard", "HEAD"],
@@ -229,6 +241,10 @@ class Task:
 
             try:
 
+                # Pull the origin down. this is in a separate try/except block
+                # since if it fails, it indicates a network error, which should
+                # be non-fatal if possible.
+
                 results[rn] += "$ git pull origin {}\n".format(branch)
                 result = subprocess.check_output(
                         ["git", "pull", "origin", branch],
@@ -241,6 +257,8 @@ class Task:
                 results[rn] += "\nFailed to pull origin. Failure is non"
                 results[rn] += "-fatal to task completion.\n"
 
+        # Generate a gitignore file so that if we are already part of a git
+        # repo the user does not accidentally check the one we just cloned in.
         gitignore = this.env["TASK_DIR"] / ".gitignore"
         if not gitignore.exists():
             with open(str(gitignore), "w") as f:
@@ -548,22 +566,24 @@ class Task:
 
             delete = True
             for mg in this.manifest:
-                mg = os.path.join(this.env["TASK_DIR"], mg)
+                mg = pathlib.Path(mg)
+                mg = this.env["TASK_DIR"] / mg
 
                 # pathlib.glob does not support globbing on absolute paths,
                 # so we convert to a relative path
                 mg = os.path.relpath(str(mg), str(os.getcwd()))
+                mg = pathlib.Path(mg)
 
-                for m in pathlib.Path().glob(str(mg)):
-                    m = os.path.realpath(str(m))
-                    p = os.path.realpath(str(p))
+                for m in pathlib.Path.glob(str(mg)):
+                    m = pathlib.Path(os.path.realpath(str(m)))
+                    p = pathlib.path(os.path.realpath(str(p)))
                     if os.path.normpath(str(p)) == os.path.normpath(str(m)):
                         delete = False
 
             if delete:
-                if os.path.isfile(p):
+                if os.path.isfile(str(p)):
                     sys.stderr.write("removing: {}\n".format(p))
-                    os.remove(p)
+                    p.remove()
                 else:
                     dirstack.append(p)
 
@@ -572,17 +592,17 @@ class Task:
         for i in range(len(dirstack)):
             for p in dirstack:
                     try:
-                        os.rmdir(p)
+                        p.rmdir()
                         pass
                     except Exception as e:
                         pass
 
         for p in dirstack:
-            if not os.path.exists(p):
+            p.exists()
                 continue
 
             try:
-                os.rmdir(p)
+                p.rmdir()
             except Exception as e:
                 print_warning("Could not delete '{}': {}".format(p, e))
 
@@ -778,8 +798,8 @@ def main():
         with open(args.sudo_file, 'r') as f:
             sudo_pw = f.read()
 
-    base_dir = os.path.dirname(os.path.realpath(str(__file__)))
-    tasks_dir = os.path.join(base_dir, "tasks")
+    base_dir = pathlib.Path(os.path.dirname(os.path.realpath(str(__file__))))
+    tasks_dir = base_dir / "tasks"
 
     tasks = index_tasks(tasks_dir)
 
