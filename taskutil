@@ -243,7 +243,7 @@ class Task:
 
         gitignore = this.env["TASK_DIR"] / ".gitignore"
         if not gitignore.exists():
-            with open(gitignore, "w") as f:
+            with open(str(gitignore), "w") as f:
                 for g in this.require_git:
                     url, clonedir, branch = g
                     f.write(clonedir)
