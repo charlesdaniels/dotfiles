@@ -60,7 +60,7 @@ class Task:
             parent = os.path.join(this.env["TASK_DIR"], src)
             for spath in pathlib.Path(parent).glob("./**/*"):
                 try:
-                    dpath = os.path.relpath(spath, parent)
+                    dpath = os.path.relpath(str(spath), str(parent))
                     dpath = os.path.join(dest, dpath)
                     dparent = os.path.dirname(dpath)
 
@@ -532,7 +532,7 @@ class Task:
 
                 # pathlib.glob does not support globbing on absolute paths,
                 # so we convert to a relative path
-                mg = os.path.relpath(mg, os.getcwd())
+                mg = os.path.relpath(str(mg), str(os.getcwd()))
 
                 for m in pathlib.Path().glob(mg):
                     m = os.path.realpath(m)
