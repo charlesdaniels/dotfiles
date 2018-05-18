@@ -125,9 +125,9 @@ class Task:
                 # explicitly delete the destination
                 if dest.exists():
                     if os.path.isdir(str(dest)):
-                        shutil.rmtree((dest))
+                        shutil.rmtree(str(dest))
                     else:
-                        dest.rmdir()
+                        dest.unlink()
 
                 # perform the copy
                 shutil.copyfile(str(src), str(dest))
@@ -150,7 +150,7 @@ class Task:
 
         results = {}
         for f in this.require_file:
-            f = Pathlib.path(f)
+            f = pathlib.Path(f)
             rn = "File '{}' must exist".format(f)
             if f.exists():
                 results[rn] = "File exists."
@@ -598,7 +598,7 @@ class Task:
                         pass
 
         for p in dirstack:
-            p.exists()
+            if p.exists():
                 continue
 
             try:
