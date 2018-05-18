@@ -43,9 +43,9 @@ class Task:
         this.overlay = []
 
         this.env = {}
-        this.env["HOME"] = str(os.path.expanduser("~"))
-        this.env["BIN_DIR"] = str(os.path.join(this.env["HOME"], "bin"))
-        this.env["TASK_DIR"] = str(os.getcwd())
+        this.env["HOME"] = pathlib.Path.home()
+        this.env["BIN_DIR"] = this.env["HOME"] / "bin"
+        this.env["TASK_DIR"] = pathlib.Path.cwd()
 
     def do_overlay(this):
         if len(this.overlay) == 0:
@@ -54,27 +54,40 @@ class Task:
         results = {}
 
         for src, dest in this.overlay:
-            dest = str(dest.format(**this.env))
+
+            # apply env formatting to destiantion
+            dest = pathlib.Path(dest.format(**this.env))
+
             rn = "Overlay {} over {}".format(src, dest)
             results[rn] = "\n"
-            parent = str(os.path.join(this.env["TASK_DIR"], src))
+
+            # calculate the parent of the source of the overlay
+            parent = this.env["TASK_DIR"] / src
+
+            # for each source element under the parent...
             for spath in pathlib.Path(parent).glob("./**/*"):
                 try:
-                    dpath = os.path.relpath(str(spath), str(parent))
-                    dpath = os.path.join(str(dest), str(dpath))
-                    dparent = os.path.dirname(str(dpath))
+                    # calculate destination for this element and it's parent
+                    dpath = pathlib.Path(os.path.relpath(str(spath),
+                                                         str(parent)))
+                    dpath = dest / dpath
+                    dparent = dpath.parent
 
+                    # If the source file is a directory, then we create a
+                    # directory at the destination, and we're done with this
+                    # element.
                     if os.path.isdir(str(spath)):
                         results[rn] += "create directory '{}'\n".format(dpath)
                         os.makedirs(str(dpath), exist_ok=True)
                         continue
 
-                    # ensure the destination's parent directory exists
+                    # Ensure the destination's parent directory exists.
                     results[rn] += "create directory '{}'\n".format(dparent)
                     os.makedirs(str(dparent), exist_ok=True)
 
-                    # explicitly delete the dest if it exists
-                    if os.path.exists(str(dpath)):
+                    # Explicitly delete the destination element if it exists
+                    # already.
+                    if dpath.exists():
                         results[rn] += "remove '{}'\n".format(str(dpath))
                         if os.path.isfile(str(dpath)):
                             os.remove(str(dpath))
@@ -83,7 +96,8 @@ class Task:
 
                     # perform a copy operation
                     results[rn] += "copy '{}' to {}'\n".format(spath, dpath)
-                    shutil.copy(str(spath), (dpath))
+                    shutil.copy(str(spath), str(dpath))
+
                 except Exception as e:
                     results[rn] += str(e) + "\n"
                     this.status = "failed"
@@ -621,13 +635,7 @@ def index_tasks(taskstore):
 
             task = Task(name, j["manifest"])
 
-            try:
-                task.env["TASK_DIR"] = os.path.dirname(p)
-            except AttributeError:
-                # Workaround for the python3 variant that readthedocs uses.
-                # This is horrible, because processing paths using string
-                # handling methods is evil.
-                task.env["TASK_DIR"] = "/".join(str(p).split("/")[:-1])
+            task.env["TASK_DIR"] = p.parent
 
 
             if 'require-task' in j:
