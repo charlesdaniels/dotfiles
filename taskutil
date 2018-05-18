@@ -280,7 +280,7 @@ class Task:
             rn = "Mark file '{}' executable".format(mx)
             try:
                 st = mx.stat()
-                os.chmod(mx, st.st_mode | stat.S_IXUSR | stat.S_IXGRP |
+                os.chmod(str(mx), st.st_mode | stat.S_IXUSR | stat.S_IXGRP |
                         stat.S_IXOTH)
                 results[rn] = "Chmod finished ok."
             except Exception as e:
@@ -301,7 +301,7 @@ class Task:
             scriptenv[key] = os.environ[key]
 
         for k in this.env:
-            scriptenv["TASKUTIL_"+k] = this.env[k]
+            scriptenv["TASKUTIL_"+k] = str(this.env[k])
 
         results = {}
         for cmd in this.run_script:
