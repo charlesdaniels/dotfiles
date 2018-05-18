@@ -62,7 +62,7 @@ class Task:
         for src, dest in this.overlay:
 
             # apply env formatting to destiantion
-            dest = pathlib.Path(dest.format(**this.env))
+            dest = pathlib.Path(apply_env_formatting(this.env, dest))
 
             rn = "Overlay {} over {}".format(src, dest)
             results[rn] = "\n"
@@ -118,8 +118,8 @@ class Task:
 
         results = {}
         for cp in this.copy_file:
-            src = pathlib.Path(cp[0].format(**this.env))
-            dest = pathlib.Path(cp[1].format(**this.env))
+            src = pathlib.Path(apply_env_formatting(this.env, cp[0]))
+            dest = pathlib.Path(apply_env_formatting(this.env, cp[1]))
             rn = "Copy file '{}' to '{}'".format(src, dest)
             try:
                 # explicitly delete the destination
@@ -276,10 +276,10 @@ class Task:
 
         results = {}
         for mx in this.mark_executable:
-            mx = mx.format(**this.env)
+            mx = pathlib.Path(apply_env_formatting(this.env, mx))
             rn = "Mark file '{}' executable".format(mx)
             try:
-                st = os.stat(mx)
+                st = mx.stat()
                 os.chmod(mx, st.st_mode | stat.S_IXUSR | stat.S_IXGRP |
                         stat.S_IXOTH)
                 results[rn] = "Chmod finished ok."
@@ -305,7 +305,7 @@ class Task:
 
         results = {}
         for cmd in this.run_script:
-            cmd = [x.format(**this.env) for x in cmd]
+            cmd = [apply_env_formatting(this.env, x) for x in cmd]
             try:
                 result = subprocess.check_output(cmd,
                         env=scriptenv, stdin=subprocess.DEVNULL,
@@ -627,6 +627,11 @@ class Task:
     def __str__(this):
         return "{}: {}".format(this.provides, this.status)
 
+def apply_env_formatting(env, s):
+    for key in env:
+        env[key] = str(env[key])
+        s = s.format(**env)
+        return s
 
 def print_warning(msg):
     sys.stderr.write("WARNING: {}\n".format(msg))
