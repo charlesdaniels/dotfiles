@@ -1,5 +1,5 @@
 {
-    "provides": "archlinux-install-latex",
+    "provides": "archlinux-install-bluetooth",
     "manifest": [],
     "require-sudo": true,
     "require-task": [

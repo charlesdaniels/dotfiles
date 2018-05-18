@@ -10,7 +10,7 @@
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
         ["aurman", "-S", "--noedit", "--noconfirm", "--needed",
             "neovim",
-            "netcat",
+            "gnu-netcat",
             "nload",
             "htop",
             "tmux",
