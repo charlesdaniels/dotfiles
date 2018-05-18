@@ -627,7 +627,7 @@ def index_tasks(taskstore):
                 # Workaround for the python3 variant that readthedocs uses.
                 # This is horrible, because processing paths using string
                 # handling methods is evil.
-                task.env["TASK_DIR"] = "/".join(str(p).split("/"))[:-1]
+                task.env["TASK_DIR"] = "/".join(str(p).split("/")[:-1])
 
 
             if 'require-task' in j:
