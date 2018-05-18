@@ -5,6 +5,7 @@
         "apply-x220-usb-workaround",
         "provision-archlinux-workstation",
         "install-user-config",
-        "provision-linux-laptop"
+        "provision-linux-laptop",
+        "archlinux-install-bluetooth"
     ]
 }

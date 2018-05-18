@@ -20,7 +20,8 @@
             "pavucontrol",
             "network-manager-applet",
             "pulseaudio",
-            "pulseaudio-alsa"
+            "pulseaudio-alsa",
+            "engrampa"
         ]
     ]
 }

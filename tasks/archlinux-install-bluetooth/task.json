@@ -7,6 +7,7 @@
         "archlinux-update"
     ],
     "run-script": [
-        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S pacman -S --noconfirm --needed texlive-most"]
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S pacman -S --noconfirm --needed blueman pulseaudio-bluetooth"],
+        ["pacmd", "set-card-profile", "2", "a2dp_sink"]
     ]
 }
