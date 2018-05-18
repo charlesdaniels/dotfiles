@@ -257,7 +257,11 @@ class Task:
 
         os.chdir(this.env["TASK_DIR"])
 
-        scriptenv = { ** os.environ }
+        # copy existing environment into the one we will use with subprocess
+        scriptenv = {}
+        for key in os.environ:
+            scriptenv[key] = os.environ[key]
+
         for k in this.env:
             scriptenv["TASKUTIL_"+k] = this.env[k]
 
