@@ -198,7 +198,7 @@ class Task:
                 results[rn] = "$ git clone {} {}\n".format(url, clonedir)
                 try:
                     result = subprocess.check_output(
-                            ["git", "clone", url, clonedir],
+                            ["git", "clone", url, str(clonedir)],
                             stderr=subprocess.PIPE)
                     result = result.decode("utf-8")
                     result = result.strip()
@@ -634,6 +634,7 @@ class Task:
         return "{}: {}".format(this.provides, this.status)
 
 def apply_env_formatting(env, s):
+    s = str(s)
     for key in env:
         env[key] = str(env[key])
         s = s.format(**env)
