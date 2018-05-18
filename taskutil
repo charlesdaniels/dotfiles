@@ -574,18 +574,24 @@ class Task:
                 mg = os.path.relpath(str(mg), str(os.getcwd()))
                 mg = pathlib.Path(mg)
 
-                for m in pathlib.Path.glob(str(mg)):
+                for m in pathlib.Path().glob(str(mg)):
                     m = pathlib.Path(os.path.realpath(str(m)))
-                    p = pathlib.path(os.path.realpath(str(p)))
+                    p = pathlib.Path(os.path.realpath(str(p)))
                     if os.path.normpath(str(p)) == os.path.normpath(str(m)):
                         delete = False
 
             if delete:
-                if os.path.isfile(str(p)):
-                    sys.stderr.write("removing: {}\n".format(p))
-                    p.remove()
-                else:
-                    dirstack.append(p)
+                sys.stderr.write("removing: {}\n".format(p))
+                try:
+                    if p.is_dir():
+                        dirstack.append(p)
+                    elif p.is_symlink():
+                        p.unlink()
+                    else:
+                        p.unlink()
+                except Exception as e:
+                    print_warning("Failed to delete '{}': {}".format(p, e))
+
 
         # we try to delete everything many times in case there are nested
         # sub-directories
@@ -598,7 +604,7 @@ class Task:
                         pass
 
         for p in dirstack:
-            if p.exists():
+            if not p.exists():
                 continue
 
             try:
