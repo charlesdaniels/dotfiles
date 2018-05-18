@@ -43,7 +43,13 @@ class Task:
         this.overlay = []
 
         this.env = {}
-        this.env["HOME"] = pathlib.Path.home()
+
+        try:
+            this.env["HOME"] = pathlib.Path.home()
+        except AttributeError:
+            # This version of pathlib predates Path.home()
+            this.env["HOME"] = pathlib.Path(os.path.expanduser("~"))
+
         this.env["BIN_DIR"] = this.env["HOME"] / "bin"
         this.env["TASK_DIR"] = pathlib.Path.cwd()
 
@@ -108,7 +114,7 @@ class Task:
         if len(this.copy_file) == 0:
             return
 
-        os.chdir(this.env["TASK_DIR"])
+        os.chdir(str(this.env["TASK_DIR"]))
 
         results = {}
         for cp in this.copy_file:
@@ -177,7 +183,7 @@ class Task:
 
         results = {}
         for g in this.require_git:
-            os.chdir(this.env["TASK_DIR"])
+            os.chdir(str(this.env["TASK_DIR"]))
             url, clonedir, branch = g
             rn = "Clone git repository '{}' on branch '{}' to '{}'" \
                     .format(url, branch, clonedir)
@@ -196,7 +202,7 @@ class Task:
                     this.status = "failed"
                     continue
 
-            os.chdir(clonedir)
+            os.chdir(str(clonedir))
 
             try:
                 results[rn] += "$ git checkout {}\n".format(branch)
@@ -269,7 +275,7 @@ class Task:
         if len(this.run_script) == 0:
             return
 
-        os.chdir(this.env["TASK_DIR"])
+        os.chdir(str(this.env["TASK_DIR"]))
 
         # copy existing environment into the one we will use with subprocess
         scriptenv = {}
@@ -447,7 +453,7 @@ class Task:
                     " in group completed successfully."
 
         if this.status != "failed":
-            os.chdir(this.env["TASK_DIR"])
+            os.chdir(str(this.env["TASK_DIR"]))
             this.do_require_uname()
             this.do_require_file()
             this.do_require_github()
