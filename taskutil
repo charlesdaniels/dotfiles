@@ -241,8 +241,8 @@ class Task:
                 results[rn] += "\nFailed to pull origin. Failure is non"
                 results[rn] += "-fatal to task completion.\n"
 
-        gitignore = os.path.join(this.env["TASK_DIR"], ".gitignore")
-        if not os.path.exists(gitignore):
+        gitignore = this.env["TASK_DIR"] / ".gitignore"
+        if not gitignore.exists():
             with open(gitignore, "w") as f:
                 for g in this.require_git:
                     url, clonedir, branch = g
