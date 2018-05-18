@@ -534,10 +534,10 @@ class Task:
                 # so we convert to a relative path
                 mg = os.path.relpath(str(mg), str(os.getcwd()))
 
-                for m in pathlib.Path().glob(mg):
-                    m = os.path.realpath(m)
-                    p = os.path.realpath(p)
-                    if os.path.normpath(p) == os.path.normpath(m):
+                for m in pathlib.Path().glob(str(mg)):
+                    m = os.path.realpath(str(m))
+                    p = os.path.realpath(str(p))
+                    if os.path.normpath(str(p)) == os.path.normpath(str(m)):
                         delete = False
 
             if delete:
@@ -764,7 +764,7 @@ def main():
         with open(args.sudo_file, 'r') as f:
             sudo_pw = f.read()
 
-    base_dir = os.path.dirname(os.path.realpath(__file__))
+    base_dir = os.path.dirname(os.path.realpath(str(__file__)))
     tasks_dir = os.path.join(base_dir, "tasks")
 
     tasks = index_tasks(tasks_dir)
