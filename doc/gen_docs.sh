@@ -26,6 +26,10 @@ gen_header_underline () {
 	echo "$underline"
 }
 
+# clean existing docs out
+rm -f "$DOC_DIR/tasks/*.rst"
+rm -f "$DOC_DIR/_static/*.overview.svg"
+
 # generate doc pages for each task
 for task in "$TASK_DIR"/* ; do
 	taskname="$(basename "$task")"
