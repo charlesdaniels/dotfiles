@@ -80,5 +80,7 @@ to have ``git`` in ``$PATH``. Individual tasks will usually make more
 restrictive assumptions. For those wondering, ``taskutil`` itself should work
 on Windows, but few if any of the tasks in this repository will.
 
-
+Note that ``taskutil`` requires ``pathlib``. This means that it should run
+in Python 3.4+ with only the Python standard library. On lower versions of
+Python 3, pathlib may need to be installed separately.
 
