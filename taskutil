@@ -122,7 +122,7 @@ class Task:
         for g in this.require_github:
             url, clonedir, branch = g
             fullurl = "https://github.com/{}.git".format(url)
-            this.require_git = [[fullurl, clonedir, branch], *this.require_git]
+            this.require_git.append([fullurl, clonedir, branch])
 
     def do_require_file(this):
         if len(this.require_file) == 0:
