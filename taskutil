@@ -67,8 +67,9 @@ class Task:
             rn = "Overlay {} over {}".format(src, dest)
             results[rn] = "\n"
 
-            # calculate the parent of the source of the overlay
-            parent = this.env["TASK_DIR"] / src
+            # Calculate the parent of the source of the overlay. For unknown
+            # reasons, sometimes TASK_DIR is not of type pathlib.Path.
+            parent = pathlib.Path(this.env["TASK_DIR"]) / src
 
             # for each source element under the parent...
             for spath in pathlib.Path(parent).glob("./**/*"):
