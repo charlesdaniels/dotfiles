@@ -43,9 +43,9 @@ class Task:
         this.overlay = []
 
         this.env = {}
-        this.env["HOME"] = os.path.expanduser("~")
-        this.env["BIN_DIR"] = os.path.join(this.env["HOME"], "bin")
-        this.env["TASK_DIR"] = os.getcwd()
+        this.env["HOME"] = str(os.path.expanduser("~"))
+        this.env["BIN_DIR"] = str(os.path.join(this.env["HOME"], "bin"))
+        this.env["TASK_DIR"] = str(os.getcwd())
 
     def do_overlay(this):
         if len(this.overlay) == 0:
@@ -54,36 +54,36 @@ class Task:
         results = {}
 
         for src, dest in this.overlay:
-            dest = dest.format(**this.env)
+            dest = str(dest.format(**this.env))
             rn = "Overlay {} over {}".format(src, dest)
             results[rn] = "\n"
-            parent = os.path.join(this.env["TASK_DIR"], src)
+            parent = str(os.path.join(this.env["TASK_DIR"], src))
             for spath in pathlib.Path(parent).glob("./**/*"):
                 try:
                     dpath = os.path.relpath(str(spath), str(parent))
-                    dpath = os.path.join(dest, dpath)
-                    dparent = os.path.dirname(dpath)
+                    dpath = os.path.join(str(dest), str(dpath))
+                    dparent = os.path.dirname(str(dpath))
 
-                    if os.path.isdir(spath):
+                    if os.path.isdir(str(spath)):
                         results[rn] += "create directory '{}'\n".format(dpath)
-                        os.makedirs(dpath, exist_ok=True)
+                        os.makedirs(str(dpath), exist_ok=True)
                         continue
 
                     # ensure the destination's parent directory exists
                     results[rn] += "create directory '{}'\n".format(dparent)
-                    os.makedirs(dparent, exist_ok=True)
+                    os.makedirs(str(dparent), exist_ok=True)
 
                     # explicitly delete the dest if it exists
-                    if os.path.exists(dpath):
-                        results[rn] += "remove '{}'\n".format(dpath)
-                        if os.path.isfile(dpath):
-                            os.remove(dpath)
+                    if os.path.exists(str(dpath)):
+                        results[rn] += "remove '{}'\n".format(str(dpath))
+                        if os.path.isfile(str(dpath)):
+                            os.remove(str(dpath))
                         else:
-                            shutil.rmtree(dpath)
+                            shutil.rmtree(str(dpath))
 
                     # perform a copy operation
                     results[rn] += "copy '{}' to {}'\n".format(spath, dpath)
-                    shutil.copy(spath, dpath)
+                    shutil.copy(str(spath), (dpath))
                 except Exception as e:
                     results[rn] += str(e) + "\n"
                     this.status = "failed"
