@@ -80,6 +80,7 @@ case "$VERB" in
 					pactl set-sink-mute "$PACTL_SINK" 0
 					pactl set-sink-volume "$PACTL_SINK" +5%
 				fi
+				send_notification "raised volume"
 				;;
 			amixer)
 				amixer -q set Master 2dB+
@@ -98,6 +99,7 @@ case "$VERB" in
 		case "$VOLUME_MANAGER" in
 			pactl)
 				pactl set-sink-volume "$PACTL_SINK" -5%
+				send_notification "decreased volume"
 				;;
 			amixer)
 				amixer -q set Master 2dB-
@@ -114,6 +116,7 @@ case "$VERB" in
 			pactl)
 				pactl set-sink-volume "$PACTL_SINK" -100%
 				pactl set-sink-mute "$PACTL_SINK" 1
+				send_notification "muted volume"
 				;;
 			amixer)
 				amixer -q set Master 100%-
