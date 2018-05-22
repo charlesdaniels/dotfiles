@@ -21,7 +21,9 @@
             "network-manager-applet",
             "pulseaudio",
             "pulseaudio-alsa",
-            "engrampa"
+            "engrampa",
+            "remmina",
+            "freerdp"
         ]
     ]
 }

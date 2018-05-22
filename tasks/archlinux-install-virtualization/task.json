@@ -10,9 +10,15 @@
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S date"],
         ["aurman", "-S", "--noedit", "--noconfirm", "--needed",
             "virt-manager",
-            "libvirt"
+            "libvirt",
+            "qemu",
+            "ebtables",
+            "iptables",
+            "dnsmasque"
         ],
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl enable libvirtd"],
-        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl start libvirtd"]
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl start libvirtd"],
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl enable firewalld"],
+        ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl start firewalld"]
     ]
 }
