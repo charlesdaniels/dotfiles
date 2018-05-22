@@ -54,7 +54,9 @@ send_notification () {
 }
 
 VOLUME_MANAGER="UNDEFINED"
-if [ -x "$(which amixer)" ] ; then
+if [ -x "$(which pactl)" ] ; then
+	VOLUME_MANAGER="pactl"
+elif [ -x "$(which amixer)" ] ; then
 	VOLUME_MANAGER="amixer"
 fi
 
@@ -63,9 +65,22 @@ if [ -x "$(which cmus)" ] ; then
 	HAS_CMUS="YES"
 fi
 
+if [ "$VOLUME_MANAGER" = "pactl" ] ; then
+	PACTL_SINK="$(pacmd stat | \
+		awk -F": " '/^Default sink name: /{print $2}')"
+fi
+
 case "$VERB" in
 	up)
 		case "$VOLUME_MANAGER" in
+			pactl)
+				if [ $($0 get | tr -d '%') -lt 100 ] ; then
+					# this ensure we dont boost volume
+					# over 100
+					pactl set-sink-mute "$PACTL_SINK" 0
+					pactl set-sink-volume "$PACTL_SINK" +5%
+				fi
+				;;
 			amixer)
 				amixer -q set Master 2dB+
 				amixer -q set Master unmute
@@ -81,6 +96,9 @@ case "$VERB" in
 		;;
 	down)
 		case "$VOLUME_MANAGER" in
+			pactl)
+				pactl set-sink-volume "$PACTL_SINK" -5%
+				;;
 			amixer)
 				amixer -q set Master 2dB-
 				send_notification "decreased volume"
@@ -93,6 +111,10 @@ case "$VERB" in
 		;;
 	mute)
 		case "$VOLUME_MANAGER" in
+			pactl)
+				pactl set-sink-volume "$PACTL_SINK" -100%
+				pactl set-sink-mute "$PACTL_SINK" 1
+				;;
 			amixer)
 				amixer -q set Master 100%-
 				amixer -q set Master mute
@@ -104,6 +126,20 @@ case "$VERB" in
 				;;
 		esac
 		;;
+	get)
+		case "$VOLUME_MANAGER" in
+			pactl)
+				pacmd list-sinks |
+				awk '/^\s+name: /{indefault = $2 == "<'$PACTL_SINK'>"}
+				    /^\s+volume: / && indefault {print $5; exit}'
+				;;
+			*)
+				echo "ERROR: no known volume manager available"
+				exit 1
+				;;
+		esac
+		;;
+
 	play)
 		send_notification "playing music"
 		if [ "$HAS_CMUS" = "YES" ] ; then
