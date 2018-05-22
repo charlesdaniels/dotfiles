@@ -17,6 +17,7 @@
             "zsh",
             "parallel",
             "cmus",
+            "libmad",
             "ffmpeg",
             "ctags",
             "vorbis-tools",
