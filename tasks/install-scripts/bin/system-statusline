@@ -202,22 +202,9 @@ def get_time():
     return time
 
 def get_vol():
-    vol = "vol: unsupported"
-    if platform.system() == "FreeBSD":
-        vol = subprocess.check_output(["mixer", "vol"])
-        vol = vol.split(":")[1].rstrip()
-        vol = "vol {}".format(vol)
-
-    if platform.system() == "Linux":
-        try:
-            amixer_raw = subprocess.check_output(["amixer", "sget", "Master"])
-            for ln in amixer_raw.split("\n"):
-                if "%" in ln:
-                    vol = "vol: {}".format(ln.split()[3].replace("[", "").replace("]", ""))
-        except Exception:
-            pass
-            # TODO: add support for volume mixers other than amixer
-
+    # ugly hack, should not rely on audioctl
+    vol = "vol: "
+    vol += subprocess.check_output(["audioctl", "get"]).decode("utf8")
 
     return vol
 
