@@ -25,7 +25,8 @@
             "youtube-dl",
             "wget",
             "curl",
-            "sanoid"
+            "sanoid",
+            "ledger"
         ]
     ]
 }
