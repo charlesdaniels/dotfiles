@@ -263,16 +263,6 @@ def get_ip():
         s.close()
     return IP
 
-def get_dropbox():
-    dropbox_status = "dropbox: unknown"
-    try:
-        dropbox_status = subprocess.check_output(["dropbox-status"])
-    except Exception as e:
-        pass
-
-    dropbox_status = dropbox_status.strip()
-    return dropbox_status
-
 def get_dock():
     dock_status = "DOCK UNKNOWN"
     try:
@@ -293,7 +283,6 @@ def main():
     vol= get_vol()
     wifi = get_wifi()
     ip = get_ip()
-    dbox = get_dropbox()
     dock = get_dock()
 
     show = [dock, temp, mem, disk ,load, ip, wifi, batt, vol, time]
