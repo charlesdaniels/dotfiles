@@ -3,7 +3,6 @@ call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'scrooloose/nerdtree'
 Plug 'gi1242/vim-tex-syntax'
-Plug 'jvirtanen/vim-octave'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'heavenshell/vim-pydocstring'
 Plug 'PProvost/vim-ps1'
@@ -26,6 +25,7 @@ Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
 Plug 'altercation/vim-colors-solarized'
+Plug 'lazywei/vim-matlab'
 
 call plug#end()
 
@@ -267,6 +267,8 @@ autocmd FileType yaml call FourSpacesSoftTabs()
 autocmd FileType sh call EightSpacesHardTabs()
 autocmd FileType perl call EightSpacesHardTabs()
 autocmd FileType verilog call EightSpacesHardTabs()
+autocmd FileType json call FourSpacesSoftTabs()
+autocmd FileType matlab call FourSpacesSoftTabs()
 
 """"""""10""""""""20"""" text wrapping (gq) behaviour """"60""""""""70""""""""80
 
@@ -352,28 +354,6 @@ function! NERDTreeToggleInCurDir()
 	endif
 endfunction
 
-
-""""""""10""""""""20"""""" vim-octave configuration """"""60""""""""70""""""""80
-
-" this is required for octave.vim to work correctly, not entirely sure why
-
-if has("autocmd") && exists("+omnifunc")
-	autocmd Filetype octave
-				\ if &omnifunc == "" |
-				\ setlocal omnifunc=syntaxcomplete#Complete |
-				\ endif
-endif
-
-" set octave syntax highlighting for .m
-if has("autocmd")
-	autocmd BufNewFile,BufRead *.m set syntax=octave
-	autocmd BufNewFile,BufRead *.m set filetype=octave
-endif
-
-" we will force .m file to be treated as octave, which to my knowledge is the
-" default extension for MATLAB/octave files. The default behavior is to treat
-" *.m as some kind of objective-c header type thing.
-autocmd BufEnter *.m setlocal filetype=octave
 
 """"""""10""""""""20"""" vim-pydocstring configuration """60""""""""70""""""""80
 
