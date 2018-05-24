@@ -14,7 +14,7 @@
             "qemu",
             "ebtables",
             "iptables",
-            "dnsmasque"
+            "dnsmasq"
         ],
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl enable libvirtd"],
         ["sh", "-c", "echo $TASKUTIL_SUDO_PASSWORD | sudo -S systemctl start libvirtd"],
