@@ -79,12 +79,14 @@ while true ; do
 	fi
 
 	# this else runs on any dock state change
+	LAYOUT_OK="NO"
 	if [ "$DOCK_STATE" = "DOCKED" ] ; then
 		# this implies we have gone from undocked to docked
 		for layout in "$SCREENLAYOUT_DIR"/$(hostname).docked.screenlayout.*.sh ; do
 			log_msg "INFO" "attempting to execute screenlayout file '$layout'"
 			if sh "$layout" > /dev/null 2>&1 ; then
 				log_msg "INFO" "layout configuration succeeded"
+				LAYOUT_OK="YES"
 				break
 			else
 				log_msg "INFO" "layout configuration failed"
@@ -98,11 +100,18 @@ while true ; do
 			log_msg "INFO" "attempting to execute screenlayout file '$layout'"
 			if sh "$layout" ; then
 				log_msg "INFO" "layout configuration succeeded"
+				LAYOUT_OK="YES"
 				break
 				else
 				log_msg "INFO" "layout configuration failed"
 			fi
 		done
+	fi
+
+	if [ "$LAYOUT_OK" != "YES" ] ; then
+		log_msg "WARN" "no layout worked, attempting fallback..."
+		notify-send "screenlayout problme, check ~/.dspool/log"
+		$SCREENLAYOUT_DIR/$(hostname).fallback.sh >> "$HOME/.dspool/log"
 	fi
 
 	# handle dock / undock events
