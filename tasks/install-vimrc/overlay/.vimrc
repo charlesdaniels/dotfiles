@@ -24,7 +24,6 @@ Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
-Plug 'altercation/vim-colors-solarized'
 Plug 'lazywei/vim-matlab'
 
 call plug#end()
@@ -44,7 +43,8 @@ set ruler                      " display column and line number in statusline
 set backspace=indent,eol,start " fix dumbass default backspace behavior
 set nowrap                     " disable line wrapping
 set formatoptions+=cro         " enable content continuation on enter
-set bg=light                   " assume a light background
+set bg=dark                    " assume a dark background
+colorscheme default            " explicitly use the default colorscheme
 set shortmess+=I               " disable welcome message on blank file
 set virtualedit=block          " allow visual block past EOL
 
@@ -79,16 +79,6 @@ noremap <Leader>yc "+yy
 
 " Visualize Makefiles
 noremap <Leader>vm :!visualize-makefile %:p <CR> <CR>
-
-""""""""10""""""""20""""""""30""" colorscheme ""50""""""""60""""""""70""""""""80
-
-if $TERM == "rxvt-unicode"
-	colorscheme solarized
-	let g:solarized_termcolors=256
-	let t_Co=256
-else
-	colorscheme default
-endif
 
 """"""""10""""""""20""""""""30""" key mapping ""50""""""""60""""""""70""""""""80
 

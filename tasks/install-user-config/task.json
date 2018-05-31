@@ -17,6 +17,7 @@
                      "install-zsh-config",
                      "install-minos-static",
                      "install-herc-tools-public",
-                     "install-latexrun"
+                     "install-latexrun",
+                     "install-termite-config"
     ]
 }

@@ -17,7 +17,8 @@
             "xdotool",
             "xclip",
             "lxdm",
-            "arandr"
+            "arandr",
+            "termite"
         ]
     ]
 }
