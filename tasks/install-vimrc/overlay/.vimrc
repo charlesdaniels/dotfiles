@@ -25,6 +25,10 @@ Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
 Plug 'lazywei/vim-matlab'
+Plug 'altercation/vim-colors-solarized'
+Plug 'Yggdroot/indentLine'
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'KSP-KOS/EditorTools', {'rtp': 'VIM/vim-kerboscript'}
 
 call plug#end()
 
@@ -83,6 +87,12 @@ noremap <Leader>vm :!visualize-makefile %:p <CR> <CR>
 """"""""10""""""""20""""""""30""" key mapping ""50""""""""60""""""""70""""""""80
 
 nnoremap <F1> <nop> " don't open help with F1
+
+
+""""""""10""""""""20""""""""3 GUI-specific config """"""""60""""""""70""""""""80
+
+if has('gui_running')
+endif
 
 """"""""10""""""""20""""""""3 platform detection 0""""""""60""""""""70""""""""80
 
@@ -152,8 +162,10 @@ endif
 
 if has('gui_running')
 	" set the GUI font
-	let g:normalGUIFont="Andale_Mono:h8"
-	let g:largeGUIFont="Andale_Mono:h14"
+	let g:normalGUIFont="Gohu Gohufont 10"
+	let g:largeGUIFont="Monospace 14"
+	set bg=dark
+	colorscheme solarized
 	let &guifont=g:normalGUIFont
 
 	" make the GUI be not stupid
@@ -169,7 +181,7 @@ set listchars=
 set listchars+=trail:¬
 set listchars+=precedes:«
 set listchars+=extends:»
-set listchars+=tab:>-
+set listchars+=tab:⋮\ 
 
 """"""""10""""""""20""""""""30 presentation mode 0""""""""60""""""""70""""""""80
 
@@ -468,3 +480,19 @@ autocmd FileType c nmap <silent> <C-g> :Dox <CR>
 " the cursor.
 
 vnoremap <silent> <leader>vc :'<,'>:w !colortool -c "$(cat /dev/stdin)" -d <CR> <CR>
+
+
+""""""""10""""""""20""""""""30" indentLine     "50""""""""60""""""""70""""""""80
+
+let g:indentLine_char = '⋮'
+if has('gui_running')
+	let g:indentLine_setConceal = 0
+	let g:indentLine_enabled = 0
+endif
+
+
+""""""""10""""""""20""""""""30" indentGuide    "50""""""""60""""""""70""""""""80
+
+if has('gui_running')
+	let g:indent_guides_enable_on_vim_startup = 1
+endif
