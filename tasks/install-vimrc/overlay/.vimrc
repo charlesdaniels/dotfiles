@@ -398,7 +398,7 @@ nmap <Leader>ww <C-U>ww zR
 nmap <Leader>sc <C-U>sc zR
 
 " build wiki using ,wb
-nmap <Leader>wb :!make -C ~/src/git/wiki-next html <enter>
+nmap <Leader>wb :! ~/src/git/wiki-next/build_wiki.sh  <enter>
 
 """"""""10""""""""20"""""" jcommenter configuration """"""60""""""""70""""""""80
 
