@@ -1,9 +1,0 @@
-#!/bin/sh
-
-# .SCRIPTDOC
-
-# A shortcut for surfraw to launch a DuckDuckGo search in links2.
-
-# .ENDOC
-
-surfraw duckduckgo -browser=links2 "$@"

@@ -1,0 +1,8 @@
+{
+    "provides": "install-charles-util",
+    "manifest": [],
+    "require-github": [["charlesdaniels/charles-util", "charles-util", "master"]],
+    "run-script": [
+        ["make", "-C", "charles-util", "install"]
+    ]
+}

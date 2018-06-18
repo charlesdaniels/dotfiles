@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# an alias for git
-
-git $@
