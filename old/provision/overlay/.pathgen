@@ -1,8 +1,0 @@
-$HOME/.cargo/bin
-$HOME/bin
-$HOME/.go-workspace/bin
-$HOME/.net.cdaniels.toolchest/bin
-$HOME/.net.cdaniels.toolchest/local/bin
-/opt/bin
-/opt/local/bin
-/opt/net.cdaniels/bin

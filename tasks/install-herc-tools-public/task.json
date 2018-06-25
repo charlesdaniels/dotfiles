@@ -1,8 +1,0 @@
-{
-    "provides": "install-herc-tools-public",
-    "manifest": [],
-    "require-github": [["HeRCLab/herc-tools-public", "herc-tools-public", "master"]],
-    "run-script": [
-        ["make", "-C", "herc-tools-public", "install"]
-    ]
-}

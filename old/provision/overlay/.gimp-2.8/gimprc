@@ -1,5 +1,0 @@
-(undo-levels 20)
-(undo-size 256M)
-(toolbox-foo-area yes)
-(toolbox-image-area yes)
-(theme "Small")

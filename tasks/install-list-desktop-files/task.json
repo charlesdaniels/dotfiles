@@ -1,7 +1,0 @@
-{
-    "provides": "install-list-desktop-files",
-    "manifest": [],
-    "require-github": [["AndyCrowd/list-desktop-files", "list-desktop-files", "master"]],
-    "copy-file": [["{TASK_DIR}/list-desktop-files/lsdesktopf", "{BIN_DIR}/lsdesktopf"]],
-    "mark-executable": ["{BIN_DIR}/lsdesktopf"]
-}

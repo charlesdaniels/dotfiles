@@ -1,8 +1,0 @@
-{
-    "provides": "install-minos-static",
-    "manifest": [],
-    "require-task": ["require-linux"],
-    "require-github": [["minos-org/minos-static", "minos-static", "master"]],
-    "copy-file": [["minos-static/static-get", "{BIN_DIR}/static-get"]],
-    "mark-executable": ["{BIN_DIR}/static-get"]
-}

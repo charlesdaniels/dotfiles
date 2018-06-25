@@ -1,5 +1,0 @@
-{
-    "provides": "require-linux",
-    "manifest": [],
-    "require-uname": ".*Linux.*"
-}

@@ -1,8 +1,0 @@
-{
-    "provides": "provision-linux-laptop",
-    "manifest": [],
-    "require-task": [
-        "install-lockscreen.service",
-        "ensure-network-manager"
-    ]
-}

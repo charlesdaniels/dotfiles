@@ -1,7 +1,0 @@
-{
-    "provides": "require-network-manager",
-    "manifest": [],
-    "run-script": [
-        ["sh", "-c", "[ -x \"$(which nmcli)\" ]"]
-    ]
-}

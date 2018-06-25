@@ -1,6 +1,0 @@
-{
-    "provides": "install-scripts",
-    "manifest": ["bin", "bin/*"],
-    "require-task": ["require-unix", "install-charles-util"],
-    "overlay": [["bin", "{BIN_DIR}"]]
-}

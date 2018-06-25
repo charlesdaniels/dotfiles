@@ -1,9 +1,0 @@
-#!/bin/bash
-
-# .SCRIPTDOC
-# This script rips a video from the given URL via ``youtube-dl``, then
-# extracts the audio.
-#
-# .ENDOC
-
-youtube-dl -i -x --audio-quality 0 "$1" 
