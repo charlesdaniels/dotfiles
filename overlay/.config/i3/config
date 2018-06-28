@@ -179,7 +179,8 @@ exec "~/bin/desktop-spooler"
 exec "~/bin/restore-sanity"
 exec "blueman-applet"
 
-# media keys should be handled by mate-settings-daemon
+# fix broken rendering in some Java programs
+exec wmname LG3D
 
 bar {
 	status_command "$HOME/bin/system-statusline"
