@@ -148,7 +148,7 @@ bindsym Print exec "~/bin/system-screenshot &"
 exec "xautolock -time 5 -locker ~/bin/system-lock &"
 
 # borders
-for_window [class="^.*"] border pixel 1
+for_window [class="^.*"] border pixel 3
 
 # media keys
 bindsym XF86AudioRaiseVolume exec ~/bin/audioctl up
