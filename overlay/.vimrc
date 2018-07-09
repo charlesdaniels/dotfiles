@@ -162,7 +162,7 @@ endif
 
 if has('gui_running')
 	" set the GUI font
-	let g:normalGUIFont="Gohu Gohufont 10"
+	let g:normalGUIFont="Gohufont 10"
 	let g:largeGUIFont="Monospace 14"
 	set bg=dark
 	colorscheme solarized
