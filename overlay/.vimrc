@@ -42,6 +42,7 @@ hi CursorLine gui=underline cterm=underline cterm=underline
 set number                     " use line numbering
 set laststatus=2               " always render the statusline
 set ignorecase                 " use case insensitive searching by default
+set smartcase                  " except for when capital letters are used
 set nocompatible               " fix odd behavior on some older systems
 set ruler                      " display column and line number in statusline
 set backspace=indent,eol,start " fix dumbass default backspace behavior
