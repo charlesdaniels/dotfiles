@@ -10,6 +10,7 @@ export PATH=$HOME/.net.cdaniels.toolchest/local/bin:$PATH
 export PATH=/opt/bin:$PATH
 export PATH=/opt/local/bin:$PATH
 export PATH=/opt/net.cdaniels/bin:$PATH
+export PATH=/snap/bin/:$PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 
 export TEXMFHOME="$HOME/.texmf"
