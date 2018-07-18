@@ -26,7 +26,6 @@ Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
 Plug 'lazywei/vim-matlab'
 Plug 'altercation/vim-colors-solarized'
-Plug 'Yggdroot/indentLine'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'KSP-KOS/EditorTools', {'rtp': 'VIM/vim-kerboscript'}
 
@@ -182,7 +181,7 @@ set listchars=
 set listchars+=trail:¬
 set listchars+=precedes:«
 set listchars+=extends:»
-set listchars+=tab:⋮\ 
+set listchars+=tab:→⋅
 
 """"""""10""""""""20""""""""30 presentation mode 0""""""""60""""""""70""""""""80
 
