@@ -171,7 +171,7 @@ if has('gui_running')
 	" make the GUI be not stupid
 	set guioptions=Ace
 else
-	let t_Co=256 " force 256 color
+	set t_Co=256 " force 256 color
 	set bg=dark
 	colorscheme gruvbox
 endif
