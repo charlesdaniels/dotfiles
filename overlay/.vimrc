@@ -25,7 +25,7 @@ Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
 Plug 'lazywei/vim-matlab'
-Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'KSP-KOS/EditorTools', {'rtp': 'VIM/vim-kerboscript'}
 
@@ -165,11 +165,15 @@ if has('gui_running')
 	let g:normalGUIFont="Gohufont 10"
 	let g:largeGUIFont="Monospace 14"
 	set bg=dark
-	colorscheme solarized
+	colorscheme gruvbox
 	let &guifont=g:normalGUIFont
 
 	" make the GUI be not stupid
 	set guioptions=Ace
+else
+	let t_Co=256 " force 256 color
+	set bg=dark
+	colorscheme gruvbox
 endif
 
 """"""""10""""""""20""""""" listchars configuration """"""60""""""""70""""""""80
