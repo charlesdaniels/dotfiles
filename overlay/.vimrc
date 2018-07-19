@@ -51,6 +51,7 @@ set bg=dark                    " assume a dark background
 colorscheme default            " explicitly use the default colorscheme
 set shortmess+=I               " disable welcome message on blank file
 set virtualedit=block          " allow visual block past EOL
+set ttyfast
 
 " enable a nice interactive menu for tab-completing buffers and such
 set wildmenu
@@ -88,11 +89,6 @@ noremap <Leader>vm :!visualize-makefile %:p <CR> <CR>
 
 nnoremap <F1> <nop> " don't open help with F1
 
-
-""""""""10""""""""20""""""""3 GUI-specific config """"""""60""""""""70""""""""80
-
-if has('gui_running')
-endif
 
 """"""""10""""""""20""""""""3 platform detection 0""""""""60""""""""70""""""""80
 
@@ -174,6 +170,7 @@ else
 	let t_Co=256 " force 256 color
 	set bg=dark
 	colorscheme gruvbox
+	set lazyredraw
 endif
 
 """"""""10""""""""20""""""" listchars configuration """"""60""""""""70""""""""80
