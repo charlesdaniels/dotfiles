@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Open ``$VISUAL`` the lecture notes file for the current date. If it does
+# not exist already, create it with a basic template.
+
+# .SYNTAX
+
+# $1 . . . course code
+#
+# $2 . . . YYYY-MM-DD format date (optional, override current date)
+
+# .ENDOC
+
+WIKI_ROOT="$HOME/src/git/wiki-next"
+SCHOOL_ROOT="$WIKI_ROOT/source/School"
+
+COURSECODE="$1"
+
+if [ -z "$COURSECODE" ] ; then
+	echo "FATAL: course code was not specified." > /dev/stderr
+	exit 1
+fi
+
+DEPARTMENT="$(echo "$COURSECODE" | tr -d '[0-9]')"
+NUMBER="$(echo "$COURSECODE" | tr -d '[a-zA-Z]')"
+
+COURSE_ROOT="$SCHOOL_ROOT/$DEPARTMENT/$COURSECODE"
+if [ ! -e "$COURSE_ROOT" ] ; then
+	echo "FATAL: $COURSE_ROOT does not exist." > /dev/stderr
+	exit 1
+fi
+
+ISODATE="$(date +%Y-%m-%d)"
+if [ ! -z "$2" ] ; then
+	ISODATE="$2"
+fi
+LECTURE_FILE="$COURSE_ROOT/$ISODATE.rst"
+LECTURE_TITLE="$COURSECODE Lectures Notes $ISODATE"
+TITLE_LEN="$(echo "$LECTURE_TITLE" | wc -c)"
+
+if [ ! -e "$LECTURE_FILE" ] ; then
+
+	# generate title
+	for i in $(seq 2 $TITLE_LEN) ; do
+		printf "#" >> "$LECTURE_FILE"
+	done
+	echo "" >> "$LECTURE_FILE"
+	echo "$LECTURE_TITLE" >> "$LECTURE_FILE"
+	for i in $(seq 2 $TITLE_LEN) ; do 
+		printf "#" >> "$LECTURE_FILE"
+	done
+	echo "" >> "$LECTURE_FILE"
+	echo "" >> "$LECTURE_FILE"
+
+	# add TOC entry
+	echo ".. contents::" >> "$LECTURE_FILE"
+	echo "" >> "$LECTURE_FILE"
+	echo "" >> "$LECTURE_FILE"
+fi
+
+$VISUAL "$LECTURE_FILE"

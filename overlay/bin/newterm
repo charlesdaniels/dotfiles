@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+#
+# Spawn a new urxvt instance in CWD.
+#
+# .ENDOC
+
+disavow urxvt -cd "$(pwd)"

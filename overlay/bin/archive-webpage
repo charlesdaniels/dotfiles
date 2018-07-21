@@ -1,0 +1,187 @@
+#!/usr/bin/env phantomjs
+/*
+
+# .SCRIPTDOC
+
+# This script will save a webpage to the specified output directory using
+# PhantomJS. It will save the page in three formats:
+#
+# * Rendered as a PNG image file
+# * Rendered as a PDF document
+# * As raw HTML
+
+# Note that this script is not portable to platforms which use non-POSIX
+# path separators.
+
+# This script will automatically create a page_meta.yaml file. This file
+# will contain a dictionary with the following scheme:
+#
+# * ``title`` : page title as string
+# * ``date`` : page retrieval date in ISO8601 format
+# * ``url`` : page URL at time of retrieval
+# * ``tags`` : empty list to tag the page with from other programs
+
+# .SYNTAX
+
+# $1 . . . Output directory (will be created)
+
+# $2 . . . Wepage URL
+
+# $3 . . . Page title (used to name files, defaults to 'page' if not specified)
+
+# .AUTHOR
+
+# Charles Daniels
+
+
+# .LICENSE
+
+# Copyright 2018 Charles Daniels
+
+#  Redistribution and use in source and binary forms, with or without
+#  modification, are permitted provided that the following conditions are met:
+
+#  1. Redistributions of source code must retain the above copyright notice,
+#  this list of conditions and the following disclaimer.
+
+#  2. Redistributions in binary form must reproduce the above copyright notice,
+#  this list of conditions and the following disclaimer in the documentation
+#  and/or other materials provided with the distribution.
+
+#  3. Neither the name of the copyright holder nor the names of its
+#  contributors may be used to endorse or promote products derived from this
+#  software without specific prior written permission.
+
+#  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+#  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+#  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+#  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+#  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+#  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+#  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+#  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+#  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+#  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+#  POSSIBILITY OF SUCH DAMAGE.
+
+# .CHANGELOG
+#
+# * 0.0.1
+#
+#   + 2018-02-12 - Charles Daniels
+#
+#       - Initial version with the following features:
+#
+#           * Letterbox and stretch resizing, with arbitrary BG fill color.
+#
+#           * Read and write support for jpeg, png, bmp, ppm, de2raw, de2rawh,
+#             and hercimf format image files.
+#
+#           * Automatic packing of Altera zipfs-compatible zip files (via
+#             ``--pack2zipfs``).
+
+# .ENDOC
+
+*/
+
+var argv = require('system').args;
+var fs = require('fs');
+var process = require("child_process")
+var spawn = process.spawn
+
+if (argv.length < 3) {
+	var filename = argv[0];
+	console.log("FATAL: Usage: " + filename
+		  + " <output directory> <URL> [page title]");
+	phantom.exit(1);
+}
+
+console.log("INFO: got " + argv.length + " arguments.");
+
+var output_dir = argv[1];
+var target_url = argv[2];
+var page_title = 'page';
+if (argv.length > 3) {
+	var page_title = argv[3];
+	console.log('INFO: page title set to: ' + page_title);
+}
+var html_dir = output_dir + "/" + page_title  +"_html";
+var yaml_file = output_dir + "/" +"page_meta.yaml";
+
+// create necessary output directories
+if (fs.makeTree(output_dir)) {
+	console.log('INFO: created directory: "' + output_dir + '"');
+} else {
+	console.log('FATAL: "' + output_dir + '" could not be created.');
+	phantom.exit(1);
+}
+
+if (fs.makeTree(html_dir)) {
+	console.log('INFO: created directory: "' + html_dir + '"');
+} else {
+	console.log('FATAL: "' + html_dir + '" could not be created.');
+	phantom.exit(1);
+}
+
+var page = require('webpage').create();
+
+// wait for the page to be ready, see here:
+// https://stackoverflow.com/a/27472788
+function onPageReady() {
+	page.viewportSize = { width: 1920, height: 1080 };
+
+	console.log("INFO: saving page as PNG... ")
+	page.render(output_dir + "/" + page_title + ".png",
+			{format: 'png', quality: '85'});
+
+	console.log("INFO: saving page as PDF... ")
+	page.render(output_dir + "/" + page_title + ".pdf",
+			{format: 'pdf'});
+
+	console.log("INFO: writing metadata...");
+	try {
+		fs.write(yaml_file, "{", "w");
+		fs.write(yaml_file, '"title": "' + page.title + '",', 'a');
+		fs.write(yaml_file, '"date": "' + Date() + '",', 'a');
+		fs.write(yaml_file, '"url": "' + target_url + '",', 'a');
+		fs.write(yaml_file, '"tags": []', 'a');
+		fs.write(yaml_file, "}", "a");
+
+	} catch (e) {
+		console.log("ERROR: encountered error while writing YAML file...");
+		console.log(e);
+		phantom.exit(1);
+	}
+
+	console.log("INFO: saving raw HTML... ");
+	var wget = spawn("wget", ["--convert-links",
+			 "--page-requisites", "--no-host-directories",
+			 "-P", html_dir, target_url]);
+
+	wget.on("exit", function (code) {
+		console.log("INFO: wget exited with: " + code);
+		console.log("INFO: all operations complete.");
+		phantom.exit();
+	});
+}
+
+page.open(target_url, function (status) {
+	console.log("INFO: loading page...");
+	function checkReadyState() {
+		setTimeout(function () {
+			var readyState = page.evaluate(function () {
+				return document.readyState;
+			});
+
+			if ("complete" === readyState) {
+				onPageReady();
+			} else {
+				checkReadyState();
+			}
+		});
+	}
+
+	checkReadyState();
+});
+
+

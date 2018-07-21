@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# alias for ls -lahF
+
+ls -lahF "$@"

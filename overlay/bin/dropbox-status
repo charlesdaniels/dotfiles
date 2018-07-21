@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+
+# Get the current status of Dropbox, if it is installed. Mostly for use with
+# system-statusline.
+
+# .LICENSE
+
+# Copyright 2018, Charles A. Daniels
+# This software is distributed under the BSD 3-clause license. The full text
+# of this software's license may be retrieved from this URL:
+# https://github.com/charlesdaniels/dotfiles/blob/master/LICENSE
+
+# .ENDOC
+
+if [ ! -x "$(which dropbox)" ] ; then
+	echo "dropbox not installed"
+else
+	echo "dropbox: $(dropbox status | head -n 1)"
+fi
