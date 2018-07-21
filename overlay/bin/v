@@ -1,0 +1,19 @@
+#!/bin/sh
+
+attempt () {
+	tn=$1
+	shift
+	if [ -x "$(which $tn)" ] ; then
+		"$tn" $@ < /dev/stdin
+		exit $?
+	fi
+}
+
+attempt neovim
+attempt nvim
+attempt vim
+attempt vi
+attempt nano
+
+echo "no suitable editor found" > /dev/stderr
+exit 1

@@ -1,5 +1,5 @@
-export EDITOR=nvim
-export VISUAL=nvim
+export EDITOR=v
+export VISUAL=v
 export GOPATH=$HOME/.go-workspace
 
 export PATH=$HOME/.cargo/bin:$PATH
