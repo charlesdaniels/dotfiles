@@ -85,6 +85,12 @@ noremap <Leader>yc "+yy
 " Visualize Makefiles
 noremap <Leader>vm :!visualize-makefile %:p <CR> <CR>
 
+" enable code folding by default
+set foldmethod=syntax
+
+" automatically unfold on new files
+autocmd BufWinEnter * silent! :%foldopen!
+
 """"""""10""""""""20""""""""30""" key mapping ""50""""""""60""""""""70""""""""80
 
 nnoremap <F1> <nop> " don't open help with F1
