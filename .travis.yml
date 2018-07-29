@@ -1,2 +1,5 @@
+# we run it twice to test idempotence
+
 script:
+  - ./install.sh
   - ./install.sh
