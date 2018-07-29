@@ -67,3 +67,7 @@ rm -f "$HOME/.git-completion.zsh"
 BASE_URL='https://raw.githubusercontent.com/git/git/master/contrib/completion'
 curl -LSs "$BASE_URL/git-completion.bash" -o "$HOME/.git-completion.bash"
 curl -LSs "$BASE_URL/git-completion.zsh" -o "$HOME/.git-completion.zsh"
+
+# vim-plug
+curl -SsfLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
