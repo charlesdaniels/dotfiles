@@ -28,6 +28,8 @@ Plug 'lazywei/vim-matlab'
 Plug 'morhetz/gruvbox'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'KSP-KOS/EditorTools', {'rtp': 'VIM/vim-kerboscript'}
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
 
 call plug#end()
 
