@@ -297,7 +297,7 @@ endif
 set formatoptions+=q  " allow gqq to wrap comments
 
 " disable hard wrapping
-set wrap linebreak textwidth=0
+set wrap linebreak textwidth=0 wrapmargin=0
 
 """"""""10""""""""20""""""""30" spell checking "50""""""""60""""""""70""""""""80
 
@@ -505,3 +505,6 @@ endif
 if has('gui_running')
 	let g:indent_guides_enable_on_vim_startup = 1
 endif
+
+"" fugative.vim """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %{FugitiveStatusline()}\ %P
