@@ -4,8 +4,9 @@ set -e
 set -u
 
 # install overlay
-
-OVERLAY_DIR="$(dirname "$0")/overlay"
+cd "$(dirname "$0")"
+DOTFILES_DIR="$(pwd)"
+OVERLAY_DIR="$DOTFILES_DIR/overlay"
 DEST_DIR="$HOME"
 
 cd "$OVERLAY_DIR"
@@ -71,3 +72,14 @@ curl -LSs "$BASE_URL/git-completion.zsh" -o "$HOME/.git-completion.zsh"
 # vim-plug
 curl -SsfLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# setup gitconfig
+git_username="$(git config --get user.name)"
+git_email="$(git config --get user.email)"
+git_config_file="$HOME/.gitconfig"
+rm -f "$git_config_file"
+echo '[user]' >> "$git_config_file"
+echo "    name = $git_username" >> "$git_config_file"
+echo "    email = $git_email" >> "$git_config_file"
+echo "" >> "$git_config_file"
+cat "$DOTFILES_DIR/gitconfig" >> "$git_config_file"
