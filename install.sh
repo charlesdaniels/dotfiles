@@ -83,3 +83,5 @@ echo "    name = $git_username" >> "$git_config_file"
 echo "    email = $git_email" >> "$git_config_file"
 echo "" >> "$git_config_file"
 cat "$DOTFILES_DIR/gitconfig" >> "$git_config_file"
+
+exit 0
