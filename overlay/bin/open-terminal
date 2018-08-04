@@ -1,0 +1,16 @@
+#!/bin/bash
+
+attempt () {
+	tn=$1
+	shift
+	if [ -x "$(which $tn)" ] ; then
+		"$tn" $@ < /dev/stdin
+		exit $?
+	fi
+}
+
+attempt urxvt
+attempt rxvt
+attempt xterm
+attempt mate-terminal
+
