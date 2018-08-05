@@ -2,7 +2,7 @@
 URxvt*cursorColor:       #ad0808
 
 ! use GohuFont
-urxvt*boldFont: xft:gohufont:size=11:antialias=true
+URxvt.font: xft:gohufont:pixelsize=13
 
 ! disable scrollbar in URxvt
 URxvt.scrollBar: false
