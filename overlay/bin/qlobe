@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Fetch and run the qlobe demo from here: https://github.com/knoxknox/qlobe
+
+cd /tmp
+rm -f qlobe.rb
+URL="https://raw.githubusercontent.com/knoxknox/qlobe/master/src/qlobe.rb"
+curl -Ss -L "$URL" -o qlobe.rb
+clear; for ((;;)); do for i in {1..360}; do tput cup 0 0; ruby qlobe.rb $i; sleep 0.1; done; done;
+
+
