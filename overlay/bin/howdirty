@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# alias to get number of dirty pages from the kernel
+
+if [ ! -e /proc/meminfo ] ; then
+	echo "ERROR: no /proc/meminfo, is procfs mounted?" > /dev/stderr
+	exit 1
+fi
+
+grep Dirty < /proc/meminfo | fieldify | cut -f2,3 | tr '\t' ' '
