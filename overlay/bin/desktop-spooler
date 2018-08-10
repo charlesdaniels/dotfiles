@@ -97,15 +97,6 @@ while true ; do
 		fi
 	done < "$DOCK_DEVICE_LIST"
 
-	# update backlight from webcam unconditionally every interval,
-	# if we are undocked
-	if [ "$DOCK_STATE" = "UNDOCKED" ] ; then
-		~/bin/autobacklight
-		if [ $? -ne 0 ] ; then
-			log_msg "ERROR" "autobacklight failed"
-		fi
-	fi
-
 	if [ "$DOCK_STATE" = "$PREV_DOCK_STATE" ] ; then
 		# nothing to do
 		continue
