@@ -34,4 +34,4 @@ elif [ -x "$(which redshift-gtk)" ] ; then
 	redshift-gtk > /dev/null 2>&1 &
 fi
 ~/bin/system-launch-compositor
-disown
+~/bin/autobacklight
