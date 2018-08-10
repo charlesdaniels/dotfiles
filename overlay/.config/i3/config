@@ -158,6 +158,11 @@ bindsym XF86AudioPlay exec ~/bin/audioctl toggle
 bindsym XF86AudioNext exec ~/bin/audioctl next
 bindsym XF86AudioPrev exec ~/bin/audioctl prev
 
+# backlight
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
+
+
 # hint: use Xev to find what i3 calls non-alphanumeric keys
 bindsym Control+Next exec ~/bin/audioctl down     # ctrl+page up
 bindsym Control+Prior exec ~/bin/audioctl up      # ctrl+page down
