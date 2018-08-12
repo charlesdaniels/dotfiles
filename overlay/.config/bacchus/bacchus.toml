@@ -1,0 +1,3 @@
+default_winearch = "win32"
+prefix_dir = "/opt/cellar"
+bin_dir = "~/bin/"
