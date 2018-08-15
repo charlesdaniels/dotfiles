@@ -1,0 +1,129 @@
+#!/bin/bash
+
+# .SCRIPTDOC
+#
+# A simple wrapper script for syncing ~/Music to a remote FTP server for
+# mobile media players such as foobar2k.
+#
+# .SYNTAX
+#
+# $1 . . . FTP host
+#
+# $2 . . . FTP user
+#
+# $3 . . . FTP password
+#
+# $4 . . . Remote sync path
+#
+# $5 . . . FTP port (optional, defaults to 21)
+#
+# .LICENSE
+
+# Copyright (c) 2018, Charles Daniels
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+# .ENDOC
+
+set -u
+set -e
+
+if [ $# -lt 4 ] ; then
+	echo "usage: $(basename "$0") [host] [username] [password] [remote path] [remote port]" > /dev/stderr
+	exit 1
+fi
+
+HOST="$1"
+USER="$2"
+PASS="$3"
+TARGETFOLDER="$4"
+PORT=21
+
+if [ $# -ge 5 ] ; then
+	PORT="$4"
+fi
+
+SOURCEFOLDER="$HOME/Music/"
+MOUNTPOINT="$HOME/mnt/musicplayer"
+RSYNC_TEMPDIR="/tmp/$(uuidgen)"
+mkdir "$RSYNC_TEMPDIR"
+
+ctrl_c () {
+
+	rm -rf "$RSYNC_TEMPDIR"
+
+	if fusermount -u -q "$MOUNTPOINT" ; then
+		echo "$MOUNTPOINT unmounted successfully"
+		exit 0
+	else
+		echo "$MOUNTPOINT was not unmounted successfully"
+		exit 1
+	fi
+}
+
+if [ ! -d "$MOUNTPOINT" ] ; then
+	echo "creating '$MOUNTPOINT'..."
+	mkdir -p "$MOUNTPOINT"
+fi
+
+if [ ! -d "$MOUNTPOINT" ] ; then
+	echo "FATAL: could not create '$MOUNTPOINT'"
+	exit 1
+fi
+
+if fusermount -u -q "$MOUNTPOINT" ; then
+	echo "$MOUNTPOINT was already mounted and has been unmounted"
+else
+	echo "$MOUNTPOINT was not already mounted"
+fi
+
+
+if curlftpfs --verbose -o utf8 -o user="$USER:$PASS" "ftp://$HOST:$PORT" "$MOUNTPOINT" ; then
+	echo "$MOUNTPOINT mounted successfully"
+else
+	echo "FATAL: failed to mount $MOUNTPOINT"
+	exit 1
+fi
+
+trap ctrl_c INT
+
+rsync --temp-dir="$RSYNC_TEMPDIR" \
+	--recursive \
+	--update \
+	--verbose \
+	--no-owner \
+	--no-group \
+	--progress \
+	--inplace \
+	--append \
+	--delete \
+	--no-perms \
+	--omit-dir-times \
+	"$SOURCEFOLDER"/* "$MOUNTPOINT/$TARGETFOLDER"
+
+ctrl_c
