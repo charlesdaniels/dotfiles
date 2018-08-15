@@ -9,6 +9,9 @@ attempt () {
 	fi
 }
 
+# set terminal title
+echo -e '\033k'v'\033\\'
+
 attempt neovim $@
 attempt nvim $@
 attempt vim $@
