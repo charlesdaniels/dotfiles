@@ -87,11 +87,23 @@ noremap <Leader>yc "+yy
 " Visualize Makefiles
 noremap <Leader>vm :!visualize-makefile %:p <CR> <CR>
 
+" TODO: should do something like this (http://vim.wikia.com/wiki/Indent_text_object)
+" to create a visual maping so that vic/vac selects the RGB or HEX color under
+" the cursor.
+
+" colortool binding
+vnoremap <silent> <leader>vc :'<,'>:w !colortool -c "$(cat /dev/stdin)" -d <CR> <CR>
+
+" render markdown
+noremap <Leader>vr :!md2txt < % \| less <CR> <CR>
+
 " enable code folding by default
 set foldmethod=syntax
 
 " automatically unfold on new files
 autocmd BufWinEnter * silent! :%foldopen!
+
+" 
 
 """"""""10""""""""20""""""""30""" key mapping ""50""""""""60""""""""70""""""""80
 
@@ -481,14 +493,6 @@ let g:vmt_auto_update_on_save = 1
 """"""""10""""""""20""""""""30" DoxygenToolkit "50""""""""60""""""""70""""""""80
 
 autocmd FileType c nmap <silent> <C-g> :Dox <CR>
-
-""""""""10""""""""20""""""""30" colortool      "50""""""""60""""""""70""""""""80
-
-" TODO: should do something like this (http://vim.wikia.com/wiki/Indent_text_object)
-" to create a visual maping so that vic/vac selects the RGB or HEX color under
-" the cursor.
-
-vnoremap <silent> <leader>vc :'<,'>:w !colortool -c "$(cat /dev/stdin)" -d <CR> <CR>
 
 
 """"""""10""""""""20""""""""30" indentLine     "50""""""""60""""""""70""""""""80
