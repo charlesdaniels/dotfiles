@@ -4,6 +4,7 @@
 font -*-gohufont-medium-r-normal-*-14-100-100-100-*-*-iso10646-1
 
 set $mod Mod1
+set $win Mod4
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -171,6 +172,12 @@ bindsym Control+Home exec ~/bin/audioctl pause    # ctrl+home
 bindsym Control+End exec ~/bin/audioctl next      # ctrl+end
 bindsym Control+Insert exec ~/bin/audioctl toggle # ctrl+insert
 bindsym Control+Delete exec ~/bin/audioctl prev   # ctrl+del
+
+# move workspace
+bindsym $win+h move workspace to output left
+bindsym $win+l move workspace to output right
+bindsym $win+k move workspace to output up
+bindsym $win+j move workspace to output down
 
 # Auto Start
 exec "source $HOME/.profile"

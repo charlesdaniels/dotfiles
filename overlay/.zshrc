@@ -106,7 +106,7 @@ function nios2eds_status_disp {
 	fi
 }
 
-export PROMPT='[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
+export PROMPT='$(echo -en "\033]0;zsh\a")[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
 ($(nios2eds_status_disp)zsh) $ '
 
 
