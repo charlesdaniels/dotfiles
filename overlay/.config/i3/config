@@ -184,13 +184,11 @@ exec "source $HOME/.profile"
 exec pasystray
 exec "nm-applet"
 exec "dropbox start"
-# pulsaudio
 exec "pulseaudio --start"
 exec "~/bin/system-launch-compositor"
 exec "~/bin/desktop-spooler"
 exec "~/bin/restore-sanity"
 exec "blueman-applet"
-exec "~/bin/backlight-loop"
 
 # fix broken rendering in some Java programs
 exec wmname LG3D
