@@ -178,6 +178,10 @@ bindsym $win+h move workspace to output left
 bindsym $win+l move workspace to output right
 bindsym $win+k move workspace to output up
 bindsym $win+j move workspace to output down
+bindsym $win+Left move workspace to output left
+bindsym $win+Right move workspace to output right
+bindsym $win+Up move workspace to output up
+bindsym $win+Down move workspace to output down
 
 # Auto Start
 exec "source $HOME/.profile"
