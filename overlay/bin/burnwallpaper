@@ -206,13 +206,13 @@ CONVERT_CMD="$CONVERT_CMD -pointsize $FONTSIZE"
 CONVERT_CMD="$CONVERT_CMD -fill '$FILLCOLOR'"
 
 # insert draw calls
-CONVERT_CMD="$CONVERT_CMD $(draw 5 5 "$COL_LEFT")"
-CONVERT_CMD="$CONVERT_CMD $(draw 65 5 "$COL_RIGHT")"
+CONVERT_CMD="$CONVERT_CMD $(draw 8 10 "$COL_LEFT")"
+CONVERT_CMD="$CONVERT_CMD $(draw 65 10 "$COL_RIGHT")"
 
 # setup input and output file
 CONVERT_CMD="$CONVERT_CMD '$INPUT' '$OUTPUT'"
 
-echo "generated command: $CONVERT_CMD"
+echo "INFO: generated command: $CONVERT_CMD"
 
 # we can't just use a bare $CONVERT_CMD because of string quoting issues
 echo "INFO: executing convert... "
