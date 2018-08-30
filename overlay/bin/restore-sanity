@@ -18,7 +18,7 @@
 
 # .ENDOC
 
-feh --bg-fill ~/.wallpapers/current
+~/bin/burnwallpaper ~/.wallpapers/current
 xmodmap ~/.Xmodmap
 killall mate-settings-daemon >/dev/null 2>&1 | true
 killall mate-screensaver > /dev/null 2>&1 | true
