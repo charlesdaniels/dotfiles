@@ -1,11 +1,18 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # .SCRIPTDOC
-#
-# Burn in some stuff such as weather and a calendar into the specified image
-# and place it at the specified output. Note that this generally assumes
-# that the image resolution is 2560x1440.
-#
+
+# This script burns information (configurable by editing the body of the sript)
+# into an image (generally a wallpaper), and either writes out that image, or
+# sets it as the wallpaper using ``feh``.
+
+# .SYNTAX
+
+# $1 . . . path to input image
+
+# $2 . . . (optional) path to write output image to. If omitted, the output is
+#          set using feh instead.
+
 # .LICENSE
 #
 # Copyright (c) 2018, Charles Daniels
@@ -39,35 +46,186 @@
 #
 # .ENDOC
 
+#### helper methods ###########################################################
+
+pct2pix () {
+	# Accept an col,row coordinate (on $1, $2) as and integer percentage in
+	# 0..100, convert this to an absolute pixel coordinate in the image and
+	# output it comma-delimited (for easy consumption by convert).
+
+	IMAGE_HEIGHT="$(identify -format "%h" "$INPUT")"
+	IMAGE_WIDTH="$(identify -format "%w" "$INPUT")"
+
+	ROW="$(echo "($IMAGE_HEIGHT  / 100) * $2" | bc)"
+	COL="$(echo "($IMAGE_WIDTH / 100) * $1" | bc)"
+
+	printf "%s,%s" $COL $ROW
+}
+
+vpad () {
+	# Pad $1 with newlines until it is $2 many lines long.
+
+	TEXT="$1"
+	DESIRED_LENGTH="$2"
+	CURRENT_LENGTH="$(echo -e "$TEXT" | wc -l)"
+	DIFFERENCE="0"
+	if [ "$DESIRED_LENGTH" -gt "$CURRENT_LENGTH" ] ; then
+		# if the current length is shorter than the desired length,
+		# then we calculate the difference
+		DIFFERENCE="$(echo "$DESIRED_LENGTH - $CURRENT_LENGTH" | bc)"
+	fi
+
+	# we use '\n ' instead of just \n to prevent BASH from discarding the
+	# blank lines during variable substitution.
+	PADDING="$(for i in $(seq $DIFFERENCE) ; do echo -n "\n " ; done)"
+
+	echo -e -n "$TEXT$PADDING"
+}
+
+draw () {
+	# Generate a -draw argument to convert.
+	#
+	# $1 . . . horizontal position as a percentage in 0..100
+	#
+	# $2 . . . vertical position as a percentage in 0..100
+	#
+	# $3 . . . text
+
+	printf "%s" "-draw "
+	printf "%s" '"'
+	printf "fill-opacity %s " $OPACITY
+	printf "text "
+	pct2pix $1 $2
+	printf " '%s'" "$(echo -e -n "$3")"
+	printf "%s" '"'
+}
+
+
+
+#### setup ####################################################################
+
 set -u
 set -e
 
-if [ $# -ne 1 ] ; then
-	echo "$(basename $0) [input]" > /dev/stderr
+if [ $# -lt 1 ] ; then
+	echo "$(basename $0) [input] [output]" > /dev/stderr
 	exit 1
 fi
 
 INPUT="$1"
-OUTPUT="/tmp/$(uuidgen)"
 
+OUTPUT="/tmp/$(uuidgen)"
+OUTPUT_IS_TEMP="YES"
+SET_WALLPAPER="YES"
+if [ $# -eq 2 ] ; then
+	# set the output file if it was provided
+	OUTPUT="$2"
+	# prevent the output from being deleted
+	OUTPUT_IS_TEMP="NO"
+	# prevent the output from being immediate set as the wallpaper
+	SET_WALLPAPER="NO"
+
+fi
+
+# select the font file from the output of fc-list
 FONT="$(fc-list  | grep -i deja | grep -i mono | grep -i book | cut -d: -f1)"
-OPACITY=0.7
+
+# TODO: this should be expressed as a percentage of image height
 FONTSIZE=30
+
+OPACITY=0.7
 FILLCOLOR=white
 
+#### collect data to be displayed #############################################
+
+# fetch a weather report from wttr.in. The sed command strips out terminal
+# color codes, which `convert` does not understand.
+echo "INFO: fetching weather... "
 WEATHER="$(curl -s wttr.in | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g'  | head -n 7)"
+if [ "$WEATHER" = "" ] ; then
+	# handle network outage
+	WEATHER="<network outage>"
+fi
+WEATHER="$(vpad "$WEATHER" 9)"
+
+# We eliminate entries for snaps, as this produces too many lines of output
+echo "INFO: generating block device listing... "
 BLK="$(lsblk | grep -v '\/snap')"
-HN="$(query-webpage --url 'https://news.ycombinator.com/' --query '//a[contains(@class, "storylink")]' --extract | head -n 5 | while read -r l ; do echo "$l\n" ; done | fold -w 40 -s | sed "s/'/\\\'/g")"
 
-convert \
-	-font "$FONT" -pointsize $FONTSIZE -fill $FILLCOLOR \
-	-draw "fill-opacity $OPACITY text 240,200 '$(date +"%A, %e %B %Y" ; ncal -M -h -b | sed -n '1!p')'" \
-	-draw "fill-opacity $OPACITY text 240,500 '$WEATHER'" \
-	-draw "fill-opacity $OPACITY text 240,800 '$BLK'" \
-	-draw "fill-opacity $OPACITY text 1600,200 '$(whoami)@$(hostname) ($(get-ip))'" \
-	-draw "fill-opacity $OPACITY text 1600,300 '$(uptime | sed 's/,  /\n/g' | sed 's/^ //g')'" \
-	-draw "fill-opacity $OPACITY text 1600,600 '$HN'" \
-	"$INPUT" "$OUTPUT"
+echo "INFO: fetching HN posts... "
+# fetch and extract post titles
+POST_TITLES="$(query-webpage \
+	--url 'https://news.ycombinator.com/' \
+	--query '//a[contains(@class, "storylink")]' \
+	--extract | head -n 5)"
 
-feh --bg-fill "$OUTPUT"
-rm -f "$OUTPUT"
+HN=""
+if [ "$POST_TITLES" = "" ] ; then
+	# handle network outage
+	HN="<network outage>"
+else
+	# add an extra newline after every post title and wrap it to 40
+	# columns. The sed command escapes any instances of the ' character
+	# in the post title, which would otherwise break convert's argument
+	# parsing.
+	HN="$(echo "$POST_TITLES" | awk '{print ; print "";}' | fold -w 40 -s | sed "s/'/\\\'/g")"
+fi
+
+# generate calendar ; we drop the first line and replace it with the
+# current date, as there is not a good way to highlight the current date.
+echo "INFO: generating calendar... "
+
+# generate ncal output, and put brackets around the current day
+CURRENT_DOM="$(date +"%d")"
+CALENDAR="$(ncal -M -h -b | sed "s/ $CURRENT_DOM /[$CURRENT_DOM]/g")"
+CALENDAR="$(vpad "$CALENDAR" 9)"
+
+# hostname and IP address
+echo "INFO: gathering host information... "
+HOST_INFO="$(whoami)@$(hostname) ($(get-ip))"
+HOST_INFO="$(vpad "$HOST_INFO" 3)"
+
+# uptime
+echo "INFO: gathering uptime... "
+# these sed commands replace every ',  ' with a newline, then delete leading
+# whitespace, this produces a nice multi-line left-justified output.
+UPTIME="$(uptime | sed 's/,  /\n/g' | sed 's/^ //g')"
+UPTIME="$(vpad "$UPTIME" 5)"
+
+# generate columns. The ech
+COL_LEFT="$CALENDAR\n$WEATHER\n$BLK"
+COL_RIGHT="$HOST_INFO\n$UPTIME\n$HN"
+
+#### generate output ##########################################################
+
+echo "INFO: generating convert command... "
+# setup convert command
+CONVERT_CMD="convert"
+CONVERT_CMD="$CONVERT_CMD -font '$FONT' "
+CONVERT_CMD="$CONVERT_CMD -pointsize $FONTSIZE"
+CONVERT_CMD="$CONVERT_CMD -fill '$FILLCOLOR'"
+
+# insert draw calls
+CONVERT_CMD="$CONVERT_CMD $(draw 5 5 "$COL_LEFT")"
+CONVERT_CMD="$CONVERT_CMD $(draw 65 5 "$COL_RIGHT")"
+
+# setup input and output file
+CONVERT_CMD="$CONVERT_CMD '$INPUT' '$OUTPUT'"
+
+echo "generated command: $CONVERT_CMD"
+
+# we can't just use a bare $CONVERT_CMD because of string quoting issues
+echo "INFO: executing convert... "
+sh -c "$CONVERT_CMD"
+
+#### clean up #################################################################
+
+if [ "$SET_WALLPAPER" = "YES" ] ; then
+	echo "INFO: setting wallpaper... "
+	feh --bg-fill "$OUTPUT"
+fi
+
+if [ "$OUTPUT_IS_TEMP" = "YES" ] ; then
+	echo "INFO: cleaning up... "
+	rm -f "$OUTPUT"
+fi
