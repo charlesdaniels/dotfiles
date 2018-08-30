@@ -57,16 +57,7 @@ FILLCOLOR=white
 
 WEATHER="$(curl -s wttr.in | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g'  | head -n 7)"
 BLK="$(lsblk | grep -v '\/snap')"
-HN="$( \
-	query-webpage --url 'https://news.ycombinator.com/' --query '//a[contains(@class, "storylink")]' --extract | \
-	head -n 5 | \
-	while read -r l ; \
-		do echo "$l\n" ; \  # insert \n afer every post title
-	done | \
-	fold -w 40 -s | \  # word-wrap to 40 columns
-	sed "s/'/\\\'/g"  # escape single quotes
-	)"
-echo "$HN"
+HN="$(query-webpage --url 'https://news.ycombinator.com/' --query '//a[contains(@class, "storylink")]' --extract | head -n 5 | while read -r l ; do echo "$l\n" ; done | fold -w 40 -s | sed "s/'/\\\'/g")"
 
 convert \
 	-font "$FONT" -pointsize $FONTSIZE -fill $FILLCOLOR \
