@@ -192,9 +192,20 @@ echo "INFO: gathering uptime... "
 UPTIME="$(uptime | sed 's/,  /\n/g' | sed 's/^ //g')"
 UPTIME="$(vpad "$UPTIME" 5)"
 
-# generate columns. The ech
+# get mpc status
+# TODO: would be cool to have this fetch the album art and burn that in also
+echo "INFO: fetching MPC status"
+MPC_STATUS="$(mpc status | head -n 2)"
+if [ "$(echo "$MPC_STATUS" | wc -l)" -lt 2 ] ; then
+	# handle case where no music is playing with MPC
+	MPC_STATUS="<not playing>"
+fi
+MPC_STATUS="$(vpad "$MPC_STATUS" 4)"
+
+# generate columns
 COL_LEFT="$CALENDAR\n$WEATHER\n$BLK"
-COL_RIGHT="$HOST_INFO\n$UPTIME\n$HN"
+COL_RIGHT="$HOST_INFO\n$UPTIME\n$MPC_STATUS\n$HN"
+
 
 #### generate output ##########################################################
 
