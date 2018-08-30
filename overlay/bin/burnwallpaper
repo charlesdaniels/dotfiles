@@ -1,0 +1,73 @@
+#!/bin/sh
+
+# .SCRIPTDOC
+#
+# Burn in some stuff such as weather and a calendar into the specified image
+# and place it at the specified output. Note that this generally assumes
+# that the image resolution is 2560x1440.
+#
+# .LICENSE
+#
+# Copyright (c) 2018, Charles Daniels
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# 3. Neither the name of the copyright holder nor the names of its
+#    contributors may be used to endorse or promote products derived from
+#    this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+#
+# .ENDOC
+
+set -u
+set -e
+
+if [ $# -ne 1 ] ; then
+	echo "$(basename $0) [input]" > /dev/stderr
+	exit 1
+fi
+
+INPUT="$1"
+OUTPUT="/tmp/$(uuidgen)"
+
+FONT="$(fc-list  | grep -i deja | grep -i mono | grep -i book | cut -d: -f1)"
+OPACITY=0.7
+FONTSIZE=30
+FILLCOLOR=white
+
+WEATHER="$(curl -s wttr.in | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g'  | head -n 7)"
+BLK="$(lsblk | grep -v '\/snap')"
+HN="$(query-webpage --url 'https://news.ycombinator.com/' --query '//a[contains(@class, "storylink")]' --extract | head -n 5 | while read -r l ; do echo "$l\n" ; done | fold -w 40 -s)"
+
+convert \
+	-font "$FONT" -pointsize $FONTSIZE -fill $FILLCOLOR \
+	-draw "fill-opacity $OPACITY text 240,200 \"$(date +"%A, %e %B %Y" ; ncal -M -h -b | sed -n '1!p')" \
+	-draw "fill-opacity $OPACITY text 240,500 \"$WEATHER\"" \
+	-draw "fill-opacity $OPACITY text 240,800 \"$BLK\"" \
+	-draw "fill-opacity $OPACITY text 1600,200 \"$(whoami)@$(hostname) ($(get-ip))\"" \
+	-draw "fill-opacity $OPACITY text 1600,300 \"$(uptime | sed 's/,  /\n/g' | sed 's/^ //g')\"" \
+	-draw "fill-opacity $OPACITY text 1600,600 \"$HN\"" \
+	"$INPUT" "$OUTPUT"
+
+feh --bg-fill "$OUTPUT"
+rm -f "$OUTPUT"
