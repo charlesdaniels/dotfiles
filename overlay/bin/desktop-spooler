@@ -86,9 +86,6 @@ while true ; do
 
 	sleep $DESKTOP_SPOOLER_INTERVAL
 
-	# update wallpaper
-	~/bin/burnwallpaper ~/.wallpapers/current
-
 	# update dock state
 	DOCK_STATE="UNDOCKED"
 	while read -r DOCK_DEVICE  ; do
