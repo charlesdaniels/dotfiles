@@ -193,7 +193,7 @@ exec "~/bin/system-launch-compositor"
 exec "~/bin/desktop-spooler"
 exec "~/bin/restore-sanity"
 exec "blueman-applet"
-exec "while true ; do ~/bin/burnwallpaper ~/.wallpapers/current ; sleep 5m ; done"
+exec "while true ; do ~/bin/burnwallpaper ~/.wallpapers/current ; sleep 2m ; done"
 
 # fix broken rendering in some Java programs
 exec wmname LG3D
