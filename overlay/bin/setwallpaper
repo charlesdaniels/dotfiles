@@ -2,11 +2,8 @@
 
 # .SCRIPTDOC
 
-# Generate a wallpaper using burnwallpaper from ~/.wallpapers/current and store
-# it in ~/.wallpapers/burned. Then, for every monitor which is in a horizontal
-# configuration according to xrandr, set ~/.wallpapers/burned as the
-# background, and set ~/.wallpapers/vertical for any monitors which are in a
-# vertical orientation.
+# Generate a new wallpaper with burnwallpaper, then grab the feh argument
+# list from ~/.screenlayout/fehargs.
 
 # .LICENSE
 #
@@ -48,16 +45,7 @@ set -e
 rm -f ~/.wallpapers/burned
 ~/bin/burnwallpaper ~/.wallpapers/current ~/.wallpapers/burned
 
-# parse the output of xrandr into a list of files to be passed to feh
-FILE_LIST="$(xrandr | \
-	grep -P '^[-a-zA-Z0-9]+(( connected )|( connected primary ))[0-9]+x[0-9]' | \
-	sed 's/ primary //g' | \
-	cut -d '(' -f 1 | \
-	cut -d ' ' -f 4 | \
-	sed 's/^$/\~\/.wallpapers\/burned/g' | \
-	sed 's/left/\~\/.wallpapers\/vertical/g' | \
-	sed 's/right/\~\/.wallpapers\/vertical/g' | \
-	tr '\n' ' ')"
+FILE_LIST="$(cat ~/.screenlayout/fehargs)"
 
 # we run this in sh to help alleviate string escaping issues
 FEH_CMD="feh --bg-fill $FILE_LIST"
