@@ -101,7 +101,6 @@ draw () {
 }
 
 
-
 #### setup ####################################################################
 
 set -u
@@ -136,17 +135,41 @@ FONTSIZE=30
 OPACITY=0.7
 FILLCOLOR=white
 
+CACHE_DIR="$HOME/.cache/burnwallpaper"
+mkdir -p "$CACHE_DIR"
+
 #### collect data to be displayed #############################################
 
 # fetch a weather report from wttr.in. The sed command strips out terminal
 # color codes, which `convert` does not understand. The second sed command
 # escapes instances of the ` symbol, which can cause trouble when the
 # convert command is executed with sh -c.
-echo "INFO: fetching weather... "
-WEATHER="$(curl -s wttr.in | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g' | sed 's/`/\\`/g' | head -n 7)"
-if [ "$WEATHER" = "" ] ; then
-	# handle network outage
-	WEATHER="<network outage>"
+
+WEATHER_FILE="$CACHE_DIR/weather.txt"
+
+# handle case where WEATHER_FILE does not exist
+WEATHER_FILE_TIME=2000
+if [ -e "$WEATHER_FILE" ] ; then
+	WEATHER_FILE_TIME=$(stat "$WEATHER_FILE" -c %Y)
+fi
+
+WEATHER_FILE_AGE=$(expr $(date +%s) - $WEATHER_FILE_TIME)
+
+# if the weather is more than 10 minutes out of date, fetch it again
+if [ $WEATHER_FILE_AGE -gt 600 ] ; then
+
+	echo "INFO: fetching weather... "
+	WEATHER="$(curl -s wttr.in | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g' | sed 's/`/\\`/g' | head -n 7)"
+	if [ "$WEATHER" = "" ] ; then
+		# handle network outage
+		WEATHER="<network outage>"
+	else
+		# only store the weather if there was no network issue
+		echo "$WEATHER" > "$WEATHER_FILE"
+	fi
+else
+	echo "INFO: weather file is $WEATHER_FILE_AGE seconds old, which is still current"
+	WEATHER="$(cat "$WEATHER_FILE")"
 fi
 WEATHER="$(vpad "$WEATHER" 9)"
 
@@ -154,23 +177,46 @@ WEATHER="$(vpad "$WEATHER" 9)"
 echo "INFO: generating block device listing... "
 BLK="$(lsblk | grep -v '\/snap')"
 
-echo "INFO: fetching HN posts... "
-# fetch and extract post titles
-POST_TITLES="$(query-webpage \
-	--url 'https://news.ycombinator.com/' \
-	--query '//a[contains(@class, "storylink")]' \
-	--extract | head -n 5)"
 
+HN_FILE="$CACHE_DIR/hn.txt"
 HN=""
-if [ "$POST_TITLES" = "" ] ; then
-	# handle network outage
-	HN="<network outage>"
+
+# handle case where HN_FILE does not exist yet
+HN_FILE_TIME=2000
+if [ -e "$HN_FILE" ] ; then
+	HN_FILE_TIME=$(stat "$HN_FILE" -c %Y)
+fi
+
+HN_FILE_AGE=$(expr $(date +%s) - $HN_FILE_TIME)
+
+# check if HN file has changed in the last 30 minutes, and if so just use it's
+# contents
+#
+if [ $HN_FILE_AGE -gt 1800 ] ; then
+	echo "INFO: HN file is out of date, regenerating... "
+
+	# fetch and extract post titles
+	POST_TITLES="$(query-webpage \
+		--url 'https://news.ycombinator.com/' \
+		--query '//a[contains(@class, "storylink")]' \
+		--extract | head -n 5)"
+
+	if [ "$POST_TITLES" = "" ] ; then
+		# handle network outage, just use whatever was in the
+		# HN file last.
+		HN="$(cat "$HN_FILE")"
+		echo "INFO: failed to retrieve HN posts"
+	else
+		# add an extra newline after every post title and wrap it to 40
+		# columns. The sed command escapes any instances of the ' character
+		# in the post title, which would otherwise break convert's argument
+		# parsing.
+		HN="$(echo "$POST_TITLES" | awk '{print ; print "";}' | fold -w 40 -s | sed "s/'/\\\'/g")"
+		echo "$HN" > "$HN_FILE"
+	fi
 else
-	# add an extra newline after every post title and wrap it to 40
-	# columns. The sed command escapes any instances of the ' character
-	# in the post title, which would otherwise break convert's argument
-	# parsing.
-	HN="$(echo "$POST_TITLES" | awk '{print ; print "";}' | fold -w 40 -s | sed "s/'/\\\'/g")"
+	echo "INFO: HN file is $HN_FILE_AGE seconds old, which is still current"
+	HN="$(cat "$HN_FILE")"
 fi
 
 # generate calendar ; we drop the first line and replace it with the
