@@ -50,7 +50,7 @@ rm -f ~/.wallpapers/burned
 
 # parse the output of xrandr into a list of files to be passed to feh
 FILE_LIST="$(xrandr | \
-	grep -P '^[-a-zA-Z0-9]+( connected )|( connected primary )[0-9]+x[0-9]' | \
+	grep -P '^[-a-zA-Z0-9]+(( connected )|( connected primary ))[0-9]+x[0-9]' | \
 	sed 's/ primary //g' | \
 	cut -d '(' -f 1 | \
 	cut -d ' ' -f 4 | \
