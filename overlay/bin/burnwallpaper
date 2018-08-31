@@ -139,9 +139,11 @@ FILLCOLOR=white
 #### collect data to be displayed #############################################
 
 # fetch a weather report from wttr.in. The sed command strips out terminal
-# color codes, which `convert` does not understand.
+# color codes, which `convert` does not understand. The second sed command
+# escapes instances of the ` symbol, which can cause trouble when the
+# convert command is executed with sh -c.
 echo "INFO: fetching weather... "
-WEATHER="$(curl -s wttr.in | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g'  | head -n 7)"
+WEATHER="$(curl -s wttr.in | sed 's/\x1B\[[0-9;]\+[A-Za-z]//g' | sed 's/`/\\`/g' | head -n 7)"
 if [ "$WEATHER" = "" ] ; then
 	# handle network outage
 	WEATHER="<network outage>"
