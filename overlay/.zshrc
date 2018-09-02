@@ -38,9 +38,6 @@ fpath=(~/.zsh $fpath)
 autoload -U compinit && compinit
 zmodload -i zsh/complist
 
-# k
-source ~/.zsh/k.sh
-
 # zcalc calculator
 autoload -U zcalc
 zle -N zcalc
