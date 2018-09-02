@@ -224,7 +224,7 @@ fi
 echo "INFO: generating calendar... "
 
 # generate ncal output, and put brackets around the current day
-CURRENT_DOM="$(date +"%d")"
+CURRENT_DOM="$(date +"%-d")"
 CALENDAR="$(ncal -M -h -b | sed "s/ $CURRENT_DOM /[$CURRENT_DOM]/g")"
 CALENDAR="$(vpad "$CALENDAR" 9)"
 
