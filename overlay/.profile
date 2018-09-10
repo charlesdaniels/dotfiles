@@ -25,3 +25,5 @@ export LANGUAGE=en_US.UTF-8
 
 # this fixes missing color support in neovim
 export COLORTERM=xterm-256color
+
+export MANPATH="$MANPATH:$HOME/.local/man"
