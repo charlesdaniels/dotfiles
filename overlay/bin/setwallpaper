@@ -2,8 +2,8 @@
 
 # .SCRIPTDOC
 
-# Generate a new wallpaper with burnwallpaper, then grab the feh argument
-# list from ~/.screenlayout/fehargs.
+# Generate a new wallpaper with burnwallpaper, then set it as the current
+# wallpaper.
 
 # .LICENSE
 #
@@ -45,9 +45,4 @@ set -e
 rm -f ~/.wallpapers/burned
 ~/bin/burnwallpaper ~/.wallpapers/current ~/.wallpapers/burned
 
-FILE_LIST="$(cat ~/.screenlayout/fehargs)"
-
-# we run this in sh to help alleviate string escaping issues
-FEH_CMD="feh --bg-fill $FILE_LIST"
-echo "INFO: generated feh command: $FEH_CMD"
-sh -c "$FEH_CMD"
+feh --bg-fill ~/.wallpapers/burned
