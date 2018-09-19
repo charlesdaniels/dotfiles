@@ -4,7 +4,7 @@ attempt () {
 	tn=$1
 	shift
 	if [ -x "$(which $tn)" ] ; then
-		"$tn" $@ < /dev/stdin
+		"$tn" "$*" < /dev/stdin
 		exit $?
 	fi
 }
