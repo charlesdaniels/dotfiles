@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+
+descr = """
+Read floating point scores in on standard input, generate a histogram using
+matplotlib and display it.
+"""
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as stats
+import argparse
+import sys
+
+def main():
+
+    parser = argparse.ArgumentParser(description=descr)
+
+    parser.add_argument("--max", "-m", default=100.0, type=float,
+            help="Maximum possible score on assignment. (default: 100)")
+
+    parser.add_argument("--output", "-o", default=None,
+            help="Save output to file");
+
+    parser.add_argument("--title", "-t", default="Score Histogram",
+            help="Set figure title");
+
+    parser.add_argument("--ticks", "-T", default="0,60,70,80,90,100",
+            help="Comma-separated tickmark locations for 0, F, D, C, B, A" +
+            " in that order. (default: 0, 60, 70, 80, 90, 100)")
+
+    parser.add_argument("--display", "-d", default=False, action="store_true",
+            help="Display the histogram in a graphical window.")
+
+    parser.add_argument("--bins", "-b", default=10, type=int,
+            help="Override number of bins. (default: 10)")
+
+    args = parser.parse_args()
+
+    ticks = None
+
+    try:
+        ticks = [int(x) for x in args.ticks.split(",")]
+        assert(len(ticks) == 6)
+    except Exception as e:
+        sys.stderr.write("FATAL: could not parse ticks specification: {}"
+                .format(e))
+        sys.exit(1)
+
+
+    data = []
+    for line in sys.stdin:
+        data.append(100.0 * float(line) / args.max)
+
+    n, bins, patches = plt.hist(data, args.bins, facecolor="blue", alpha=0.75)
+
+    plt.xlabel("Score out of 100")
+    plt.ylabel("Frequency")
+    plt.xticks(ticks, ["F", "D", "C", "B", "A"])
+    plt.title(args.title)
+    plt.grid(True)
+    plt.xlim(0, 100)
+
+    if args.output is not None:
+        plt.savefig(args.output)
+
+    if args.display:
+        plt.show()
+
+if __name__ == "__main__":
+    main()
