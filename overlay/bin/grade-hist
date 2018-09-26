@@ -25,9 +25,10 @@ def main():
     parser.add_argument("--title", "-t", default="Score Histogram",
             help="Set figure title");
 
-    parser.add_argument("--ticks", "-T", default="0,60,70,80,90,100",
-            help="Comma-separated tickmark locations for 0, F, D, C, B, A" +
-            " in that order. (default: 0, 60, 70, 80, 90, 100)")
+    parser.add_argument("--spec", "-s", default="A:90,B:80,C:70,D:60,F:0",
+            help="Letter grade assignment specification, as a comma " +
+            "separated list of label:threshold pairs. " +
+            "(default: A:90,B:80,C:70,D:60,F:0)")
 
     parser.add_argument("--display", "-d", default=False, action="store_true",
             help="Display the histogram in a graphical window.")
@@ -37,29 +38,72 @@ def main():
 
     args = parser.parse_args()
 
-    ticks = None
+    labels = {}
+    bins = {}
+    thresholds = []
 
-    try:
-        ticks = [int(x) for x in args.ticks.split(",")]
-        assert(len(ticks) == 6)
-    except Exception as e:
-        sys.stderr.write("FATAL: could not parse ticks specification: {}"
-                .format(e))
-        sys.exit(1)
+    for s in args.spec.split(","):
 
+        label, val = None, None
+        try:
+            label, val = s.split(":")
+            val = float(val)
+        except Exception as e:
+            sys.stderr.write("FATAL: invalid spec: {}\n".format(e))
+            sys.exit(1)
 
-    data = []
+        if (val in labels) or (label in bins):
+            sys.stderr.write("FATAL: duplicate value or label '{}' or '{}'\n"
+                    .format(val, label))
+            sys.exit(1)
+
+        # associate a given threshold with a label
+        labels[val] = label
+
+        # list of thresholds for comparisons
+        thresholds.append(val)
+
+        # this will ultimately be the bar height for the bar chart
+        bins[label] = 0
+
+    thresholds.sort()
+
+    # read input
     for line in sys.stdin:
-        data.append(100.0 * float(line) / args.max)
+        line = 100.0 * float(line) / args.max
+        label="error"
 
-    n, bins, patches = plt.hist(data, args.bins, facecolor="blue", alpha=0.75)
+        # calculate the maximum threshold that the current value exceeds
+        for t in thresholds:
+            if line > t:
+                label = labels[t]
 
-    plt.xlabel("Score out of 100")
-    plt.ylabel("Frequency")
-    plt.xticks(ticks, ["F", "D", "C", "B", "A"])
+        if label == "error":
+            sys.stderr.write("FATAL: value '{}' exceeds no threshold in spec\n"
+                    .format(line))
+            sys.exit(1)
+
+        assert(label in bins)
+
+        # increment the corresponding bin
+        bins[label] += 1
+
+    # generate lists for matplotlib
+    names = []
+    values = []
+    for label in reversed(sorted(bins.keys())):
+        names.append(label)
+        values.append(bins[label])
+
+    assert(len(names) == len(values))
+
+    y_pos = np.arange(len(names))
+
+    plt.bar(y_pos, values, align='center')
+    plt.xticks(y_pos, names)
+    plt.xlabel("")
+    plt.ylabel("number of scores")
     plt.title(args.title)
-    plt.grid(True)
-    plt.xlim(0, 100)
 
     if args.output is not None:
         plt.savefig(args.output)
