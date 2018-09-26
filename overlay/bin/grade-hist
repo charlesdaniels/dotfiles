@@ -33,6 +33,11 @@ def main():
     parser.add_argument("--display", "-d", default=False, action="store_true",
             help="Display the histogram in a graphical window.")
 
+    parser.add_argument("--bump", "-B", default=0, type=float,
+            help="Bump all grades read by this many points. Note that "+
+            "the bump occurs AFTER normalization to 100 points. "+
+            "(default: 0")
+
     parser.add_argument("--bins", "-b", default=10, type=int,
             help="Override number of bins. (default: 10)")
 
@@ -70,7 +75,13 @@ def main():
 
     # read input
     for line in sys.stdin:
-        line = 100.0 * float(line) / args.max
+        try:
+            line = 100.0 * float(line) / args.max + args.bump
+        except ValueError:
+            sys.stderr.write("Ignoring input line '{}' - not a valid flaot\n"
+                    .format(line))
+            continue
+
         label="error"
 
         # calculate the maximum threshold that the current value exceeds
@@ -107,6 +118,7 @@ def main():
 
     if args.output is not None:
         plt.savefig(args.output)
+        sys.stderr.write("figure saved to '{}'".format(args.output))
 
     if args.display:
         plt.show()
