@@ -199,6 +199,6 @@ exec "while true ; do ~/bin/setwallpaper ; sleep 1m ; done"
 exec wmname LG3D
 
 bar {
-	status_command "$HOME/bin/system-statusline"
+	status_command "picobar"
 }
 
