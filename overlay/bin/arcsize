@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Display current ZFS ARC Size
+
+ARCSTAT_PATH=/proc/spl/kstat/zfs/arcstats
+
+if [ ! -e "$ARCSTAT_PATH" ] ; then
+	echo "FATAL: no '$ARCSTAT_PATH', is this a Linux system?"
+	exit 1
+fi
+
+SIZE_BYTES="$(cat "$ARCSTAT_PATH" | grep '^size' | fieldify | cut -f 3)"
+
+# https://unix.stackexchange.com/a/44087
+echo "$SIZE_BYTES" | awk 'function human(x) {
+         s=" B   KiB MiB GiB TiB EiB PiB YiB ZiB"
+         while (x>=1024 && length(s)>1) 
+               {x/=1024; s=substr(s,5)}
+         s=substr(s,1,4)
+         xf=(s==" B  ")?"%5d   ":"%8.2f"
+         return sprintf( xf"%s\n", x, s)
+      }
+      {gsub(/^[0-9]+/, human($1)); print}' | fieldify
+
+# The fieldify on the end eats the trailing and leading whitespace
