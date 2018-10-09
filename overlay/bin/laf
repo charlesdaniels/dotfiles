@@ -5,5 +5,5 @@
 if [ -x "$(which exa)" ] ; then
 	exa -lahF $@
 else
-	ls --color=always -lahF $@
+	ls -lahF $@
 fi
