@@ -3,7 +3,7 @@
 attempt () {
 	tn=$1
 	shift
-	if [ -x "$(which $tn)" ] ; then
+	if [ -x "$(which $tn 2>&1)" ] ; then
 		"$tn" "$@" < /dev/stdin
 		exit $?
 	fi

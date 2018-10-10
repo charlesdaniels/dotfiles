@@ -70,6 +70,8 @@ curl -LSs "$BASE_URL/git-completion.bash" -o "$HOME/.git-completion.bash"
 curl -LSs "$BASE_URL/git-completion.zsh" -o "$HOME/.git-completion.zsh"
 
 # vim-plug
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 curl -SsfLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 

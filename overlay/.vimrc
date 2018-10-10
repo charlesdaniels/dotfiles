@@ -130,6 +130,12 @@ if g:uname =~ "FreeBSD"
 	let g:variant = "BSD"
 endif
 
+if g:uname =~ "OpenBSD"
+	let g:platform = "POSIX"
+	let g:variant = "OpenBSD"
+	let g:easytags_cmd = "ectags"
+endif
+
 if g:uname =~ "Linux"
 	let g:platform = "POSIX"
 	let g:platform = "LINUX"
