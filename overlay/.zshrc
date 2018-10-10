@@ -62,10 +62,16 @@ function zle-line-init zle-keymap-select {
 	else
 		VISTATE="$KEYMAP"
 	fi
+
+	# fix home/end
+	echoti smkx
 	zle reset-prompt
 }
 zle -N zle-keymap-select
 zle -N zle-line-init
+# fix home/end
+function zle-line-finish () { echoti rmkx }
+zle -N zle-line-finish
 
 # edit the current line in vim with ^V
 autoload -U edit-command-line
@@ -93,10 +99,6 @@ for m in visual viopp; do
 	done
 done
 
-function zle-line-init () { echoti smkx }
-function zle-line-finish () { echoti rmkx }
-zle -N zle-line-init
-zle -N zle-line-finish
 
 function nios2eds_status_disp {
 	# Detect when we are in a NIOS2 development environment and update
