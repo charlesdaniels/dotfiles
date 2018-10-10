@@ -93,6 +93,11 @@ for m in visual viopp; do
 	done
 done
 
+function zle-line-init () { echoti smkx }
+function zle-line-finish () { echoti rmkx }
+zle -N zle-line-init
+zle -N zle-line-finish
+
 function nios2eds_status_disp {
 	# Detect when we are in a NIOS2 development environment and update
 	# the prompt to indicate this.
@@ -113,3 +118,5 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 # zsh syntax highlighting
 # MUST BE THE LAST THING SOURCED
 source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+
+
