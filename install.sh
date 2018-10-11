@@ -33,23 +33,16 @@ if [ ! -d "$ZSH_DIR" ] ; then
 fi
 cd "$ZSH_DIR"
 
-# zsh fast syntax highlighting
-if [ ! -d "./fast-syntax-highlighting" ] ; then
-	git clone --quiet git://github.com/zdharma/fast-syntax-highlighting.git
+# zsh-history-substring-search
+if [ ! -d "./zsh-history-substring-search" ] ; then
+	git clone --quiet git://github.com/zsh-users/zsh-history-substring-search.git
 fi
-cd fast-syntax-highlighting
+cd zsh-history-substring-search
 git reset --hard HEAD --quiet
 git pull --quiet origin master
 cd "$ZSH_DIR"
-
-# zsh-autosuggestions
-if [ ! -d "./zsh-autosuggestions" ] ; then
-	git clone --quiet git://github.com/zsh-users/zsh-autosuggestions.git
-fi
-cd zsh-autosuggestions
-git reset --hard HEAD --quiet
-git pull --quiet origin master
-cd "$ZSH_DIR"
+rm -f ./zsh-history-substring-search.zsh
+ln -s ./zsh-history-substring-search/zsh-history-substring-search.zsh ./zsh-history-substring-search.zsh
 
 # zsh-abbr-path
 if [ ! -d "./zsh-abbr-path" ] ; then

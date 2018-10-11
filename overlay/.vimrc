@@ -97,8 +97,8 @@ vnoremap <silent> <leader>vc :'<,'>:w !colortool -c "$(cat /dev/stdin)" -d <CR> 
 " render markdown
 noremap <Leader>vr :!md2txt < % \| less <CR> <CR>
 
-" enable code folding by default
-set foldmethod=syntax
+" manual code folding only by default, for performance
+set foldmethod=manual
 
 " automatically unfold on new files
 autocmd BufWinEnter * silent! :%foldopen!

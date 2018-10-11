@@ -56,16 +56,48 @@ setopt PROMPT_SUBST
 # entering or leaving vi editing modes
 function zle-line-init zle-keymap-select {
 	if [ "$KEYMAP" = "main" ] ; then
-		VISTATE="I"
+		VISTATE=">"
 	elif [ "$KEYMAP" = "vicmd" ] ; then
-		VISTATE="N"
+		VISTATE=":"
 	else
 		VISTATE="$KEYMAP"
 	fi
+	
+	# fix home/end
+	echoti smkx
 	zle reset-prompt
 }
+
+# fix home/end
+function zle-line-finish () { echoti rmkx }
+
 zle -N zle-keymap-select
 zle -N zle-line-init
+zle -N zle-line-finish
+
+# fix ^Y / ^E showing up when scrolling in st
+function do_nothing () {printf ""}
+zle -N do_nothing
+bindkey '^Y' do_nothing
+bindkey '^E' do_nothing
+
+# zsh history substring search
+source ~/.zsh/zsh-history-substring-search.zsh
+
+# fix a breakage in zsh introduced by Debian's packaging
+# https://github.com/robbyrussell/oh-my-zsh/issues/1720#issuecomment-22921247
+# note: it's unclear if this does anything helpful?
+export DEBIAN_PREVENT_KEYBOARD_CHANGES=yes
+
+# bind to up and down arrows
+bindkey '^k' history-substring-search-up
+bindkey '^j' history-substring-search-down
+[[ -n "${key[Up]}" ]] && bindkey "${key[Up]}" history-substring-search-up
+[[ -n "${key[Down]}" ]] && bindkey "${key[Down]}" history-substring-search-down
+
+# and also to j and k in normal mode
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
 
 # edit the current line in vim with ^V
 autoload -U edit-command-line
@@ -93,23 +125,18 @@ for m in visual viopp; do
 	done
 done
 
+
 function nios2eds_status_disp {
 	# Detect when we are in a NIOS2 development environment and update
 	# the prompt to indicate this.
 	if [ -d "$SOPC_KIT_NIOS2" ] ; then
-		printf "nios2/"
+		printf "(nios2) "
 	else
 		printf ""
 	fi
 }
 
-export PROMPT='$(echo -en "\033]0;zsh\a")[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
-($(nios2eds_status_disp)zsh) $ '
+# export PROMPT='$(echo -en "\033]0;zsh\a")[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
+# ($(nios2eds_status_disp)zsh) $ '
 
-
-# zsh autosuggestions
-source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# zsh syntax highlighting
-# MUST BE THE LAST THING SOURCED
-source ~/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+export PROMPT='$(echo -en "\033];zsh\a")%n@%M:$(felix_pwd_abbr) $(nios2eds_status_disp)$VISTATE '
