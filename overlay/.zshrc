@@ -56,9 +56,9 @@ setopt PROMPT_SUBST
 # entering or leaving vi editing modes
 function zle-line-init zle-keymap-select {
 	if [ "$KEYMAP" = "main" ] ; then
-		VISTATE="I"
+		VISTATE=">"
 	elif [ "$KEYMAP" = "vicmd" ] ; then
-		VISTATE="N"
+		VISTATE=":"
 	else
 		VISTATE="$KEYMAP"
 	fi
@@ -130,11 +130,13 @@ function nios2eds_status_disp {
 	# Detect when we are in a NIOS2 development environment and update
 	# the prompt to indicate this.
 	if [ -d "$SOPC_KIT_NIOS2" ] ; then
-		printf "nios2/"
+		printf "(nios2) "
 	else
 		printf ""
 	fi
 }
 
-export PROMPT='$(echo -en "\033]0;zsh\a")[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
-($(nios2eds_status_disp)zsh) $ '
+# export PROMPT='$(echo -en "\033]0;zsh\a")[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
+# ($(nios2eds_status_disp)zsh) $ '
+
+export PROMPT='$(echo -en "\033];zsh\a")%n@%M:$(felix_pwd_abbr) $(nios2eds_status_disp)$VISTATE '
