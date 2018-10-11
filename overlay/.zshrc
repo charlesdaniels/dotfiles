@@ -136,7 +136,6 @@ function nios2eds_status_disp {
 	fi
 }
 
-# export PROMPT='$(echo -en "\033]0;zsh\a")[%n@%M][%T][$VISTATE][$(felix_pwd_abbr)]
-# ($(nios2eds_status_disp)zsh) $ '
+export SHORT_HOSTNAME="$(hostname | cut -d'.' -f1)"
 
-export PROMPT='$(echo -en "\033];zsh\a")%n@%M:$(felix_pwd_abbr) $(nios2eds_status_disp)$VISTATE '
+export PROMPT='$(echo -en "\033];zsh\a")%n@$SHORT_HOSTNAME:$(felix_pwd_abbr) $(nios2eds_status_disp)$VISTATE '
