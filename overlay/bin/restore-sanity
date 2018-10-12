@@ -18,10 +18,10 @@
 
 # .ENDOC
 
-~/bin/setwallpaper
 xmodmap ~/.Xmodmap
 killall mate-settings-daemon >/dev/null 2>&1 | true
 killall mate-screensaver > /dev/null 2>&1 | true
+killall nowall
 numlockx on
 
 if [ -x "$(which redshift-qt)" ] ; then
@@ -34,3 +34,4 @@ elif [ -x "$(which redshift-gtk)" ] ; then
 	redshift-gtk > /dev/null 2>&1 &
 fi
 ~/bin/system-launch-compositor
+disavow ~/bin/nowall

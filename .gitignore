@@ -10,3 +10,6 @@ tasks/*/.gitignore
 doc/source/tasks
 doc/source/_static/*overview*.svg
 doc/build
+nowall/nowall
+nowall/*.gch
+nowall/*.o

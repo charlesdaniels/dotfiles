@@ -79,4 +79,11 @@ echo "    email = $git_email" >> "$git_config_file"
 echo "" >> "$git_config_file"
 cat "$DOTFILES_DIR/gitconfig" >> "$git_config_file"
 
+# setup nowall
+cd "$DOTFILES_DIR/nowall"
+make
+cp ./nowall ~/bin/nowall
+
+
+
 exit 0
