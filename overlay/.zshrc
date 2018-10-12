@@ -138,4 +138,4 @@ function nios2eds_status_disp {
 
 export SHORT_HOSTNAME="$(hostname | cut -d'.' -f1)"
 
-export PROMPT='$(echo -en "\033];zsh\a")%n@$SHORT_HOSTNAME:$(felix_pwd_abbr) $(nios2eds_status_disp)$VISTATE '
+export PROMPT='%n@$SHORT_HOSTNAME:$(felix_pwd_abbr) $(nios2eds_status_disp)$VISTATE '
