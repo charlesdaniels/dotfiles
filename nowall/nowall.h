@@ -25,7 +25,7 @@
 #define NOWALL_HISTORY_BAR_WIDTH 1
 #define NOWALL_HISTORY_BAR_SEP 18
 #define NOWALL_HORIZ_PIX_PER_CHAR 6
-#define NOWALL_INTERVAL 5
+#define NOWALL_INTERVAL 20
 
 char* get_time(char* fmt);
 double get_memory_usage();

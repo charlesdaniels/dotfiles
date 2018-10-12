@@ -45,6 +45,7 @@ char* generate_message() {
 	char* msg;
 	double load_avg[3];
 	double memory_usage;
+	char* timestamp;
 
 	msg = (char*) malloc(sizeof(char) * NOWALL_MESSAGE_MAXLEN);
 
@@ -54,17 +55,20 @@ char* generate_message() {
 	/* get memory usage */
 	memory_usage = get_memory_usage() * 100.0f;
 
+	timestamp = get_time("%m-%d");
+
 	snprintf(
 			msg,
 			NOWALL_MESSAGE_MAXLEN,
 			"%0.2f / %0.0f%% / %s",
 			load_avg[0],
 			memory_usage,
-			get_time("%m-%d")
+			timestamp
 	);
 
-	return msg;
+	free(timestamp);
 
+	return msg;
 
 }
 
@@ -153,6 +157,7 @@ void draw_frame(Display* disp, int screen_num, float* history,
 			msg,			/* string */
 			strlen(msg)		/* string length */
 	);
+	free(msg);
 
 	/* draw the history visualization */
 	XSetForeground(disp, gc, fg_color.pixel);
