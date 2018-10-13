@@ -107,6 +107,7 @@ void draw_frame(Display* disp, int screen_num, float* history,
 	int history_index = 0;
 	double x_base, y_base, x_centered, y_centered, horizontal_pos;
 	double horizontal_offset, bar_height, msg_x;
+	Cursor cursor;
 
 	/* gather information about the display and screen to manipulate */
 	root   = RootWindow(disp, screen_num);		/* root window      */
@@ -189,6 +190,10 @@ void draw_frame(Display* disp, int screen_num, float* history,
 		);
 
 	}
+
+	/* setup the cursor settings */
+	cursor = XCreateFontCursor(disp, XC_top_left_arrow);
+	XDefineCursor(disp, root, cursor);
 
 	/* set the root window background to what we just drew */
 	XSetWindowBackgroundPixmap(disp, root, pmap);
