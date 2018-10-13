@@ -2,7 +2,7 @@
 
 # alias for ls -lahF
 
-if [ -x "$(which exa)" ] ; then
+if [ -x "$(which exa 2>/dev/null)" ] ; then
 	exa -lahF $@
 else
 	ls -lahF $@
