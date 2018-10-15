@@ -158,7 +158,7 @@ void draw_frame(Display* disp, int screen_num, float* history,
 			pmap,			/* drawable */
 			gc,			/* graphics context */
 			msg_x,			/* x position */
-			screen->height / 1.8,	/* y position */
+			screen->height / 1.75,	/* y position */
 			msg,			/* string */
 			strlen(msg)		/* string length */
 	);
@@ -177,7 +177,7 @@ void draw_frame(Display* disp, int screen_num, float* history,
 			horizontal_pos * (NOWALL_HISTORY_BAR_WIDTH + \
 					NOWALL_HISTORY_BAR_SEP);
 		x_base = screen->width / 2 + horizontal_offset;
-		y_base = screen->height / 2.2;
+		y_base = screen->height / 2.0 ;
 		bar_height = screen->height * 0.1 * history[history_index];
 		x_centered = x_base + NOWALL_HISTORY_BAR_WIDTH / 2;
 		y_centered = y_base - bar_height / 2;
@@ -202,7 +202,7 @@ void draw_frame(Display* disp, int screen_num, float* history,
 
 	/* clock center */
 	clock_center_x = screen->width / 2.0f;
-	clock_center_y = screen->height / 6.0f;
+	clock_center_y = screen->height / 3.0f;
 
 	/* hour hand */
 	hour_hand_x = clock_center_x + HOUR_HAND_LENGTH * sin( \
