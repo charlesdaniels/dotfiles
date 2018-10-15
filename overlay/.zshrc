@@ -81,6 +81,9 @@ zle -N do_nothing
 bindkey '^Y' do_nothing
 bindkey '^E' do_nothing
 
+# zsh-ocd
+source ~/.zsh/zsh-ocd.zsh
+
 # zsh history substring search
 source ~/.zsh/zsh-history-substring-search.zsh
 
