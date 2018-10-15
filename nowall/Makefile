@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Wextra -pedantic -std=c89 -Og -g
+CFLAGS=-Wall -Wextra -pedantic -std=c89 -Og -g -lm
 
 .PHONY: clean
 

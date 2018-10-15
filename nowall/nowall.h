@@ -13,6 +13,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <math.h>
 
 #define SAFE_ALLOC_COLOR(disp, cmap, color) \
 	if (XAllocColor(disp, cmap, color) == 0) { \
@@ -27,6 +28,8 @@
 #define NOWALL_HISTORY_BAR_SEP 18
 #define NOWALL_HORIZ_PIX_PER_CHAR 6
 #define NOWALL_INTERVAL 20
+#define HOUR_HAND_LENGTH 75.0f
+#define MINUTE_HAND_LENGTH 125.0f
 
 char* get_time(char* fmt);
 double get_memory_usage();

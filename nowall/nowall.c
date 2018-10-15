@@ -108,6 +108,10 @@ void draw_frame(Display* disp, int screen_num, float* history,
 	double x_base, y_base, x_centered, y_centered, horizontal_pos;
 	double horizontal_offset, bar_height, msg_x;
 	Cursor cursor;
+	struct tm *info;
+	time_t rawtime;
+	double clock_center_x, clock_center_y;
+	double minute_hand_x, minute_hand_y, hour_hand_x, hour_hand_y;
 
 	/* gather information about the display and screen to manipulate */
 	root   = RootWindow(disp, screen_num);		/* root window      */
@@ -188,8 +192,48 @@ void draw_frame(Display* disp, int screen_num, float* history,
 				NOWALL_HISTORY_BAR_WIDTH,	/* width */
 				bar_height	/* height */
 		);
-
 	}
+
+	/* draw the clock */
+
+	/* get the current time */
+	time(&rawtime);
+	info = localtime(&rawtime);
+
+	/* clock center */
+	clock_center_x = screen->width / 2.0f;
+	clock_center_y = screen->height / 4.0f;
+
+	/* hour hand */
+	hour_hand_x = clock_center_x + HOUR_HAND_LENGTH * sin(
+			((12 - (info->tm_hour % 12)) / 12.0f) * 2 * 3.14159 - 3.14159 );
+	hour_hand_y = clock_center_y + HOUR_HAND_LENGTH * cos(
+			((12 - (info->tm_hour % 12)) / 12.0f) * 2 * 3.14159 - 3.14159 );
+	XDrawLine(
+			disp,		/* display */
+			pmap,		/* drawable */
+			gc,		/* graphics context */
+			clock_center_x,	/* x1 */
+			clock_center_y, /* y1 */
+			hour_hand_x,	/* x2 */
+			hour_hand_y	/* y2 */
+	);
+
+	/* minute hand */
+	minute_hand_x = clock_center_x + MINUTE_HAND_LENGTH * sin(
+			((60 - info->tm_min) / 60.0f) * 2 * 3.14159 - 3.14159 );
+	minute_hand_y = clock_center_y + MINUTE_HAND_LENGTH * cos(
+			((60 - info->tm_min) / 60.0f) * 2 * 3.14159 - 3.14159 );
+	XDrawLine(
+			disp,		/* display */
+			pmap,		/* drawable */
+			gc,		/* graphics context */
+			clock_center_x,	/* x1 */
+			clock_center_y, /* y1 */
+			minute_hand_x,	/* x2 */
+			minute_hand_y	/* y2 */
+	);
+
 
 	/* setup the cursor settings */
 	cursor = XCreateFontCursor(disp, XC_top_left_arrow);
