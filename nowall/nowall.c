@@ -202,12 +202,12 @@ void draw_frame(Display* disp, int screen_num, float* history,
 
 	/* clock center */
 	clock_center_x = screen->width / 2.0f;
-	clock_center_y = screen->height / 4.0f;
+	clock_center_y = screen->height / 6.0f;
 
 	/* hour hand */
-	hour_hand_x = clock_center_x + HOUR_HAND_LENGTH * sin(
+	hour_hand_x = clock_center_x + HOUR_HAND_LENGTH * sin( \
 			((12 - (info->tm_hour % 12)) / 12.0f) * 2 * 3.14159 - 3.14159 );
-	hour_hand_y = clock_center_y + HOUR_HAND_LENGTH * cos(
+	hour_hand_y = clock_center_y + HOUR_HAND_LENGTH * cos( \
 			((12 - (info->tm_hour % 12)) / 12.0f) * 2 * 3.14159 - 3.14159 );
 	XDrawLine(
 			disp,		/* display */
