@@ -202,7 +202,7 @@ void draw_frame(Display* disp, int screen_num, float* history,
 
 	/* clock center */
 	clock_center_x = screen->width / 2.0f;
-	clock_center_y = screen->height / 3.0f;
+	clock_center_y = screen->height / 3.5f;
 
 	/* hour hand */
 	hour_hand_x = clock_center_x + HOUR_HAND_LENGTH * sin( \
