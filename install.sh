@@ -82,7 +82,9 @@ cat "$DOTFILES_DIR/gitconfig" >> "$git_config_file"
 # setup nowall
 cd "$DOTFILES_DIR/nowall"
 make
+set +e
 killall nowall
+set -e
 cp ./nowall ~/bin/nowall
 
 exit 0
