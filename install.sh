@@ -83,8 +83,19 @@ cat "$DOTFILES_DIR/gitconfig" >> "$git_config_file"
 cd "$DOTFILES_DIR/nowall"
 make
 set +e
-killall nowall
+pkill nowall
 set -e
 cp ./nowall ~/bin/nowall
+
+# install GTK3 theme
+if [ ! -d "$HOME/.themes/clearlooks-phenix-master" ] ; then
+	mkdir -p "$HOME/.themes"
+	cd /tmp
+	rm -f master.zip
+	wget "https://github.com/jpfleury/clearlooks-phenix/archive/master.zip"
+	unzip master.zip
+	mv clearlooks-phenix-master "$HOME/.themes"
+	rm -f master.zip
+fi
 
 exit 0
