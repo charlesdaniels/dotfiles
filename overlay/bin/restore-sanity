@@ -19,9 +19,9 @@
 # .ENDOC
 
 xmodmap ~/.Xmodmap
-killall mate-settings-daemon >/dev/null 2>&1 | true
-killall mate-screensaver > /dev/null 2>&1 | true
-killall nowall
+pkill mate-settings-daemon >/dev/null 2>&1 | true
+pkill mate-screensaver > /dev/null 2>&1 | true
+pkill nowall
 numlockx on
 
 if [ -x "$(which redshift-qt)" ] ; then
@@ -33,5 +33,14 @@ elif [ -x "$(which redshift-gtk)" ] ; then
 	pkill -9 redshift
 	redshift-gtk > /dev/null 2>&1 &
 fi
+
+if [ -x "$(which sysctl)" ] ; then
+	if [ "$(sysctl hw.version | cut -d'=' -f 2)" = "ThinkPad X220" ] ; then
+		xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation" 1
+		xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation Button" 2
+	fi
+fi
+		
+
 ~/bin/system-launch-compositor
 disavow ~/bin/nowall
