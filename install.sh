@@ -79,14 +79,6 @@ echo "    email = $git_email" >> "$git_config_file"
 echo "" >> "$git_config_file"
 cat "$DOTFILES_DIR/gitconfig" >> "$git_config_file"
 
-# setup nowall
-cd "$DOTFILES_DIR/nowall"
-make
-set +e
-pkill nowall
-set -e
-cp ./nowall ~/bin/nowall
-
 # install GTK3 theme
 if [ ! -d "$HOME/.themes/clearlooks-phenix-master" ] ; then
 	mkdir -p "$HOME/.themes"

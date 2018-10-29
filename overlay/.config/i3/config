@@ -190,10 +190,8 @@ exec "nm-applet"
 exec "dropbox start"
 exec "pulseaudio --start"
 exec "~/bin/system-launch-compositor"
-exec "~/bin/desktop-spooler"
 exec "~/bin/restore-sanity"
 exec "blueman-applet"
-exec "while true ; do ~/bin/setwallpaper ; sleep 1m ; done"
 
 # fix broken rendering in some Java programs
 exec wmname LG3D

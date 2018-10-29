@@ -1,0 +1,3 @@
+#!/bin/sh
+
+i3lock --tiling --image ~/.wallpapers/lockpaper

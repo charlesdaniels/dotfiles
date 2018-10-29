@@ -21,7 +21,6 @@
 xmodmap ~/.Xmodmap
 pkill mate-settings-daemon >/dev/null 2>&1 | true
 pkill mate-screensaver > /dev/null 2>&1 | true
-pkill nowall
 numlockx on
 
 if [ -x "$(which redshift-qt)" ] ; then
@@ -43,4 +42,4 @@ fi
 		
 
 ~/bin/system-launch-compositor
-disavow ~/bin/nowall
+feh --bg-fill ~/.wallpapers/wallpaper
