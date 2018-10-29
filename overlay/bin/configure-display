@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+for f in /home/cad/.screenlayout/*.sh ; do
+	if [ ! -x "$f" ] ; then
+		echo "ignore $f, not executable"
+		continue
+	fi
+	if "$f" ; then
+		echo "configured successfully"
+		break
+	else
+		echo "script failed"
+	fi
+done
+
+ps aux | awk '{print($2,$11);}' | grep nowall | while read -r line ; do
+	echo "killing $line"
+	kill "$(echo "$line" | cut -d ' ' -f 1)"
+done
+
+feh --bg-fill ~/.wallpapers/wallpaper
