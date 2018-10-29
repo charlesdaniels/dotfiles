@@ -70,7 +70,7 @@ bindsym $mod+a focus parent
 bindsym $mod+c focus child
 
 # lock the screen
-bindsym $mod+m exec "~/bin/system-lock"
+bindsym $mod+m exec "~/bin/screenlock"
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -146,7 +146,7 @@ bindsym $mod+Tab exec "rofi -show window"
 bindsym Print exec "~/bin/system-screenshot &"
 
 # i3lock
-exec "xautolock -time 5 -locker ~/bin/system-lock &"
+exec "xautolock -time 5 -locker ~/bin/screenlock &"
 
 # borders
 for_window [class="^.*"] border pixel 3
