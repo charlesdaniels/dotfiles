@@ -151,27 +151,9 @@ exec "xautolock -time 5 -locker ~/bin/screenlock &"
 # borders
 for_window [class="^.*"] border pixel 3
 
-# media keys
-bindsym XF86AudioRaiseVolume exec ~/bin/audioctl up
-bindsym XF86AudioLowerVolume exec ~/bin/audioctl down
-bindsym XF86AudioMute exec ~/bin/audioctl mute
-bindsym XF86AudioPlay exec ~/bin/audioctl toggle
-bindsym XF86AudioNext exec ~/bin/audioctl next
-bindsym XF86AudioPrev exec ~/bin/audioctl prev
-
 # backlight
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
-
-
-# hint: use Xev to find what i3 calls non-alphanumeric keys
-bindsym Control+Next exec ~/bin/audioctl down     # ctrl+page up
-bindsym Control+Prior exec ~/bin/audioctl up      # ctrl+page down
-bindsym Control+Pause exec ~/bin/audioctl mute    # ctrl+pause
-bindsym Control+Home exec ~/bin/audioctl pause    # ctrl+home
-bindsym Control+End exec ~/bin/audioctl next      # ctrl+end
-bindsym Control+Insert exec ~/bin/audioctl toggle # ctrl+insert
-bindsym Control+Delete exec ~/bin/audioctl prev   # ctrl+del
 
 # move workspace
 bindsym $win+h move workspace to output left
