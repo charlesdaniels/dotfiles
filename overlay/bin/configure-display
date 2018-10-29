@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 for f in /home/cad/.screenlayout/*.sh ; do
+	echo "attempting script $f"
 	if [ ! -x "$f" ] ; then
 		echo "ignore $f, not executable"
 		continue

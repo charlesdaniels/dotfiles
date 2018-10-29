@@ -33,13 +33,8 @@ elif [ -x "$(which redshift-gtk)" ] ; then
 	redshift-gtk > /dev/null 2>&1 &
 fi
 
-if [ -x "$(which sysctl)" ] ; then
-	if [ "$(sysctl hw.version | cut -d'=' -f 2)" = "ThinkPad X220" ] ; then
-		xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation" 1
-		xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation Button" 2
-	fi
-fi
-		
-
 ~/bin/system-launch-compositor
 feh --bg-fill ~/.wallpapers/wallpaper
+
+xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation" 1
+xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation Button" 2
