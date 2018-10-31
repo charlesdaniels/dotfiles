@@ -84,6 +84,9 @@ endif
 " Yank to system clipboard with ,yc
 noremap <Leader>yc "+yy
 
+" ,fl to fill line with char under cursor
+noremap <Leader>fl y1l$80p079ld$
+
 " Visualize Makefiles
 noremap <Leader>vm :!visualize-makefile %:p <CR> <CR>
 
