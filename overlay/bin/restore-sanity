@@ -27,3 +27,7 @@ feh --bg-fill ~/.wallpapers/wallpaper
 
 xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation" 1
 xinput set-prop /dev/wsmouse "WS Pointer Wheel Emulation Button" 2
+
+pkill redshift
+redshift -l '34.018123:-81.028373' &
+disown
