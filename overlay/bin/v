@@ -12,6 +12,11 @@ attempt () {
 # set terminal title
 echo '\033k'v'\033\\'
 
+# fix doas v changing ownership of ~/.vimtags
+if [ "$(whoami)" = "root" ] ; then
+	export HOME=/hoor
+fi
+
 attempt neovim "$@"
 attempt nvim "$@"
 attempt vim "$@"
