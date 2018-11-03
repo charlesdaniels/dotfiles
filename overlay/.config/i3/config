@@ -70,7 +70,7 @@ bindsym $mod+a focus parent
 bindsym $mod+c focus child
 
 # lock the screen
-bindsym $mod+m exec "~/bin/screenlock"
+bindsym $mod+m exec "xautolock -locknow"
 
 # switch to workspace
 bindsym $mod+1 workspace 1
