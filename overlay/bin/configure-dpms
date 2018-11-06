@@ -33,7 +33,7 @@ killall mate-screensaver > /dev/null 2>&1 || true
 if [ $# -ge 1 ] ; then
 	CONFIGURATION="$1"
 fi
-timestamp-message "INFO" "Setting DPMS configuration to $CONFIGURATION"
+echo "Setting DPMS configuration to $CONFIGURATION"
 
 # not sure this does much on modern systems, but in theory it turns of the
 # bell, whatever that is.
@@ -53,11 +53,11 @@ case "$CONFIGURATION" in
 		xset dpms 180 360 540
 		;;
 	nosleep)
-		timestamp-message "INFO" "monitor will never sleep, remember to re-enable sleep when you are done"
+		echo "monitor will never sleep, remember to re-enable sleep when you are done"
 		xset dpms 0 0 0
 		;;
 	*)
-		timestamp-message "ERROR" "Invalid DPMS configuration '$CONFIGURATION'"
+		echo "Invalid DPMS configuration '$CONFIGURATION'"
 		exit 1
 		;;
 esac

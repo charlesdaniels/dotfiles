@@ -1,0 +1,104 @@
+# windows attach to the group they spawn in
+sticky yes
+
+# pixel distance at which wndows snap
+snapdist 4
+
+# window border width in pixels
+borderwidth 3
+
+# cwm menu font
+fontname "fixed:pixelsize=13:style=semicondensed"
+
+# remove all default keybindings
+unbind-key all
+
+# KEYBINDINGS:
+# 4 = mod (windows key)
+# S = shift
+# C = control
+# M = meta (alt)
+
+bind-key M-Return st			# spawn terminal
+bind-key M-m lock			# lock screen
+bind-key M-BackSpace window-hide	# hide window
+bind-key M-Down window-lower		# lower window in stack
+bind-key M-Up window-raise		# raise window in stack
+bind-key 4-Tab window-cycle		# window cycle forward
+bind-key M-Tab window-cycle
+bind-key 4S-Tab window-rcycle		# window cycle backward
+bind-key MS-Tab window-rcycle
+bind-key M-w window-delete		# close window
+bind-key MS-q window-delete
+bind-key M-n window-menu-label		# re-label window
+bind-key M-1 group-only-1		# raise group
+bind-key M-2 group-only-2
+bind-key M-3 group-only-3
+bind-key M-4 group-only-4
+bind-key M-5 group-only-5
+bind-key M-6 group-only-6
+bind-key M-7 group-only-7
+bind-key M-8 group-only-8
+bind-key M-9 group-only-9
+bind-key MS-1 window-movetogroup-1	# move window to group
+bind-key MS-2 window-movetogroup-2
+bind-key MS-3 window-movetogroup-3
+bind-key MS-4 window-movetogroup-4
+bind-key MS-5 window-movetogroup-5
+bind-key MS-6 window-movetogroup-6
+bind-key MS-7 window-movetogroup-7
+bind-key MS-8 window-movetogroup-8
+bind-key MS-9 window-movetogroup-9
+bind-key M-a group-toggle-all		# toggle global window visibility
+bind-key M-g window-group		# toggle window membership in group
+bind-key M-Right group-cycle		# cycle forward through groups
+bind-key M-Left group-rcycle		# cycle window backwards through groups
+bind-key M-s window-stick		# toggle window visible in all groups
+bind-key MS-f window-fullscreen		# toggle window fullscreen
+bind-key M-f window-maximize		# maximize window
+bind-key M-equal window-vmaximize	# vertical maximize
+bind-key MS-equal window-hmaximize	# horizontal maximize
+bind-key M-h window-move-left-big	# move window with hjkl
+bind-key M-j window-move-down-big
+bind-key M-k window-move-up-big
+bind-key M-l window-move-right-big
+bind-key MS-h window-resize-left-big	# resize window with hjkl
+bind-key MS-j window-resize-down-big
+bind-key MS-k window-resize-up-big
+bind-key MS-l window-resize-right-big
+bind-key M-v window-vtile		# tile windows vertically
+bind-key M-c window-htile		# tile windows horizontally
+bind-key M-slash menu-window		# search open windows
+bind-key M-d menu-cmd			# run a command
+bind-key M-question menu-exec		# run a shell command
+bind-key M-space menu-exec
+bind-key M-period menu-ssh		# show ssh menu
+					# reset window size
+bind-key MS-space "xdotool getactivewindow windowsize 800 600"
+bind-key MS-r restart			# restart cwm
+bind-key MS-e quit			# logout
+unbind-mouse M-1			# unbind default mouse actions
+unbind-mouse CM-1
+unbind-mouse M-2
+unbind-mouse M-3
+unbind-mouse CMS-3
+bind-mouse M-1 window-move		# move window
+bind-mouse M-3 window-resize		# resize window
+bind-mouse M-2 window-lower		# lower window in stack
+bind-mouse MS-2 window-hide		# hide window
+command st st				# commands for M-d
+command terminal st
+command firefox "firefox"
+command regiongrab regiongrab
+command screengrab screengrab
+command fm pcmanfm
+command pcmanfm pcmanfm
+command thunderbird thunderbird
+command mail thunderbird
+command locknow "pkill -USR1 xidle"
+color activeborder   "#cc3333"		# color scheme
+color inactiveborder "#3f3f3f"
+color menubg         "#151515"
+color menufg         "#d7d0c7"
+color font           "#d7d0c7"
+color selfont        "#151515"
