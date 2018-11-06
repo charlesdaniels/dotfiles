@@ -14,3 +14,14 @@ xlock.foreground  : white
 xlock.mode        : blank
 xlock.username    :
 xlock.password    :
+
+! ==== xclock =================================================================
+XClock*analog      : false
+XClock*twentyfour  : true
+XClock*padding     : 2
+XClock*geometry    : -2-2
+XClock*render      : false
+XClock*height      : 28
+XClock*background  : dimgray
+XClock*foreground  : white
+XClock*borderWidth : 0
