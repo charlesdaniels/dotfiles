@@ -1,6 +1,9 @@
 # set default language
 export LANG=en_US.UTF-8
 
+# export ENV for ksh
+export ENV=$HOME/.kshrc
+
 # setup xresources
 xrdb -merge $HOME/.Xresources
 

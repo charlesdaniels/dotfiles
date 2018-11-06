@@ -89,4 +89,8 @@ if [ ! -d "$HOME/.themes/clearlooks-phenix-master" ] ; then
 	rm -f master.zip
 fi
 
+# install fastabr
+make -C "$DOTFILES_DIR/fastabr" fastabr
+cp "$DOTFILES_DIR/fastabr/fastabr" ~/bin/fastabr
+
 exit 0
