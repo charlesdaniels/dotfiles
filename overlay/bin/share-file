@@ -129,7 +129,7 @@ echo "File Name: $FILE_NAME" >> "$META_FILE"
 echo "Upload Date: $(date)" >> "$META_FILE"
 echo "Uploaded From Host: $(hostname)" >> "$META_FILE"
 echo "Uploaded By User: $(whoami)" >> "$META_FILE"
-echo "File shasum: $(shasum "$TMP_FILE" | cut -d' ' -f 1)" >> "$META_FILE"
+echo "File md5: $(md5 "$TMP_FILE" | cut -d' ' -f 1)" >> "$META_FILE"
 
 # Fetch FTP credentials
 FTP_USERNAME="$(get-token --get "share-file-username")"
