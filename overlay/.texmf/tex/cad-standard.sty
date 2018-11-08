@@ -1,0 +1,454 @@
+% Copyright (c) 2016, Charles Daniels
+% All rights reserved.
+%
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are met:
+%
+% 1. Redistributions of source code must retain the above copyright notice, this
+%    list of conditions and the following disclaimer.
+%
+% 2. Redistributions in binary form must reproduce the above copyright notice,
+%    this list of conditions and the following disclaimer in the documentation
+%    and/or other materials provided with the distribution.
+%
+% 3. Neither the name of the copyright holder nor the names of its contributors
+%    may be used to endorse or promote products derived from this software
+%    without specific prior written permission.
+%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+% AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+% IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+% DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+% FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+% DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+% SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+% CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+% OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+% OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+% general purpose LaTeX template, suitable for most documents
+
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%% packages %%%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+% set margins
+\usepackage[top=2.5cm, bottom=1.5cm, outer=2cm, inner=2cm]{geometry}
+
+% enable hyperlinks
+\usepackage{hyperref}
+
+% mathscr
+\usepackage{mathrsfs}
+
+% enable UTF-8 support
+\usepackage[utf8]{inputenc}
+
+% monospaced source code listings
+\usepackage{listings}
+
+% enable colored text
+\usepackage{color}
+
+% multicolumn environment
+\usepackage{multicol}
+
+% enable floating figures
+\usepackage{float}
+
+% enable figure captions
+\usepackage{caption}
+
+% enable arrays in math mode
+\usepackage{array}
+
+% sometimes useful when tabular does not cut it - this is basically tabular
+% with some extra features
+\usepackage{tabularx}
+
+% circuitikz library for creating circuit diagrams
+%
+% american . . . . . use US-style components
+% cute inductors . . use pretty spiral-shaped inductors
+\usepackage[american, cute inductors]{circuitikz}
+
+% enable the tikz drawing library
+\usepackage{tikz}
+
+% allow including EPS documents directly
+\usepackage{epstopdf}
+
+% required for certain types of plots
+\usepackage{pgf}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+
+% required to include external graphics
+\usepackage{graphicx}
+
+% enable including PDF documents directly
+\usepackage{pdfpages}
+
+% required to explicitly set single/double spacing
+\usepackage{setspace}
+
+% more control over headers and footers
+\usepackage{fancyhdr}
+
+% automatically generate filler text
+\usepackage{lipsum}
+
+% this is used by my header that shows the pages as 'page x of y'
+\usepackage[lastpage,user]{zref}
+
+% used for index generation
+\usepackage{makeidx}
+
+% more options for enumerate
+\usepackage{enumerate}
+
+% used by the \nth macro
+\usepackage{textcomp}
+
+% additional math symbols
+\usepackage{amssymb}
+
+% better derivatives
+\usepackage{esdiff}
+
+% used for string manipulation
+\usepackage{xstring}
+
+ % adjustwidth
+\usepackage{changepage}
+
+% provides \isempty test
+\usepackage{xifthen}
+
+% used to typeset macros
+\usepackage[]{algorithm2e}
+
+% wrap text around figures
+\usepackage{wrapfig}
+
+% used to typeset theorems
+\usepackage{amsthm}
+
+% render key combinations nicely
+\usepackage[os=win]{menukeys}
+
+% these macros seem to break things when not included, but are not deliberately
+% used for their actual functionality.
+\usepackage{changepage}
+\usepackage{marginnote}
+\usepackage{datatool}
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%%% general %%%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+% reduce spacing between list items
+%
+% https://tex.stackexchange.com/a/10688
+\usepackage{paralist}
+	\let\itemize\compactitem
+	\let\enditemize\endcompactitem
+	\let\enumerate\compactenum
+	\let\endenumerate\endcompactenum
+	\let\description\compactdesc
+	\let\enddescription\endcompactdesc
+	\pltopsep=\medskipamount
+	\plitemsep=1pt
+	\plparsep=1pt
+
+% use incompatible pgfplots updates
+\pgfplotsset{compat=1.13}
+
+% setup headings
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\theTitle}
+\chead{\theDate}
+\rhead{\thepage\ of \zpageref{LastPage}}
+
+\cfoot{}
+\lfoot{}
+\rfoot{}
+
+\restylefloat{figure}
+
+\usetikzlibrary{shapes, arrows}
+
+
+\setcounter{tocdepth}{3}
+
+
+\newenvironment{mynopagebreak}  {
+>-------% text enclosed in this environment will never be split over pages
+
+>-------\par\nobreak\vfil\penalty0\vfilneg
+>-------\vtop\bgroup
+} {
+>-------\par\xdef\tpd {
+>------->-------\the\prevdepth
+>-------}
+
+>-------\egroup
+>-------\prevdepth=\tpd
+}
+
+% allow pretty source listings with highlighting and numbers
+% see: https://www.sharelatex.com/learn/Code_listing
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize\ttfamily,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=8
+}
+
+\lstset{style=mystyle}
+
+% generate index
+\makeindex
+
+% make figures work properly in multicols
+\newenvironment{Figure}
+    {\par\medskip\noindent\minipage{\linewidth}}
+    {\endminipage\par\medskip}
+
+
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%% shortcuts %%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+\newcommand{\pgh}[1]{\paragraph{#1}}
+
+% centered horizontal separator
+\newcommand{\hsep}{
+	\begin{center}
+		\noindent\rule{0.3\textwidth}{0.5pt}
+	\end{center}
+}
+
+\newcommand{\point}{\paragraph{$\rightarrow$}}
+
+% a cdot character, useful for tikz node "labels"
+\newcommand{\gdot}{$\cdot$}
+
+% used to indicate different parts of a problem
+\newcommand{\prob}[1]{\paragraph{(#1)}}
+
+% scientific notation
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+
+% ohms
+\newcommand{\ohm}{\ensuremath{\Omega}}
+
+% kOhms
+\newcommand{\kohm}{\ensuremath{\ohm}}
+
+% degrees
+\newcommand{\degrees}{\ensuremath{^{\circ}}}
+
+% laplace
+\newcommand{\laplace}[1]{\ensuremath{\mathcal{L}\left(#1\right)}}
+\newcommand{\ilaplace}[1]{\ensuremath{\mathcal{L}^{-1}\left(#1\right)}}
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30%%%%% macros %%%%%50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+% two columns with a divider, reset divider width to 0 after.
+\newcommand{\twocol}[1]{
+	\setlength{\columnseprule}{0.4pt}
+	\begin{multicols}{2}
+	#1
+	\end{multicols}
+	\setlength{\columnseprule}{0pt}
+}
+
+% 1 - label, 2 - equation content
+\newcommand{\eqn}[2]{
+	\begin{equation} \label{#1}
+	#2
+	\end{equation}
+}
+
+\newcommand{\indentone}[1]{
+	\begin{adjustwidth}{4em}{0cm}
+	\nointerlineskip\leavevmode % prevent an obscure compiler warning
+	{#1}
+	\end{adjustwidth}
+}
+
+\newcommand{\nth}[1]{%
+	\StrRight{#1}{1}[\lastletter]%
+	\IfStrEq{\lastletter}{1}{$\text{#1}^{\text{st}}$}{%
+	\IfStrEq{\lastletter}{2}{$\text{#1}^{\text{nd}}$}{%
+	\IfStrEq{\lastletter}{3}{$\text{#1}^{\text{rd}}$}{%
+	$\text{#1}^{\text{th}}$}}}%
+}
+
+% plot one function of x and y
+%
+% This is deliberately not in a figure, so that you can wrap it in your own if
+% you so desire.
+%
+% Note that to plot trig functions like sin(x), you need to put sin(deg(x)),
+% this will make your key look fugly, but it does work
+%
+% $1 . . . . the function, just the part to the right of y=
+\newcommand{\plotone}[1] {
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$x$, ylabel={$y = #1$}]
+			\addplot[line join=none, color=black, samples=500]{#1};
+			\addlegendentry{\tiny $#1$};
+		\end{axis}
+	\end{tikzpicture}
+}
+
+% plot two functions of x and y. Syntax as with plotone, just $2 is the
+% second plot.
+\newcommand{\plottwo}[2] {
+
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$x$, ylabel={$y$}]
+			\addplot[line join=none, color=black, samples=500]{#1};
+			\addlegendentry{\tiny $#1$};
+			\addplot[densely dotted, color=black, samples=500]{#2};
+			\addlegendentry{\tiny $#2$};
+		\end{axis}
+	\end{tikzpicture}
+}
+
+% as with plotone and plottwo, but with three.
+\newcommand{\plotthree}[3] {
+
+	\begin{tikzpicture}
+		\begin{axis}[xlabel=$x$, ylabel={$y$}]
+			\addplot[line join=none, color=black, samples=500]{#1};
+			\addlegendentry{\tiny $#1$};
+			\addplot[densely dotted, color=black, samples=500]{#2};
+			\addlegendentry{\tiny $#2$};
+			\addplot[dashed, color=black, samples=500]{#3};
+			\addlegendentry{\tiny $#3$};
+		\end{axis}
+	\end{tikzpicture}
+}
+
+% wrapfig macros
+\newcommand{\rfig}[1] {
+	\begin{wrapfigure}{R}{0.4\textwidth}
+		\centering
+		#1
+	\end{wrapfigure}
+
+}
+
+\newcommand{\lfig}[1] {
+	\begin{wrapfigure}{L}{0.4\textwidth}
+		\centering
+		#1
+	\end{wrapfigure}
+
+}
+
+\newcommand{\hfig}[1] {
+	\begin{figure}[H]
+		\centering
+		#1
+
+	\end{figure}
+}
+
+\newenvironment{clumpytext}  {
+
+	% Text enclosed in this environment will never be split over pages.
+	% Note that this can and will break if you enclosure too much stuff in
+	% it to fit on one page - TeX still wont generate
+	% the pagebreaks
+
+	\par\nobreak\vfil\penalty0\vfilneg
+	\vtop\bgroup
+} {
+	\par\xdef\tpd {
+		\the\prevdepth
+	}
+
+	\egroup
+	\prevdepth=\tpd
+}
+
+%%%%%%%%10%%%%%%%%20%%%%%%%%30 math mode macros 50%%%%%%%%60%%%%%%%%70%%%%%%%%80
+
+% a small horizontal space that works in math mode
+\newcommand{\mathspc}{\hskip 1em}
+
+
+% the "stack" macros typeset their arguments vertically one over the other
+\newcommand{\stackone}[1] {
+	\begin{matrix}
+		#1
+	\end{matrix}
+}
+
+\newcommand{\stacktwo}[2] {
+	\begin{matrix}
+		#1 \\
+		#2
+	\end{matrix}
+}
+
+\newcommand{\stackthree}[3] {
+	\begin{matrix}
+		#1 \\
+		#2 \\
+		#3
+	\end{matrix}
+}
+
+\newcommand{\stackfour}[4] {
+	\begin{matrix}
+		#1 \\
+		#2 \\
+		#3 \\
+		#4
+	\end{matrix}
+}
+
+\newcommand{\stackfive}[5] {
+	\begin{matrix}
+		#1 \\
+		#2 \\
+		#3 \\
+		#4 \\
+		#5
+	\end{matrix}
+}
+
+% the collect command place arguments one over the other to the left of a
+% single "big" } symbol
+\newcommand{\collectone}[1]{\left.\stackone{#1}\right\}}
+\newcommand{\collecttwo}[2]{\left.\stacktwo{#1}{#2}\right\}}
+\newcommand{\collectthree}[3]{\left.\stackthree{#1}{#2}{#3}\right\}}
+\newcommand{\collectfour}[4]{\left.\stackfour{#1}{#2}{#3}{#4}\right\}}
+\newcommand{\collectfive}[5]{\left.\stackfive{#1}{#2}{#3}{#4}{#5}\right\}}
+
+% used to define piecewise functions easily
+\newcommand{\piecewiseone}[1]{\left\{\stackone{#1}\right.}
+\newcommand{\piecewisetwo}[2]{\left\{\stacktwo{#1}{#2}\right.}
+\newcommand{\piecewisethree}[3]{\left\{\stackthree{#1}{#2}{#3}\right.}
+\newcommand{\piecewisefour}[4]{\left\{\stackfour{#1}{#2}{#3}{#4}\right.}
+\newcommand{\piecewisefive}[5]{\left\{\stackfive{#1}{#2}{#3}{#4}{#5}\right.}
