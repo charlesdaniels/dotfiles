@@ -15,3 +15,9 @@ gtk-xft-hinting=1
 gtk-xft-hintstyle="hintfull"
 gtk-xft-rgba="rgb"
 gtk-key-theme-name="normal"
+style "my-tooltips"
+{
+   bg[NORMAL] = "#FFFFFF"
+   fg[NORMAL] = "#000000"
+}
+widget "gtk-tooltip*" style "my-tooltips"
