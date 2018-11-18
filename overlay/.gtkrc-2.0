@@ -1,5 +1,5 @@
 include "/home/cad/.gtkrc-2.0.mine"
-gtk-theme-name="clearlooks-phenix-master"
+gtk-theme-name="Adwaita"
 gtk-icon-theme-name="Adwaita"
 gtk-font-name="Sans 10"
 gtk-cursor-theme-name="Adwaita"
@@ -15,9 +15,3 @@ gtk-xft-hinting=1
 gtk-xft-hintstyle="hintfull"
 gtk-xft-rgba="rgb"
 gtk-key-theme-name="normal"
-style "my-tooltips"
-{
-   bg[NORMAL] = "#FFFFFF"
-   fg[NORMAL] = "#000000"
-}
-widget "gtk-tooltip*" style "my-tooltips"

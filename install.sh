@@ -78,17 +78,6 @@ echo "    email = $git_email" >> "$git_config_file"
 echo "" >> "$git_config_file"
 cat "$DOTFILES_DIR/gitconfig" >> "$git_config_file"
 
-# install GTK3 theme
-if [ ! -d "$HOME/.themes/clearlooks-phenix-master" ] ; then
-	mkdir -p "$HOME/.themes"
-	cd /tmp
-	rm -f master.zip
-	wget "https://github.com/jpfleury/clearlooks-phenix/archive/master.zip"
-	unzip master.zip
-	mv clearlooks-phenix-master "$HOME/.themes"
-	rm -f master.zip
-fi
-
 # install fastabr
 make -C "$DOTFILES_DIR/fastabr" fastabr
 cp "$DOTFILES_DIR/fastabr/fastabr" ~/bin/fastabr
