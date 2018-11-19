@@ -3,7 +3,7 @@ CFLAGS=-Wall -Wextra -pedantic -std=c99 -O3
 .PHONY: clean
 
 fastabr: fastabr.c fastabr.h
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $< -o $@ $(CFLAGS) $$(if [ $$(uname)="Linux" ] ; then printf " -lbsd " ; fi) 
 
 clean:
 	rm -f *.o

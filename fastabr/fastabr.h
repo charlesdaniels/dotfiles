@@ -14,6 +14,12 @@
 #define PATHSEP "/"
 #define FASTABR_VERSION "0.0.1"
 
+#ifndef PATH_MAX
+/* we are compiling under Linux */
+#include <linux/limits.h>
+#include <bsd/string.h>
+#endif
+
 char* fastabr(char* path);
 void set_home(char* path);
 void display_help(void);
