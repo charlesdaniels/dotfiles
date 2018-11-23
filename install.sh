@@ -19,48 +19,6 @@ find . -type f | while read -r target ; do
 	cp "$target" "$dest_file"
 done
 
-# install shell extensions
-
-# ensure the directory exists
-ZSH_DIR="$HOME/.zsh"
-if [ ! -d "$ZSH_DIR" ] ; then
-	mkdir -p "$ZSH_DIR"
-fi
-if [ ! -d "$ZSH_DIR" ] ; then
-	echo "FATAL: could not create $ZSH_DIR"
-	exit 1
-fi
-cd "$ZSH_DIR"
-
-# zsh-history-substring-search
-if [ ! -d "./zsh-history-substring-search" ] ; then
-	git clone --quiet git://github.com/zsh-users/zsh-history-substring-search.git
-fi
-cd zsh-history-substring-search
-git reset --hard HEAD --quiet
-git pull --quiet origin master
-cd "$ZSH_DIR"
-rm -f ./zsh-history-substring-search.zsh
-ln -s ./zsh-history-substring-search/zsh-history-substring-search.zsh ./zsh-history-substring-search.zsh
-
-# zsh-abbr-path
-if [ ! -d "./zsh-abbr-path" ] ; then
-	git clone --quiet git://github.com/felixgravila/zsh-abbr-path.git
-fi
-cd zsh-abbr-path
-git reset --hard HEAD --quiet
-git pull --quiet origin master
-cd "$ZSH_DIR"
-rm -f ./abbr_pwd.zsh
-ln -s ./zsh-abbr-path/.abbr_pwd ./abbr_pwd.zsh
-
-# git completions
-rm -f "$HOME/.git-completion.bash"
-rm -f "$HOME/.git-completion.zsh"
-BASE_URL='https://raw.githubusercontent.com/git/git/master/contrib/completion'
-curl -LSs "$BASE_URL/git-completion.bash" -o "$HOME/.git-completion.bash"
-curl -LSs "$BASE_URL/git-completion.zsh" -o "$HOME/.git-completion.zsh"
-
 # vim-plug
 curl -SsfLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim

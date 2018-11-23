@@ -18,4 +18,4 @@ This repository works primary via the `overlay` directory, which written
 (overlaid) over top of `$HOME`, such that `overlay/something` winds up in
 `$HOME/something` after installation. If `$HOME/something` already existed, it
 would be silently deleted. There are also a few things cloned from GitHub and
-installed via `install.sh`, namely various ZSH extensions.
+installed via `install.sh`.
