@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+
+import datetime
+import matplotlib.pyplot as plt
+import numpy as np
+import dateutil
+import dateutil.parser
+
+timestamps       = []
+last_full_data   = []
+remaining_data   = []
+discharging_data = []
+speed_data       = []
+rate_data        = []
+coretemp_data    = []
+load_data        = []
+degrade_data     = []
+
+with open("/var/log/batrecord.log") as f:
+    for line in f:
+        line = line.strip().split(',')
+        timestamp = line[0]
+        rate = line[1]
+        last_full = line[2]
+        remaining = line[3]
+        discharging = line[4]
+        speed = line[5]
+        coretemp = 0
+        numcpu = 1
+        loadavg = 0
+
+        if len(line) > 6:
+            coretemp = line[6]
+
+        if len(line) > 7:
+            loadavg = float(line[7])
+            numcpu = float(line[8])
+
+        timestamps.append(dateutil.parser.parse(timestamp))
+        rate_data.append(float(rate))
+        last_full_data.append(float(last_full))
+        remaining_data.append(float(remaining))
+        discharging_data.append(float(discharging))
+        speed_data.append(float(speed) * 0.025)
+        coretemp_data.append(float(coretemp))
+        load_data.append((loadavg / numcpu) * 100)
+
+        if len(timestamps) < 51:
+            degrade_data.append(0)
+            continue
+
+        lost_capacity = last_full_data[0] - last_full_data[-50]
+        elapsed = timestamps[-50] - timestamps[0]
+        rate = (lost_capacity * 60 * 60) / (elapsed.total_seconds())
+        rate_why = rate * 8765.8128
+        print("lost capacity since {}: {:0.2f} Wh over {} at {:0.4f} w = {:0.2f} wh / yr"
+                .format(timestamps[0], lost_capacity, elapsed, rate, rate_why))
+        degrade_data.append(rate_why)
+
+
+
+plt.plot(timestamps, remaining_data, label="remaining (Wh)", marker='o', linestyle=':')
+plt.plot(timestamps, rate_data, label="discharge rate (W)", marker='x', linestyle='-.')
+plt.plot(timestamps, last_full_data, label="last full (Wh)", marker='o', linestyle='--')
+plt.plot(timestamps, coretemp_data, label="core temperature (C)", marker='x', linestyle='--')
+plt.plot(timestamps, speed_data, label="clock speed (MHz * 0.025)", marker='o')
+plt.plot(timestamps, load_data, label="load average (of 100)", marker='x', linestyle=':')
+plt.plot(timestamps, degrade_data, label="degrade rate (Wh / y)", marker='x', linestyle='--')
+
+plt.legend(loc = "upper left")
+
+plt.xticks(rotation=20)
+
+plt.show()

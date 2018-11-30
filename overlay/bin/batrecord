@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+
+import subprocess
+import datetime
+
+sysctl_raw = subprocess.check_output("sysctl")
+
+rate = -1
+last_full = -1
+remaining = -1
+discharging = -1
+speed = -1
+loadavg = -1
+numcpu = 1
+
+for line in (x.strip() for x in sysctl_raw.decode().split("\n")):
+    if 'hw.sensors.acpibat0.watthour0' in line:
+        last_full = line.split('=')[1].split(' ')[0]
+    elif 'hw.sensors.acpibat0.power0' in line:
+        rate = line.split('=')[1].split(' ')[0]
+    elif 'hw.sensors.acpibat0.watthour3' in line:
+        remaining = line.split('=')[1].split(' ')[0]
+    elif 'hw.sensors.acpibat0.raw0' in line:
+        discharging = line.split('=')[1].split(' ')[0]
+    elif 'hw.cpuspeed' in line:
+        speed = line.split('=')[1].strip()
+    elif 'hw.sensors.cpu0.temp0' in line:
+        coretemp = line.split('=')[1].split(' ')[0].strip()
+    elif 'vm.loadavg' in line:
+        loadavg = line.split('=')[1].split()[1].strip()
+    elif 'hw.ncpuonline' in line:
+        numcpu = line.split('=')[1].strip()
+
+print(",".join([str(datetime.datetime.now()), rate, last_full, remaining, discharging, speed, coretemp, loadavg, numcpu]))
