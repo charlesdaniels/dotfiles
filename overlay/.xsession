@@ -34,7 +34,10 @@ xmodmap $HOME/.Xmodmap
 # configure display settings
 $HOME/bin/configure-display
 
-# run redshift and make sure everything is set up right
+# launch redshift
+redshift -l '34.018123:-81.028373' &
+
+# make sure everything is set up right
 $HOME/bin/restore-sanity
 
 # launch cwm

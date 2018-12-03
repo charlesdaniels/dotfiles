@@ -45,17 +45,17 @@ with open("/var/log/batrecord.log") as f:
         coretemp_data.append(float(coretemp))
         load_data.append((loadavg / numcpu) * 100)
 
-        if len(timestamps) < 51:
+        if len(timestamps) < 5:
             degrade_data.append(0)
             continue
 
-        lost_capacity = last_full_data[0] - last_full_data[-50]
-        elapsed = timestamps[-50] - timestamps[0]
+        lost_capacity = last_full_data[-1] - last_full_data[0]
+        elapsed = timestamps[-1] - timestamps[0]
         rate = (lost_capacity * 60 * 60) / (elapsed.total_seconds())
         rate_why = rate * 8765.8128
         print("lost capacity since {}: {:0.2f} Wh over {} at {:0.4f} w = {:0.2f} wh / yr"
                 .format(timestamps[0], lost_capacity, elapsed, rate, rate_why))
-        degrade_data.append(rate_why)
+        degrade_data.append(-1*rate_why)
 
 
 
