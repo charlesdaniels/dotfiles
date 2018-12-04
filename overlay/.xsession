@@ -13,10 +13,6 @@ feh --bg-fill $HOME/.wallpapers/wallpaper
 # auto lock screen
 xidle &
 
-# xclock
-LANG= xclock -strftime "%a %e %b %Y %H:%M" &
-
-
 # disable bell
 xset b off
 
