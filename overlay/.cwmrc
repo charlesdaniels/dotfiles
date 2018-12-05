@@ -91,10 +91,13 @@ command terminal st
 command firefox "firefox"
 command regiongrab regiongrab
 command screengrab screengrab
-command fm pcmanfm
-command pcmanfm pcmanfm
-command thunderbird thunderbird
-command mail thunderbird
+command fm caja
+command caja caja
+command evolution evolution
+command mail evlution
+command ff firefox
+command musique musique
+command music musique
 command locknow "pkill -USR1 xidle"
 color activeborder   "#cc3333"		# color scheme
 color inactiveborder "#3f3f3f"
