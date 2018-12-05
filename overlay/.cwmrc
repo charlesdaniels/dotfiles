@@ -40,6 +40,15 @@ bind-key M-6 group-only-6
 bind-key M-7 group-only-7
 bind-key M-8 group-only-8
 bind-key M-9 group-only-9
+bind-key 4-1 group-toggle-1			# raise group-toggle
+bind-key 4-2 group-toggle-2
+bind-key 4-3 group-toggle-3
+bind-key 4-4 group-toggle-4
+bind-key 4-5 group-toggle-5
+bind-key 4-6 group-toggle-6
+bind-key 4-7 group-toggle-7
+bind-key 4-8 group-toggle-8
+bind-key 4-9 group-toggle-9
 bind-key MS-1 window-movetogroup-1	# move window to group
 bind-key MS-2 window-movetogroup-2
 bind-key MS-3 window-movetogroup-3
