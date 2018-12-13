@@ -36,7 +36,7 @@ call plug#end()
 """"""""10""""""""20"""""""" platform independent """"""""60""""""""70""""""""80
 
 filetype plugin indent on      " guess indent based on file type
-syntax off                     " disable syntax highlighting
+syntax on                      " enable syntax highlighting
 set cursorline                 " highlight the active line
 hi clear CursorLine
 hi CursorLine gui=underline cterm=underline cterm=underline
