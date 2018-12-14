@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# generate a PDF from one or more input files
+
+if [ $# -lt 2 ] ; then
+	echo "$0 [output] [input 1] ... [input n]"
+	exit 1
+fi
+
+DEST="$1"
+shift
+
+VIM=vim
+if [ -x "$(which nvim)" ] ; then
+	VIM=nvim
+fi
+
+OUTFILES=""
+
+for f in $@ ; do
+	printf "rendering '$f'... "
+	OUTFILE="$(mktemp)"
+	$VIM -c 'set printheader=%<%f%h%m%=' \
+	     -c 'set printoptions=number:y,left:5pc,paper:letter' \
+	     -c 'set printfont=:h10' \
+	     -c "hardcopy > $OUTFILE" -c \
+	     quit "$f" > /dev/null
+	OUTFILES="$OUTFILE:$OUTFILES"
+	echo "done."
+done
+
+printf "merging... "
+gs -o "$DEST" -sDEVICE=pdfwrite -dPDFSettings=/Screen $(echo "$OUTFILES" | tr ':' ' ') > /dev/null
+echo "done."
+
+printf "cleaning up... "
+echo "$OUTFILES" | tr ':' ' ' | xargs rm
+echo "done."
+
+
