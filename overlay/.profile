@@ -27,3 +27,6 @@ export LANGUAGE=en_US.UTF-8
 export COLORTERM=xterm-256color
 
 export MANPATH="$MANPATH:$HOME/.local/man"
+
+# export ENV for ksh
+export ENV=$HOME/.kshrc
