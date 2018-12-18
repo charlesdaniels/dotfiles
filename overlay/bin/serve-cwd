@@ -1,13 +1,42 @@
 #!/bin/sh
 
-# .SCRIPTDOC
-# Serve the CWD this script is run in over HTTP on localhost:8000. Requires
-# Python.
-#
-# .ENDOC
+method="auto"
+port=8000
+root="$(pwd)"
 
-HOST_IP="$(get-ip)"
-echo "link: http://$HOST_IP:8000"
+gen_config () {
+	config_port="$1"
+	config_root="$2"
 
-python -m SimpleHTTPServer
+	echo 'server "default" {'
+	echo "listen on * port $port"
+	echo "root \"$config_root\""
+	echo '}'
+}
 
+while getopts "hp:d:" arg ; do
+	case $arg in
+		h)
+			echo "$0 [-d directory] [-p port]"
+			exit 0;
+			;;
+		p)
+			port="$OPTARG"
+			;;
+		d)
+			root="$OPTARG"
+			;;
+	esac
+done
+
+ip="$(get-ip)"
+
+echo "link: http://$ip:$port"
+
+if [ -x "$(which python3)" ] ; then
+	cd "$root"
+	python3 -m http.server $port
+elif [ -x "$(which python2)" ] ; then
+	cd "$root"
+	python2 -m SimpleHTTPServer $port
+fi
