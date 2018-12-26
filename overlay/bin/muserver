@@ -1,0 +1,49 @@
+#!/bin/sh
+
+if [ $# -ne 1 ] ; then
+	echo "$0 [FIFO path]"
+	exit 1
+fi
+
+IP="$(get-ip)"
+PORT=5656
+FIFO="$1"
+
+rm -f "$FIFO"
+mkfifo "$FIFO"
+
+# keep the FIFO open
+(while true ; do sleep 1 ; done > "$FIFO") &
+SLEEPER_PID=$!
+echo "sleeper PID=$SLEEPER_PID"
+
+# run the player
+./muplayer.sh "$FIFO" &
+PLAYER_PID=$!
+echo "player PID=$PLAYER_PID"
+
+echo "starting muserver... "
+echo "my IP is $IP"
+echo "listening on port $PORT"
+
+while true ; do
+	RECV="$(nc -l $PORT)"
+	echo "muserver: got message '$RECV'"
+	if [ "$RECV" = "SKIP" ] ; then
+		echo "muserver: skip requested, kicking over player ($PLAYER_PID)"
+		kill -9 $PLAYER_PID
+		pkill mpv
+		./muplayer.sh "$FIFO" &
+		PLAYER_PID=$!
+		echo "muserver: player PID=$PLAYER_PID"
+	elif [ "$RECV" = "DIE" ] ; then
+		echo "muserver: committing die"
+		kill -9 $PLAYER_PID
+		kill -9 $SLEEPER_PID
+		pkill mpv
+		exit
+	else
+		echo "muserver: appended to queue"
+		echo "$RECV" >> "$FIFO"
+	fi
+done
