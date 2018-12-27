@@ -5,11 +5,19 @@ char* fastabr(char* path) {
 	char* ptr;
 	char* ap;
 	char* prev;
+	char* prev_base;
+	char* abr_base;
+	char* result;
 
-	if (((abr  = (char*) calloc(PATH_MAX, sizeof(char))) == NULL) ||
-	    ((prev = (char*) calloc(PATH_MAX, sizeof(char))) == NULL)   ) {
+	if (((abr    = (char*) calloc(PATH_MAX, sizeof(char))) == NULL) ||
+	    ((result = (char*) calloc(PATH_MAX, sizeof(char))) == NULL) ||
+	    ((prev   = (char*) calloc(PATH_MAX, sizeof(char))) == NULL)   ) {
 		err(1, "calloc()");
 	}
+
+	/* this allows us to free() later */
+	prev_base = prev;
+	abr_base = abr;
 
 	memset(abr, '\0', PATH_MAX);
 	memset(prev, '\0', PATH_MAX);
@@ -44,7 +52,15 @@ char* fastabr(char* path) {
 	 * leading separator */
 	if (abr[1] == '~') { abr++;}
 
-	return abr;
+	/* this guarantees that the caller can free() result, since the above
+	 * increment would mean that returning abr could result in freeing in
+	 * the middle of an allocation. */
+	strlcpy(result, abr, PATH_MAX-1);
+
+	free(prev_base);
+	free(abr_base);
+
+	return result;
 }
 
 void set_home(char* path) {
@@ -91,6 +107,7 @@ void display_help(void) {
 
 int main(int argc, char** argv) {
 	char* path;
+	char* abr;
 	char* normalized;
 	int c, option_index;
 	int flag_disable_home, flag_disable_normalize, flag_version, flag_help;
@@ -191,7 +208,12 @@ int main(int argc, char** argv) {
 		set_home(normalized);
 	}
 
-	printf("%s\n", fastabr(normalized));
+	abr = fastabr(normalized);
+	printf("%s\n", abr);
+
+	free(path);
+	free(normalized);
+	free(abr);
 
 	return 0;
 
