@@ -19,7 +19,7 @@ unbind-key all
 # C = control
 # M = meta (alt)
 
-bind-key M-Return mlterm		# spawn terminal
+bind-key M-Return st			# spawn terminal
 bind-key M-m lock			# lock screen
 bind-key M-BackSpace window-hide	# hide window
 bind-key M-Down window-lower		# lower window in stack
@@ -95,8 +95,8 @@ bind-mouse M-1 window-move		# move window
 bind-mouse M-3 window-resize		# resize window
 bind-mouse M-2 window-lower		# lower window in stack
 bind-mouse MS-2 window-hide		# hide window
-command mlterm mlterm			# commands for M-d
-command terminal mlterm 
+command st st				# commands for M-d
+command terminal st
 command firefox "firefox"
 command regiongrab regiongrab
 command screengrab screengrab
