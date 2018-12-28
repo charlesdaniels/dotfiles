@@ -8,5 +8,5 @@ scrollbar_mode = none
 scrollbar_view_name = next
 geometry = 90x30
 logsize = 8192
-bel_mode = visual
+bel_mode = none
 use_extended_scroll_shortcut = true
