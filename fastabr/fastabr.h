@@ -1,6 +1,10 @@
 #ifndef FASTABR_H
 #define FASTABR_H
 
+/* Make glibc on Linux give us the non-broken strsep(). */
+#define _BSD_SOURCE /* for glibc < 2.19 */
+#define _DEFAULT_SOURCE /* for glibc >= 2.19 */
+
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -14,8 +18,7 @@
 #define PATHSEP "/"
 #define FASTABR_VERSION "0.0.1"
 
-#ifndef PATH_MAX
-/* we are compiling under Linux */
+#ifdef __linux__
 #include <linux/limits.h>
 #include <bsd/string.h>
 #endif
