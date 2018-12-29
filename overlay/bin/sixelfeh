@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# show a sixel image using feh
+
+if [ $# -ne 1 ] ; then
+	echo "$0 FILE"
+	exit 1
+fi
+
+sixel2png < "$1" | feh -
+exit $?
