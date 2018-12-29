@@ -1,3 +1,5 @@
+. /etc/profile
+
 export EDITOR=v
 export VISUAL=v
 export GOPATH=$HOME/.go-workspace
