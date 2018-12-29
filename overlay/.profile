@@ -32,6 +32,3 @@ export MANPATH="$MANPATH:$HOME/.local/man"
 
 # export ENV for ksh
 export ENV=$HOME/.kshrc
-
-# EPBSD PKG_PATH
-export PKG_PATH=https://repo.epbsd.net/pub/OpenBSD/$(arch -s):${PKG_PATH}
