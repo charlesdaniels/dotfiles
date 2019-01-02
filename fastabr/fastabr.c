@@ -27,6 +27,12 @@ char* fastabr(char* path) {
 	 * */
 	ptr = abr;
 
+	/* initialize abr to '/' - this prevents an edge case where '/'
+	 * is abbreviated to '', in other cases it will simply be overwritten.
+	 */
+	abr[0] = '/';
+
+
 	/* read until we're out of data in the input string */
 	while((ap = strsep(&path, PATHSEP)) != NULL) {
 		/* field is empty, ignore it */
