@@ -1,0 +1,39 @@
+#!/bin/sh
+
+usage () {
+	echo "$0 [-h] [-r RESOLUTION] [-d DISPLAY] COMMAND ..." 1>&2
+}
+
+RES=1024x768
+DPY=:42
+
+while getopts "hr:d:" opt; do
+	case "$opt" in
+		h)
+			usage
+			exit 0
+			;;
+		r)
+			RES="$OPTARG"
+			;;
+		d)
+			DPY="$OPTARG"
+			;;
+		*)
+			usage
+			exit 1
+			;;
+	esac
+done
+shift $((OPTIND-1))
+
+if [ $# -lt 1 ] ; then
+	usage
+	exit 1
+fi
+
+echo "nestit: execute '$@' on $DPY with resolution $RES" 1>&2
+Xephyr -ac -screen "$RES" -br -reset -terminate "$DPY" &
+sleep 1
+DISPLAY="$DPY" $@
+echo "nestit: finished with code $?" 1>&2
