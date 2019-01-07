@@ -4,13 +4,28 @@ attempt () {
 	tn=$1
 	shift
 	if [ -x "$(which $tn 2>&1)" ] ; then
+		# save previous title
+		OLDTITLE=""
+		if [ -x "$(which xdotool)" ] ; then
+			OLDTITLE="$(xdotool getwindowfocus getwindowname)"
+		else
+			OLDTITLE="you need to install xdotool"
+		fi
+		
+		# set terminal title
+		echo "\033kv $@\033\\"
+
+		# launch editor
 		"$tn" "$@" < /dev/stdin
-		exit $?
+		STATUS=$?
+
+		# restore old name
+		echo "\033k$OLDTITLE\033\\"
+
+		exit $STATUS
 	fi
 }
 
-# set terminal title
-echo '\033k'v'\033\\'
 
 # fix doas v changing ownership of ~/.vimtags
 if [ "$(whoami)" = "root" ] ; then
