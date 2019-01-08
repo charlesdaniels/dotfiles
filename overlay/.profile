@@ -1,4 +1,6 @@
 . /etc/profile
+clear
+# on Ubuntu, /etc/profile throws a bunch of errors, so we clear the screen
 
 export EDITOR=v
 export VISUAL=v
