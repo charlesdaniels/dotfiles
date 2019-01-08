@@ -107,7 +107,7 @@ command mail evlution
 command ff firefox
 command musique musique
 command music musique
-command locknow "pkill -USR1 xidle"
+command locknow "sh -c 'if [ \"$(uname)\" = OpenBSD ] ; then  -eq pkill -USR1 xidle ; else mate-screensaver-command --lock ; done'"
 command keepass keepassxc
 color activeborder   "#cc3333"		# color scheme
 color inactiveborder "#3f3f3f"
