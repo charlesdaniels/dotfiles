@@ -44,6 +44,7 @@ $HOME/bin/restore-sanity
 # and screen locking
 if [ "$(uname)" != "OpenBSD" ] ; then
 	mate-settings-daemon &
+	mate-screensaver &
 fi
 
 # launch cwm
