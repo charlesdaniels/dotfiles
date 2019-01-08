@@ -45,6 +45,7 @@ $HOME/bin/restore-sanity
 if [ "$(uname)" != "OpenBSD" ] ; then
 	mate-settings-daemon &
 	mate-screensaver &
+	mate-power-manager &
 fi
 
 # launch cwm
