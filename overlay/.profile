@@ -18,6 +18,7 @@ export PATH=/snap/bin/:$PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="$HOME/.local/share/esp/xtensa-esp32-elf/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="/opt/cxoffice/bin:$PATH"
 
 export TEXMFHOME="$HOME/.texmf"
 
