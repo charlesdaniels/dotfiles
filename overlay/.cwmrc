@@ -20,7 +20,7 @@ unbind-key all
 # M = meta (alt)
 
 bind-key M-Return st			# spawn terminal
-bind-key M-m lock			# lock screen
+bind-key M-m "locknow"			# lock screen
 bind-key M-BackSpace window-hide	# hide window
 bind-key M-Down window-lower		# lower window in stack
 bind-key M-Up window-raise		# raise window in stack
@@ -107,7 +107,7 @@ command mail evlution
 command ff firefox
 command musique musique
 command music musique
-command locknow "sh -c 'if [ \"$(uname)\" = OpenBSD ] ; then  -eq pkill -USR1 xidle ; else mate-screensaver-command --lock ; fi'"
+command locknow "locknow"
 command keepass keepassxc
 color activeborder   "#cc3333"		# color scheme
 color inactiveborder "#3f3f3f"

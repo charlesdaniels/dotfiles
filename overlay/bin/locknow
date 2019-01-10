@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# lock the screen now
+
+if [ "$(uname)" = "OpenBSD" ] ; then
+	pkill -USR1 xidle
+else
+	mate-screensaver-command --lock
+fi
