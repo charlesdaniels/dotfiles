@@ -46,6 +46,7 @@ if [ "$(uname)" != "OpenBSD" ] ; then
 	mate-settings-daemon &
 	mate-screensaver &
 	mate-power-manager &
+	xautolock -locker "mate-screensaver-command --lock" &
 fi
 
 # launch cwm
