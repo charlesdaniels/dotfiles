@@ -20,6 +20,7 @@
 
 xmodmap ~/.Xmodmap
 numlockx on
+xkbset nullify lock
 
 feh --bg-fill ~/.wallpapers/wallpaper
 

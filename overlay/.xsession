@@ -49,5 +49,11 @@ if [ "$(uname)" != "OpenBSD" ] ; then
 	xautolock -locker "mate-screensaver-command --lock" &
 fi
 
+# disable caps lock from being engaged - this does not prevent caps lock from
+# being asserted, but rather causes the state of caps lock to be ignored by
+# Xorg.
+xkbset nullify lock
+
 # launch cwm
 exec cwm
+
