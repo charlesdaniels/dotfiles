@@ -87,7 +87,7 @@ bind-key MS-space "xdotool getactivewindow windowsize 800 600"
 bind-key MS-r restart			# restart cwm
 bind-key MS-e quit			# logout
 					# handle docking
-bind-key M-o "configure-display ; restore-sanity"
+bind-key M-o "sh -c 'configure-display ; restore-sanity'"
 unbind-mouse M-1			# unbind default mouse actions
 unbind-mouse CM-1
 unbind-mouse M-2
