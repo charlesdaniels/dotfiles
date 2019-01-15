@@ -30,6 +30,8 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'KSP-KOS/EditorTools', {'rtp': 'VIM/vim-kerboscript'}
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+Plug 'jonsmithers/vim-html-template-literals'
+Plug 'pangloss/vim-javascript'
 
 call plug#end()
 
@@ -521,3 +523,7 @@ endif
 
 "" fugative.vim """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set statusline=%<%f\ %h%m%r%=%-14.(%l,%c%V%)\ %{FugitiveStatusline()}\ %P
+
+"" vim-html-temlate-literals """"""""""""""""""""""""""""""""""""""""""""""""""
+
+let g:html_indent_style1 = "inc"
