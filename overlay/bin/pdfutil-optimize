@@ -98,7 +98,7 @@ fi
 
 # http://stackoverflow.com/questions/16152583/tell-if-a-file-is-pdf-in-bash
 IS_PDF=$(file "$INPUT_FILE" | grep -q 'PDF' && echo 'YES'  || echo 'NO')
-if [ "$IS_PDF" == "NO" ] ; then
+if [ "$IS_PDF" = "NO" ] ; then
   echo "ERROR: input file does not seem to be a PDF"
   exit 1
 fi
