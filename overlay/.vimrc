@@ -20,7 +20,6 @@ Plug 'keith/investigate.vim'
 Plug 'roxma/vim-paste-easy'
 Plug 'chrisbra/csv.vim'
 Plug 'mzlogin/vim-markdown-toc'
-Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-scripts/DoxygenToolkit.vim'
 Plug 'mtth/scratch.vim'
 Plug 'ledger/vim-ledger'
@@ -32,6 +31,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'jonsmithers/vim-html-template-literals'
 Plug 'pangloss/vim-javascript'
+Plug 'heavenshell/vim-jsdoc'
 
 call plug#end()
 
@@ -302,6 +302,7 @@ autocmd FileType sh call EightSpacesHardTabs()
 autocmd FileType perl call EightSpacesHardTabs()
 autocmd FileType verilog call EightSpacesHardTabs()
 autocmd FileType json call FourSpacesSoftTabs()
+autocmd FileType javascript call FourSpacesSoftTabs()
 autocmd FileType matlab call FourSpacesSoftTabs()
 
 """"""""10""""""""20"""" text wrapping (gq) behaviour """"60""""""""70""""""""80
@@ -394,6 +395,9 @@ endfunction
 " C-g should generate docs in supported languages
 autocmd FileType python nmap <silent> <C-g> <Plug>(pydocstring)
 
+"""" vim-jsdoc configuration """"""""""""""""""""""""""""""""""""""""""""""""""
+autocmd FileType javascript nmap <silent> <C-g> :JsDoc<cr>
+
 """"""""10""""""""20"""""""" tagbar configuration """"""""60""""""""70""""""""80
 
 nmap <F8> :TagbarToggle<CR>  " map tagbar to F8
@@ -445,9 +449,6 @@ autocmd BufEnter * TrailerHide
 autocmd InsertLeave * TrailerHide
 nnoremap <Leader>tt :TrailerTrim<CR>
 
-" prevent vim-table-mode from overriding <LeadeR>tt
-autocmd BufEnter * :silent! nnoremap <Leader>tt :TrailerTrim<CR>
-
 """"""""10""""""""20""""""""3 ctrlP configuration """"""""60""""""""70""""""""80
 
 " show dotfiles
@@ -472,16 +473,6 @@ aug end
 
 " don't render whitespace in CSV files
 autocmd FileType csv set nolist
-
-""""""""10""""""""20"""" vim-table-mode configuration """"60""""""""70""""""""80
-
-" Markdown
-autocmd FileType markdown let g:table_mode_corner='|'
-autocmd FileType markdown let g:table_mode_header_fillchar='-'
-
-" reST
-autocmd FileType rst let g:table_mode_corner='+'
-autocmd FileType rst let g:table_mode_header_fillchar='-'
 
 """"""""10""""""""20"" vim-tmux-navigator configuration ""60""""""""70""""""""80
 
