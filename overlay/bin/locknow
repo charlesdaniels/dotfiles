@@ -5,5 +5,7 @@
 if [ "$(uname)" = "OpenBSD" ] ; then
 	pkill -USR1 xidle
 else
+	~/bin/restore-sanity
+	sleep "0.1"
 	xautolock -locknow
 fi
