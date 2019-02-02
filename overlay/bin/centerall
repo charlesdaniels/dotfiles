@@ -15,9 +15,9 @@ cy="$(echo "$vres / 2 - ($VSIZE / 2)" | bc)"
 
 echo "display detected as $hres x $vres center at $cx,$cy"
 
-wmctrl -l | cut -d' ' -f 5- | while read -r wtitle ; do
+wmctrl -l | cut -d' ' -f 1 | while read -r wtitle ; do
 	echo "centering window '$wtitle'"
-	wmctrl -r "$wtitle" -e "0,$cx,$cy,$HSIZE,$VSIZE"
+	wmctrl -ir $wtitle -e "0,$cx,$cy,$HSIZE,$VSIZE"
 
 	# stagger
 	cx="$(echo "$cx + $STAGSTEP" | bc)"
