@@ -25,6 +25,14 @@ curl -SsfLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 curl -SsfLo ~/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
+# zsh-history-substring-search
+curl -SsfLo ~/.zsh/zsh-history-substring-search.zsh --create-dirs \
+    https://github.com/zsh-users/zsh-history-substring-search/raw/v1.0.1/zsh-history-substring-search.zsh
+
+# zsh git completions
+curl -SsfLo ~/.zsh/git-completion.zsh --create-dirs \
+    https://github.com/git/git/raw/v2.20.1/contrib/completion/git-completion.zsh
+
 # setup gitconfig
 git_username="$(git config --get user.name)"
 git_email="$(git config --get user.email)"
