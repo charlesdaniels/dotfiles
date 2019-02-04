@@ -293,17 +293,19 @@ autocmd BufEnter *.lib setlocal filetype=sh
 
 " set up tab & space behaviour sensibly
 autocmd FileType c call EightSpacesHardTabs()
+autocmd FileType html call FourSpacesSoftTabs()
 autocmd FileType java call FourSpacesSoftTabs()
-autocmd FileType rst call FourSpacesSoftTabs()
-autocmd FileType python call FourSpacesSoftTabs()
-autocmd FileType tex call EightSpacesHardTabs()
-autocmd FileType yaml call FourSpacesSoftTabs()
-autocmd FileType sh call EightSpacesHardTabs()
-autocmd FileType perl call EightSpacesHardTabs()
-autocmd FileType verilog call EightSpacesHardTabs()
-autocmd FileType json call FourSpacesSoftTabs()
 autocmd FileType javascript call FourSpacesSoftTabs()
+autocmd FileType json call FourSpacesSoftTabs()
 autocmd FileType matlab call FourSpacesSoftTabs()
+autocmd FileType perl call EightSpacesHardTabs()
+autocmd FileType python call FourSpacesSoftTabs()
+autocmd FileType rst call FourSpacesSoftTabs()
+autocmd FileType sh call EightSpacesHardTabs()
+autocmd FileType tex call EightSpacesHardTabs()
+autocmd FileType verilog call EightSpacesHardTabs()
+autocmd FileType yaml call FourSpacesSoftTabs()
+autocmd FileType xml call FourSpacesSoftTabs()
 
 """"""""10""""""""20"""" text wrapping (gq) behaviour """"60""""""""70""""""""80
 
