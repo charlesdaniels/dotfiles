@@ -33,7 +33,8 @@ bindkey -e
 chmod -R 755 ~/.zsh
 
 # git completions
-fpath=(~/.zsh $fpath)
+fpath=(~/.zsh/completions $fpath)
+
 # http://stackoverflow.com/a/26479426
 autoload -U compinit && compinit
 zmodload -i zsh/complist

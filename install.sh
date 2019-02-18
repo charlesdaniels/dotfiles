@@ -30,8 +30,12 @@ curl -SsfLo ~/.zsh/zsh-history-substring-search.zsh --create-dirs \
     https://github.com/zsh-users/zsh-history-substring-search/raw/v1.0.1/zsh-history-substring-search.zsh
 
 # zsh git completions
-curl -SsfLo ~/.zsh/git-completion.zsh --create-dirs \
+curl -SsfLo ~/.zsh/completions/git-completion.zsh --create-dirs \
     https://github.com/git/git/raw/v2.20.1/contrib/completion/git-completion.zsh
+
+# zsh docker completions
+curl -SsfLo ~/.zsh/completions/_docker-compose https://raw.githubusercontent.com/docker/compose/1.23.2/contrib/completion/zsh/_docker-compose 
+
 
 # setup gitconfig
 git_username="$(git config --get user.name)"
