@@ -15,7 +15,7 @@ Plug 'twmht/jcommenter.vim'
 Plug 'csexton/trailertrash.vim'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-easytags'
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'keith/investigate.vim'
 Plug 'roxma/vim-paste-easy'
 Plug 'chrisbra/csv.vim'
@@ -456,6 +456,8 @@ nnoremap <Leader>tt :TrailerTrim<CR>
 " show dotfiles
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_dotfiles = 1
+let g:ctrlp_working_path_mode = 'a'
+let g:ctrlp_switch_buffer = 'et'
 
 """"""""10""""""""20"""" investigate.vim configuration """60""""""""70""""""""80
 
