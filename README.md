@@ -1,5 +1,7 @@
 # My Dotfiles
 
+**[THIS REPOSITORY HAS MOVED](https://git.sr.ht/~charles/dotfiles)**
+
 [![Build Status](https://travis-ci.org/charlesdaniels/dotfiles.svg?branch=master)](https://travis-ci.org/charlesdaniels/dotfiles)
 
 These are my dotfiles. You might have come here looking for my [provisioning
